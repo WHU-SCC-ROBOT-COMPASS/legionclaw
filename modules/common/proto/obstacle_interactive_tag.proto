@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message ObstacleInteractiveTag{
+    enum InteractiveTag{
+        INTERACTION = 1;
+        NONINTERACTION = 2;
+    }
+
+    optional ObstacleInteractiveTag.InteractiveTag interactive_tag = 1 [default = INTERACTION];
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message ParkingOutInfo{
+    //timestamp is included in header
+    optional Header header = 1;
+    //若车位有id，同停车位id
+    optional int32 parking_out_id = 2 [default = 0];
+    optional legion.common.Direction parking_direction_type = 3 [default = DIR_INVALID];
+    //true可泊出，false不可泊出
+    optional bool is_parking_out_enable = 4 [default = false];
+    //世界坐标系下提车点位置
+    optional Point3D parking_out_point = 5;
+    //世界坐标系下的夹角（单位rad），提车点与正东方向夹角
+    optional double theta = 6 [default = 0.0];
+}

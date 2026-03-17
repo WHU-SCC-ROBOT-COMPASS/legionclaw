@@ -1,0 +1,19 @@
+ #ifndef __RadarStateError__idl__
+#define __RadarStateError__idl__
+module ros2_interface{
+ module msg{
+  struct RadarStateError{
+    uint8   _persistent_error;
+    uint8   _temporary_error;
+    uint8   _interference_error;
+    uint8   _temperature_error;
+    uint8   _voltage_error;
+    uint8   _block_error;
+    uint8   _broadcast_error;
+    uint8   _electric_axis_error;
+    uint8   _config_error;
+    uint8   _calibration_error;
+  };
+ };
+}; 
+#endif

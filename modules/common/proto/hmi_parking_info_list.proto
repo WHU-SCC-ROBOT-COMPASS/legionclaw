@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/hmi_parking_info.proto";
+
+
+message HMIParkingInfoList{
+    //timestamp is  included in header
+    optional Header header = 1;
+    repeated HMIParkingInfo parking_info = 2;
+    optional bool parking_out_enable = 3 [default = false];
+    optional int32 parking_out_direction = 4 [default = 0];
+    optional int32 parking_out_id = 5 [default = 0];
+}

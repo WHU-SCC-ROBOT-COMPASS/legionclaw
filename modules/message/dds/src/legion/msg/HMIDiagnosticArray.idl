@@ -1,0 +1,13 @@
+ #ifndef __HMIDiagnosticArray__idl__
+#define __HMIDiagnosticArray__idl__
+#include "HMIDiagnosticStatus.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct HMIDiagnosticArray{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::HMIDiagnosticStatus> _status;
+  };
+ };
+}; 
+#endif

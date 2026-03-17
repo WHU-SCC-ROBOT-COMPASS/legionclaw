@@ -1,0 +1,49 @@
+ #ifndef __PlanningParkingDebug__idl__
+#define __PlanningParkingDebug__idl__
+#include "PathPoint.idl"
+#include "Trajectory.idl"
+#include "TrajectoryPoint.idl"
+#include "Polygon2D.idl"
+#include "Point2dList.idl"
+module ros2_interface{
+ module msg{
+  struct PlanningParkingDebug{
+    sequence<ros2_interface::msg::Polygon2D> _vehicle_preiew_polygon;
+    sequence<ros2_interface::msg::Polygon2D> _obstacles_polygon;
+    sequence<ros2_interface::msg::PathPoint> _path_points;
+    double   _lat_error;
+    double   _lon_error;
+    double   _yaw_error;
+    sequence<ros2_interface::msg::Point2dList> _obstacles_vec;
+    sequence<ros2_interface::msg::TrajectoryPoint> _warm_start_traj;
+    sequence<ros2_interface::msg::TrajectoryPoint> _smoothed_traj_stage1;
+    sequence<ros2_interface::msg::TrajectoryPoint> _smoothed_traj_stage2;
+    ros2_interface::msg::Trajectory   _reference_line;
+    sequence<ros2_interface::msg::Trajectory> _trajectory_array;
+    ros2_interface::msg::Trajectory   _optimal_coarse_trajectory;
+    ros2_interface::msg::Trajectory   _optimal_smooth_trajectory;
+    double   _hybrid_a_star_map_time;
+    double   _hybrid_a_star_heuristic_time;
+    double   _hybrid_a_star_rs_time;
+    double   _hybrid_a_star_total_time;
+    double   _ias_collision_avoidance_time;
+    double   _ias_path_smooth_time;
+    double   _ias_speed_smooth_time;
+    double   _ias_total_time;
+    double   _samping_trajectory_time;
+    boolean   _is_replan;
+    string   _replan_reason;
+    double   _replan_time;
+    int32   _replan_num;
+    int32   _optimizer_thread_counter;
+    int32   _replan_by_context_update_counter;
+    int32   _replan_by_large_error_counter;
+    int32   _parking_type;
+    int32   _moves_counter;
+    double   _remain_distance;
+    double   _distance_to_leader_obj;
+    int32   _state;
+  };
+ };
+}; 
+#endif

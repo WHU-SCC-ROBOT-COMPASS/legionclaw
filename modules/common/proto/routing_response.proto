@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/lane_info.proto";
+
+
+message RoutingResponse{
+    enum ReplanFlag{
+        REPLAN_FLAG_NONE = 0;
+        REPLAN_FLAG_NAVI = 1;
+        REPLAN_FLAG_HUMAN = 2;
+    }
+
+    enum RouteReason{
+        ROUTE_REASON_HMI = 0;
+        ROUTE_REASON_PLATOON_HEADER = 1;
+        ROUTE_REASON_PLATOON_OTHER = 2;
+    }
+
+    enum PlanStatus{
+        PLAN_SUCCESS = 0 ;
+        REQUEST_ERROR = 1 ;
+        OUT_OF_MAP = 2 ;
+    }
+
+    //timestamp is included in header
+    optional Header header = 1;
+    //规划结果状态
+    optional RoutingResponse.PlanStatus plan_status = 2 [default = PLAN_SUCCESS];
+    //REPLAN_FLAG_NONE=0  //不需要重规划 REPLAN_FLAG_NAVI=1 //网络层重规划 REPLAN_FLAG_HUMAN=2 //人为重规划
+    optional RoutingResponse.ReplanFlag replan_flag = 3 [default = REPLAN_FLAG_NONE];
+    //规划原因 ROUTE_REASON_HMI = 0 //hmi上触发规划 ROUTE_REASON_PLATOON_HEADER = 1 //车队头车下发规划 ROUTE_REASON_PLATOON_OTHER = 2 //车队其他车辆下发规划
+    optional RoutingResponse.RouteReason route_reason = 4 [default = ROUTE_REASON_HMI];
+    //分段路径规划结果
+    repeated LaneInfo lane_list = 5;
+}

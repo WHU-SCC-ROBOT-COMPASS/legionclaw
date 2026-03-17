@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/common_enum.proto";
+
+
+message TrafficLightBox{
+    //交通灯目标在图像上中心点横向方向像素位置
+    optional int32 x = 1 [default = 0];
+    //交通灯目标在图像上中心点纵向方向像素位置
+    optional int32 y = 2 [default = 0];
+    //交通灯目标在图像上宽度
+    optional int32 width = 3 [default = 0];
+    //交通灯目标在图像上高度
+    optional int32 height = 4 [default = 0];
+    //UNKNOWN = 0; RED = 1; YELLOW = 2; GREEN = 3; BLACK = 4;
+    optional legion.common.TrafficLightColor color = 5 [default = COLOR_UNKNOWN];
+    //是否选择
+    optional bool selected = 6 [default = false];
+    //相机名称
+    optional string camera_name = 7;
+}

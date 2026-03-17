@@ -1,0 +1,16 @@
+ #ifndef __Grid__idl__
+#define __Grid__idl__
+#include "SLPoint.idl"
+module ros2_interface{
+ module msg{
+  struct Grid{
+    double   _x;
+    double   _y;
+    ros2_interface::msg::SLPoint   _sl_point;
+    double   _yaw;
+    double   _potential;
+    int32   _region_id;
+  };
+ };
+}; 
+#endif

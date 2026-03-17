@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/command.proto";
+
+
+message CommCommand{
+    optional Header header = 1;
+    //发送指令的节点名称
+    optional string name = 2;
+    //发送节点的ID号，参考apps描述
+    optional int32 self_id = 3 [default = 0];
+    //需要发送的指令，如果需要发送给多个节点，需要使用多个command
+    repeated Command commands = 4;
+}

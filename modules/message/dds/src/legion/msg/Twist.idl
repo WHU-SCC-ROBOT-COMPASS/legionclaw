@@ -1,0 +1,14 @@
+ #ifndef __Twist__idl__
+#define __Twist__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct Twist{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::Point3D   _linear;
+    ros2_interface::msg::Point3D   _angular;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,17 @@
+# Do not change this file as far as possible.
+# Set local variable to build.properties.local 
+# by reference to build.properties.local.example
+# platform [linux | win | mac | android]
+platform linux
+
+# architecture
+# linux [ x86(default), arm, ... ]
+# android [arm(default), x86 ,mpis, ...]
+
+architecture aarch64-j2
+
+# vendor
+vendor hobot
+
+# toolchain
+toolchain gcc6.5.0

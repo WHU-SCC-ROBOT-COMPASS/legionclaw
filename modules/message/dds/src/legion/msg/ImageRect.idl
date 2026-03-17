@@ -1,0 +1,13 @@
+ #ifndef __ImageRect__idl__
+#define __ImageRect__idl__
+module ros2_interface{
+ module msg{
+  struct ImageRect{
+    int32   _x;
+    int32   _y;
+    int32   _width;
+    int32   _height;
+  };
+ };
+}; 
+#endif

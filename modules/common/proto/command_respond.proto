@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+
+
+message CommandRespond{
+    optional Header header = 1;
+    //发送指令的节点名称
+    optional string name = 2;
+    //发送节点的ID号，参考apps描述
+    optional int32 self_id = 3 [default = 0];
+    optional int32 respond_id = 4 [default = 0];
+    //0 无响应 1 响应失败 2 响应成功
+    optional int32 status = 5 [default = 0];
+    //失败原因
+    optional int32 fail_code = 6 [default = 0];
+}

@@ -1,0 +1,11 @@
+ #ifndef __Status__idl__
+#define __Status__idl__
+module ros2_interface{
+ module msg{
+  struct Status{
+    int32   _error_code;
+    string   _msg;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,19 @@
+ #ifndef __JunctionInfo__idl__
+#define __JunctionInfo__idl__
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct JunctionInfo{
+    int32   _id;
+    int32   _light_flag;
+    int32   _light_color;
+    double   _light_remain_time;
+    double   _distance_to_stop;
+    int32   _direction_flag;
+    int32   _direction;
+    double   _distance_to_junction;
+    sequence<ros2_interface::msg::Point3D> _stop_line;
+  };
+ };
+}; 
+#endif

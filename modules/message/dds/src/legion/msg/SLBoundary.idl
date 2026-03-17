@@ -1,0 +1,15 @@
+ #ifndef __SLBoundary__idl__
+#define __SLBoundary__idl__
+#include "SLPoint.idl"
+module ros2_interface{
+ module msg{
+  struct SLBoundary{
+    double   _start_s;
+    double   _end_s;
+    double   _start_l;
+    double   _end_l;
+    sequence<ros2_interface::msg::SLPoint> _boundary_point;
+  };
+ };
+}; 
+#endif

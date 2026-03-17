@@ -1,0 +1,95 @@
+{
+    "parking_manager_conf": {
+        "is_near_theta" : 0.2,
+        "in_parking_area_distance": 25.0,
+        "in_parking_area_angle": 80.0,
+        "ttc_window_size": 2.0,
+        "dtc_window_size": 1,
+        "safe_distance": 1.5,
+        "suggest_speed_forward": 2.5,
+        "suggest_speed_backward": 1.5,
+        "extend_length": 2.0,
+        "threshold_static_speed": 0.1,
+        "threshold_lon_error": 0.4,
+        "threshold_lat_error": 0.2,
+        "threshold_pos_error": 0.25,
+        "threshold_yaw_error": 2.5,
+        "threshold_remian_length": 0.3,
+        "start_pose_mode": 0,
+        "parking_log_enable": true,
+        "max_re_planning_count": 1
+    },
+    "parallel_parking_conf": {
+        "parallel_min_forward_extend_distance": 1.0,
+        "parallel_forward_extend_distance_keep": 0.2,
+        "parallel_lon_safe_distance": 0.3,
+        "parallel_lat_safe_distance": 0.15,
+        "parallel_park_lane_width": 20.0,
+        "parallel_path_interval": 0.1,
+        "parallel_parking_order": 3,
+        "parallel_parking_start_rad_offset": 0.0,
+        "parallel_parking_end_rad_offset": 0.0
+    },
+    "vertical_parking_conf": {
+        "vertical_min_forward_extend_distance": 0.5,
+        "vertical_forward_extend_distance_keep": 0.5,
+        "vertical_lon_safe_distance": 0.4,
+        "vertical_lat_safe_distance": 0.15,
+        "vertical_park_lane_width": 20.0,
+        "vertical_path_interval": 0.02,
+        "vertical_parking_order": 5,
+        "vertical_parking_start_rad_offset": 0.1,
+        "vertical_parking_end_rad_offset": 0.07,
+        "forward_distance":1.7,
+        "upward_distance":0.8,
+        "caculate_turning_radius":5.6455,
+        "scheme":1,
+        "road_width":5,
+        "d1":0.3,
+        "R1":8.25,
+        "theta_4":0.175,
+        "vehicle_lat_buffer":0.2,
+        "vehicle_lon_buffer":0.0,
+        "out_d":2.0,
+        "backword_distance":1.7
+
+    },
+    "spiral_curve_conf": {
+        "simpson_size": 9,
+        "newton_raphson_tol": 0.01,
+        "newton_raphson_max_iter": 20
+    },
+    "nlp_planner": {
+        "optimization_weights": {
+            "steering": 1.0,
+            "throttle": 1.0,
+            "goal": 0.5
+        },
+        "state_bounds": {
+            "lower": {
+                "x_m": -500.0,
+                "y_m": -500.0,
+                "velocity_mps": -3.0,
+                "heading_rad": -6.2832,
+                "steering_rad": -0.53
+            },
+            "upper": {
+                "x_m": 500.0,
+                "y_m": 500.0,
+                "velocity_mps": 3.0,
+                "heading_rad": 6.2832,
+                "steering_rad": 0.53
+            }
+        },
+        "command_bounds": {
+            "lower": {
+                "steering_rate_rps": -5.0,
+                "throttle_mps2": -5.0
+            },
+            "upper": {
+                "steering_rate_rps": 5.0,
+                "throttle_mps2": 5.0
+            }
+        }
+    }
+}

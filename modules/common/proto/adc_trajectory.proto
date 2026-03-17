@@ -1,0 +1,160 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/estop.proto";
+import "modules/common/proto/header.proto";
+import "modules/common/proto/rss_info.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/trajectory_point.proto";
+
+
+message ADCTrajectory{
+    enum CarAction{
+        CAR_ACTION_NONE = 0;
+        CAR_ACTION_SINGLE = 1;
+        CAR_ACTION_PLATOON_HEAD = 2;
+        CAR_ACTION_PLATOON_OTHER = 3;
+    }
+
+    enum BehaviourLatState{
+        LAT_NOT_ACTIVE_STATE = 0;
+        WAITING_STATE = 1;
+        FORWARD_STATE = 2;
+        STOPPING_STATE = 3;
+        EMERGENCY_STATE = 4;
+        FOLLOW_STATE = 5;
+        LANE_CHANGE_STATE = 6;
+        OBSTACLE_AVOIDANCE_STATE = 7;
+        STATION_STATE = 8;
+        STATION_WAIT_STATE = 9;
+        STATION_ARRIVED_STATE = 10;
+        YIELDING_STATE = 11;
+        BRANCH_LEFT_STATE = 12;
+        BRANCH_RIGHT_STATE = 13;
+        SLOW_DOWN_STATE = 14;
+        AVOIDANCE_PRE_STATE = 15;
+        AVOIDANCING_STATE = 16;
+        AVOIDANCE_KEEP_STATE = 17;
+        AVOIDANCE_BACK_PRE_STATE = 18;
+        AVOIDANCE_BACK_STATE = 19;
+        LANE_CHANGE_LEFT_PRE_STATE = 20;
+        LANE_CHANGE_RIGHT_PRE_STATE = 21;
+        LANE_CHANGE_LEFT_STATE = 22;
+        LANE_CHANGE_RIGHT_STATE = 23;
+        PARKING_INITIAL_STATE = 24;
+        PARKING_FINISH_STATE = 25;
+        PARALLEL_PARKING_BEGIN_STATE = 26;
+        PARALLEL_PARKING_FORWARD_BEGIN_STATE = 27;
+        PARALLEL_PARKING_FORWARD_STATE = 28;
+        PARALLEL_PARKING_FORWARD_FINISH_STATE = 29;
+        PARALLEL_PARKING_BACKWARD_BEGIN_STATE = 30;
+        PARALLEL_PARKING_BACKWARD_STATE = 31;
+        PARALLEL_PARKING_BACKWARD_FINISH_STATE = 32;
+        PARALLEL_PARKING_FINISH_STATE = 33;
+        VERTICAL_PARKING_BEGIN_STATE = 34;
+        VERTICAL_PARKING_FORWARD_BEGIN_STATE = 35;
+        VERTICAL_PARKING_FORWARD_STATE = 36;
+        VERTICAL_PARKING_FORWARD_FINISH_STATE = 37;
+        VERTICAL_PARKING_BACKWARD_BEGIN_STATE = 38;
+        VERTICAL_PARKING_BACKWARD_STATE = 39;
+        VERTICAL_PARKING_BACKWARD_FINISH_STATE = 40;
+        VERTICAL_PARKING_FINISH_STATE = 41;
+        OBLIQUE_PARKING_BEGIN_STATE = 42;
+        OBLIQUE_PARKING_FORWARD_BEGIN_STATE = 43;
+        OBLIQUE_PARKING_FORWARD_STATE = 44;
+        OBLIQUE_PARKING_FORWARD_FINISH_STATE = 45;
+        OBLIQUE_PARKING_BACKWARD_BEGIN_STATE = 46;
+        OBLIQUE_PARKING_BACKWARD_STATE = 47;
+        OBLIQUE_PARKING_BACKWARD_FINISH_STATE = 48;
+        OBLIQUE_PARKING_FINISH_STATE = 49;
+        FALLBACK = 50;
+        PULLOVER = 51;
+        LANECHANGE = 52;
+        LEFT = 53;
+        RIGHT = 54;
+        SELF = 55;
+    }
+
+    enum BehaviourLonState{
+        LON_NOT_ACTIVE_STATE = 0;
+        NORMAL = 1;
+        CONTINUE = 2;
+        FOLLOW = 3;
+        ACC = 4;
+        TJP = 5;
+        CUT_IN = 6;
+        STOP = 7;
+        ONCOMING = 8;
+        CROSSING = 9;
+        WAITE_AND_SEE = 10;
+        CREEP = 11;
+        PASS_THROUGH = 12;
+        PRECISE_STOP = 13;
+        TRAFFIC_LIGHT_STOP_STATE = 14;
+        TRAFFIC_LIGHT_WAIT_STATE = 15;
+        TRAFFIC_SIGN_STOP_STATE = 16;
+        TRAFFIC_SIGN_WAIT_STATE = 17;
+        KEEP_CLEAR = 18;
+        EMIGNORE = 19;
+        EMSTOP = 20;
+        EMFOLLOW = 21;
+        EMYIELD = 22;
+        EMOVERTAKE = 23;
+        EMNUDGE = 24;
+        EMAVOID = 25;
+        EMSIDEPASS = 26;
+        OBJECT_TAG_NOT_SET = 27;
+    }
+
+    enum Scenario{
+        SCENARIO_UNKNOWN = 0;
+        CRUISE = 1000;
+        CRUISE_URBAN = 1001;
+        CRUISE_HIGHWAY = 1002;
+        JUNCTION = 2000;
+        JUNCTION_TRAFFIC_LIGHT = 2001;
+        JUNCTION_STOP_SIGN = 2002;
+    }
+
+    enum ADCTrajectoryType{
+        TRAJECTORY_TYPE_ABSOLUTE = 0;
+        TRAJECTORY_TYPE_RELATIVE = 1;
+        TRAJECTORY_TYPE_INVALID = 2;
+    }
+
+    enum RightOfWayStatus{
+        UNPROTECTED = 0;
+        PROTECTED = 1;
+    }
+
+    //timestamp is included in header
+    optional Header header = 1;
+    //unit meters(m)
+    optional double total_path_length = 2 [default = 0.0];
+    //unit seconds(s)
+    optional double total_path_time = 3 [default = 0.0];
+    //规划轨迹点列
+    repeated TrajectoryPoint trajectory_points = 4;
+    //车辆行为： CAR_ACTION_NONE=0  //无效值 CAR_ACTION_SINGLE=1 //单车 CAR_ACTION_PLATOON_HEAD=2 //车队头车 CAR_ACTION_PLATOON_OTHER=3 //车队其他车辆
+    optional ADCTrajectory.CarAction car_action = 5 [default = CAR_ACTION_NONE];
+    //自动驾驶状态（主要指横向状态）
+    optional ADCTrajectory.BehaviourLatState behaviour_lat_state = 6 [default = LAT_NOT_ACTIVE_STATE];
+    //自动驾驶状态（主要指纵向状态）
+    optional ADCTrajectory.BehaviourLonState behaviour_lon_state = 7 [default = LON_NOT_ACTIVE_STATE];
+    //驾驶场景 0-UNKNOWN, 1-CRUISE, 2-CRUISE_URBAN 3-CRUISE_HIGHWAY, 2000-JUNCTION  2001-JUNCTION_TRAFFIC_LIGHT 2002-JUNCTION_STOP_SIGN
+    optional ADCTrajectory.Scenario scenario = 8 [default = SCENARIO_UNKNOWN];
+    //驾驶模式： 1：人工驾驶， 2：辅助驾驶， 3：自动驾驶
+    optional legion.common.DrivingMode driving_mode = 9 [default = COMPLETE_MANUAL];
+    //轨迹类型： TRAJECTORY_TYPE_ABSOLUTE=0 //绝对规划轨迹 TRAJECTORY_TYPE_RELATIVE=1 //相对规划轨迹 TRAJECTORY_TYPE_INVALID=2 //无效规划轨迹
+    optional ADCTrajectory.ADCTrajectoryType adc_trajectory_type = 10 [default = TRAJECTORY_TYPE_ABSOLUTE];
+    //emergency stop
+    optional EStop estop = 11;
+    //is_replan == truemean replan triggered(default = false)
+    optional bool is_replan = 12 [default = false];
+    optional string replan_reason = 13;
+    //UNPROTECTED = 0;PROTECTED = 1;
+    optional ADCTrajectory.RightOfWayStatus right_of_way_status = 14 [default = UNPROTECTED];
+    //output related to RSS
+    optional RSSInfo rss_info = 15 ;
+}

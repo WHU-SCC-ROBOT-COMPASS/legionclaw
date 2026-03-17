@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/common_enum.proto";
+
+
+message LimitSpeedInfo{
+    //限速有效性标志位
+    optional legion.common.IsValid limitspeed_valid_flag = 1 [default = INVALID];
+    //限速大小（m/s）
+    optional double limit_speed = 2 [default = 0.0];
+    //开始减速距离(m)
+    optional double limit_distance = 3 [default = 0.0];
+}

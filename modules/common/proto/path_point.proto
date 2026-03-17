@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message PathPoint{
+    //coordinates x
+    optional double x = 1 [default = 0.0];
+    //coordinates y
+    optional double y = 2 [default = 0.0];
+    //coordinates z
+    optional double z = 3 [default = 0.0];
+    //direction on the x-y plane
+    optional double theta = 4 [default = 0.0];
+    //curvature on the x-y planning
+    optional double kappa = 5 [default = 0.0];
+    //accumulated distance from beginning of the path
+    optional double s = 6 [default = 0.0];
+    //derivative of kappa w.r.t s.
+    optional double dkappa = 7 [default = 0.0];
+    //derivative of derivative of kappa w.r.t s.
+    optional double ddkappa = 8 [default = 0.0];
+    //The lane ID where the path point is on
+    optional double lane_id = 9 [default = 0.0];
+    //derivative of x w.r.t parametric parameter t in CosThetareferenceline
+    optional double x_derivative = 10 [default = 0.0];
+    //derivative of y w.r.t parametric parameter t in CosThetareferenceline
+    optional double y_derivative = 11 [default = 0.0];
+}

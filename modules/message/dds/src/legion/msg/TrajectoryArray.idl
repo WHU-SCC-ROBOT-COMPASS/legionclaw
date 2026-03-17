@@ -1,0 +1,16 @@
+ #ifndef __TrajectoryArray__idl__
+#define __TrajectoryArray__idl__
+#include "Header.idl"
+#include "Path.idl"
+#include "Trajectory.idl"
+module ros2_interface{
+ module msg{
+  struct TrajectoryArray{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::Path> _spline_s;
+    sequence<ros2_interface::msg::Path> _qp_smooth;
+    sequence<ros2_interface::msg::Trajectory> _trajectory_list;
+  };
+ };
+}; 
+#endif

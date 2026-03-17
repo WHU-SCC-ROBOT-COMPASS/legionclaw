@@ -1,0 +1,163 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message Chassis{
+    enum ErrorCode{
+        NO_ERROR = 0;
+        CMD_NOT_IN_PERIOD = 1;
+        CHASSIS_ERROR = 2;
+        MANUAL_INTERVENTION = 3;
+        CHASSIS_CAN_NOT_IN_PERIOD = 4;
+        SPEED_IS_INVALID = 5;
+        UNKNOWN_ERROR = 6;
+    }
+
+    optional Header header = 1;
+    //移动状态
+    optional legion.common.MovingStatus moving_status = 2 [default = UNKNOWN_VEHICLE_STATE];
+    //驾驶状态
+    optional legion.common.DrivingMode driving_mode = 3 [default = COMPLETE_MANUAL];
+    //线控转向驾驶模式
+    optional legion.common.DrivingMode steer_driving_mode = 4 [default = COMPLETE_MANUAL];
+    //线控转向执行器状态
+    optional legion.common.ControlStatus steering_status = 5 [default = CONTROLLABLE];
+    //方向盘转角
+    optional double front_steering_value = 6 [default = 0.0];
+    //后轮转角
+    optional double rear_steering_value = 7 [default = 0.0];
+    //方向盘扭矩
+    optional double steering_torque_nm = 8 [default = 0.0];
+    //方向盘转速
+    optional double front_steering_rate_dps = 9 [default = 0.0];
+    //方向盘转速
+    optional double rear_steering_rate_dps = 10 [default = 0.0];
+    //线控驱动驾驶模式
+    optional legion.common.DrivingMode accel_driving_mode = 11 [default = COMPLETE_MANUAL];
+    //线控驱动状态
+    optional legion.common.ControlStatus accel_status = 12 [default = CONTROLLABLE];
+    //线控驱动值（油门值）
+    optional double accel_value = 13 [default = 0.0];
+    //线控制动驾驶模式
+    optional legion.common.DrivingMode brake_driving_mode = 14 [default = COMPLETE_MANUAL];
+    //线控制动状态
+    optional legion.common.ControlStatus brake_status = 15 [default = CONTROLLABLE];
+    //线控制动值（刹车值）
+    optional double brake_value = 16 [default = 0.0];
+    //备用线控制动驾驶模式
+    optional legion.common.DrivingMode backup_brake_driving_mode = 17 [default = COMPLETE_MANUAL];
+    //备用线控制动状态
+    optional legion.common.ControlStatus backup_brake_status = 18 [default = CONTROLLABLE];
+    //备用线控制动值
+    optional double backup_brake_value = 19 [default = 0.0];
+    //EPB驾驶模式
+    optional legion.common.DrivingMode epb_driving_mode = 20 [default = COMPLETE_MANUAL];
+    //EPB状态
+    optional legion.common.ControlStatus epb_status = 21 [default = CONTROLLABLE];
+    //EPB档位
+    optional legion.common.EPBLevel epb_level = 22 [default = RELEASED];
+    //发动机状态
+    optional legion.common.EngineStauts engine_status = 23 [default = STOPPED];
+    //发动机转速
+    optional double engine_rpm = 24 [default = 0.0];
+    //发动机扭矩
+    optional double engine_torque = 25 [default = 0.0];
+    //车速（m/s）
+    optional double speed_mps = 26 [default = 0.0];
+    //里程(m)
+    optional double odometer_m = 27 [default = 0.0];
+    //油表值
+    optional int32 fuel_range_m = 28 [default = 0];
+    //档位驾驶模式
+    optional legion.common.DrivingMode gear_driving_mode = 29 [default = COMPLETE_MANUAL];
+    //档位状态
+    optional legion.common.ControlStatus gear_status = 30 [default = CONTROLLABLE];
+    //档位值
+    optional legion.common.GearPosition gear_location = 31 [default = GEAR_NEUTRAL];
+    //主驾驶位安全带状态
+    optional legion.common.SwitchStatus driver_seat_belt = 32 [default = SWITCH_STATUS_OFF];
+    //远光灯状态
+    optional legion.common.SwitchStatus high_beam_status = 33 [default = SWITCH_STATUS_OFF];
+    //近光灯状态
+    optional legion.common.SwitchStatus low_beam_status = 34 [default = SWITCH_STATUS_OFF];
+    //喇叭状态
+    optional legion.common.SwitchStatus horn_status = 35 [default = SWITCH_STATUS_OFF];
+    //转向灯状态
+    optional legion.common.TurnSignal turn_lamp_status = 36 [default = TURN_INACTIVE_SIGNAL];
+    //前雨刮器状态
+    optional legion.common.SwitchStatus front_wiper_status = 37 [default = SWITCH_STATUS_OFF];
+    //后雨刮器状态
+    optional legion.common.SwitchStatus rear_wiper_status = 38 [default = SWITCH_STATUS_OFF];
+    //位置灯状态
+    optional legion.common.SwitchStatus position_lamp_status = 39 [default = SWITCH_STATUS_OFF];
+    //前雾灯状态
+    optional legion.common.SwitchStatus front_fog_lamp_status = 40 [default = SWITCH_STATUS_OFF];
+    //后雾灯状态
+    optional legion.common.SwitchStatus rear_fog_lamp_status = 41 [default = SWITCH_STATUS_OFF];
+    //刹车灯状态
+    optional legion.common.SwitchStatus brake_lamp_status = 42 [default = SWITCH_STATUS_OFF];
+    //报警灯状态
+    optional legion.common.SwitchStatus alarm_lamp_status = 43 [default = SWITCH_STATUS_OFF];
+    //左前门状态
+    optional legion.common.DoorStatus lf_door_status = 44 [default = CLOSEED];
+    //右前门状态
+    optional legion.common.DoorStatus rf_door_status = 45 [default = CLOSEED];
+    //左后门状态
+    optional legion.common.DoorStatus lr_door_status = 46 [default = CLOSEED];
+    //右后门状态
+    optional legion.common.DoorStatus rr_door_status = 47 [default = CLOSEED];
+    //后视镜状态
+    optional legion.common.FoldUnfoldStatus rearview_mirror_status = 48 [default = FOLD_UNFOLD_STATUS_UNKNOWN];
+    //后备箱盖状态
+    optional legion.common.DoorStatus trunk_status = 49 [default = CLOSEED];
+    //发送机舱盖状态
+    optional legion.common.DoorStatus engine_bay_door_status = 50 [default = CLOSEED];
+    //右后轮方向
+    optional legion.common.WheelSpeedType wheel_direction_rr = 51 [default = FORWARD];
+    //右后轮速
+    optional double wheel_spd_rr = 52 [default = 0.0];
+    //左后轮方向
+    optional legion.common.WheelSpeedType wheel_direction_rl = 53 [default = FORWARD];
+    //左后轮值
+    optional double wheel_spd_rl = 54 [default = 0.0];
+    //右前轮方向
+    optional legion.common.WheelSpeedType wheel_direction_fr = 55 [default = FORWARD];
+    //右前轮速
+    optional double wheel_spd_fr = 56 [default = 0.0];
+    //左前轮方向
+    optional legion.common.WheelSpeedType wheel_direction_fl = 57 [default = FORWARD];
+    //左前轮速
+    optional double wheel_spd_fl = 58 [default = 0.0];
+    //胎压是否正常
+    optional legion.common.FailureStatus is_tire_pressure_ok = 59 [default = FAILURE_STATUS_UNKNOWN];
+    //左前轮胎压是否有效
+    optional legion.common.IsValid is_tire_pressure_lf_valid = 60 [default = INVALID];
+    //左前轮胎压
+    optional double tire_pressure_lf = 61 [default = 0.0];
+    //右前轮胎压是否有效
+    optional legion.common.IsValid is_tire_pressure_rf_valid = 62 [default = INVALID];
+    //右前轮胎压
+    optional double tire_pressure_rf = 63 [default = 0.0];
+    //左后轮胎压是否有效
+    optional legion.common.IsValid is_tire_pressure_lr_valid = 64 [default = INVALID];
+    //左后轮胎压
+    optional double tire_pressure_lr = 65 [default = 0.0];
+    //右后轮胎压是否有效
+    optional legion.common.IsValid is_tire_pressure_rr_valid = 66 [default = INVALID];
+    //右后轮胎压
+    optional double tire_pressure_rr = 67 [default = 0.0];
+    //电池电量值
+    optional double battery_power_percentage = 68 [default = 0.0];
+    //气囊状态
+    optional legion.common.FailureStatus air_bag_status = 69 [default = FAILURE_STATUS_UNKNOWN];
+    //充电枪状态
+    optional legion.common.PlugStatus charging_gun_status = 70 [default = PLUG_STATUS_UNKNOWN];
+    //电量表状态
+    optional legion.common.FailureStatus vehicle_power_status = 71 [default = FAILURE_STATUS_UNKNOWN];
+    //底盘错误码
+    repeated ErrorCode chassis_error_code = 72;
+}

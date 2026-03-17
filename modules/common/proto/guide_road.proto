@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/curvature_info.proto";
+
+
+message GuideRoad{
+    //道路的id
+    optional int64 road_id = 1 [default = 0];
+    //道路的类型: 0：未知或一般道路  1：环岛 2：交叉路口 3：主路 4：辅路
+    optional int32 road_type = 2 [default = 0];
+    //规划路线上道路的转向信息 1：左转 2：直行 3：右转
+    optional int32 turn_type = 3 [default = 0];
+    //道路的平均曲率
+    optional double avg_curvature = 4 [default = 0.0];
+    //道路中心线上点(曲率)数量
+    optional int32 curvature_size = 5 [default = 0];
+    //道路曲率信息数组
+    repeated CurvatureInfo curvature = 6;
+}

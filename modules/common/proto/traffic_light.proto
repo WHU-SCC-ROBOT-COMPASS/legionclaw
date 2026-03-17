@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/time.proto";
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/image_rect.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message TrafficLight{
+    //UNKNOWN = 0; RED = 1; YELLOW = 2; GREEN = 3; BLACK = 4;
+    optional legion.common.TrafficLightColor color = 1 [default = COLOR_UNKNOWN];
+    //light id
+    optional uint32 id = 2 [default = 0];
+    //STRAIGHT = 0; TURN_LEFT = 1; TURN_RIGHT = 2; STRAIGHT_TURN_LEFT = 3; STRAIGHT_TURN_RIGHT =4; CIRCULAR = 5; PEDESTRIAN = 6; CYCLIST = 7; UNKNOWN = 8;
+    optional legion.common.TrafficLightType type = 3 [default = STRAIGHT];
+    //置信度confdence: [0-1]
+    optional double confidence = 4 [default = 0.0];
+    //交通灯矩形框light rect
+    optional ImageRect light_rect = 5 ;
+    //交通灯位置position of light
+    optional Point3D position = 6;
+    //距离distance between light and stop line
+    optional double distance = 7 [default = 0.0];
+    //corresponding lanes of light
+  repeated int32 light_lanes = 8;
+    //duration of a light since track
+    optional double tracking_time = 9 [default = 0.0];
+    //true:
+    optional bool blink = 10 [default = false];
+    //duration of a light blinking
+    optional double blinking_time = 11 [default = 0.0];
+    //V2X time of light
+    optional double remaining_time = 12 [default = 0.0];
+    //time of light detected
+    optional Time create_time = 13;
+}

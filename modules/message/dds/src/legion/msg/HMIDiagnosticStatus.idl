@@ -1,0 +1,14 @@
+ #ifndef __HMIDiagnosticStatus__idl__
+#define __HMIDiagnosticStatus__idl__
+module ros2_interface{
+ module msg{
+  struct HMIDiagnosticStatus{
+    int32   _id;
+    int32   _level;
+    string   _name;
+    string   _message;
+    string   _hardware_id;
+  };
+ };
+}; 
+#endif

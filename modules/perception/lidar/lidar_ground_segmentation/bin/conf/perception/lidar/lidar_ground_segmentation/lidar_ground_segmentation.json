@@ -1,0 +1,46 @@
+{
+    "app_name": "lidar_ground_segmentation",
+    "description": "lidar_ground_segmentation module",
+    "log_file_path": "./log",
+    "log_level": 0,
+    "logging_data_enable": false,
+    "use_system_timestamp": true,
+    "produce_lidar_ground_segmentation_command_duration": 20,
+    "publish_lidar_ground_segmentation_command_duration": 10,
+    "message": {
+        "active_message": [
+            4
+        ],
+        "message_info": [
+            {
+                "type": 0,
+                "name": "LCM",
+                "url": "udpm://239.255.76.21:7621?ttl=3"
+            },
+            {
+                "type": 1,
+                "name": "DDS",
+                "url":"null"
+            },
+            {
+                "type": 2,
+                "name": "ROS",
+                "url":"null"
+            },
+            {
+                "type": 3,
+                "name": "ADSFI",
+                "url": "null"
+            },
+            {
+                "type": 4,
+                "name": "ROS2",
+                "url": "null"
+            }
+        ]
+    },
+    "status": {
+        "status_detect_duration": 10
+    },
+    "params_file": "./conf/perception/lidar/lidar_ground_segmentation/params.json"
+}

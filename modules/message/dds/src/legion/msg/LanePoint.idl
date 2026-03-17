@@ -1,0 +1,18 @@
+ #ifndef __LanePoint__idl__
+#define __LanePoint__idl__
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct LanePoint{
+    ros2_interface::msg::Point3D   _point;
+    double   _theta;
+    double   _mileage;
+    double   _limit_speed;
+    double   _left_road_width;
+    double   _right_road_width;
+    int32   _left_line_type;
+    int32   _right_line_type;
+  };
+ };
+}; 
+#endif

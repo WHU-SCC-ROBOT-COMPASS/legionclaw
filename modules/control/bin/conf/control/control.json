@@ -1,0 +1,769 @@
+{
+    "app_name": "control",
+    "description": "control module",
+    "log_file_path": "./log",
+    "log_level": 1,
+    "logging_data_enable": false,
+    "use_system_timestamp": true,
+    "use_adctrajectory_system_timestamp_enable":true,
+    "produce_control_command_duration": 0.02,
+    "publish_control_command_duration": 0.01,
+    "vehicle": {
+        "brand": 8,
+        "name": "hq_h9"
+    },
+    "messages": {
+        "active_message": [
+            4
+        ],
+        "message_info": [
+            {
+                "type": 0,
+                "name": "LCM",
+                "url": "udpm://239.255.76.21:7621?ttl=3"
+            },
+            {
+                "type": 1,
+                "name": "DDS",
+                "url": "{\"participant_qos\": {\"domain_id\": 0,\"shm\": { \"enable\": true},\"udp\": {\"enable\": true,\"ttl\": 3},\"tcp\": {\"enable\": false,\"mode\": 0,\"ip\": \"127.0.0.1\",\"server_port\": 5100,\"listen_port\": 5100},\"intraprocess\": false,\"data_sharing\": true,\"statistics\": false},\"writer_qos\": {\"history\": {\"kind\": 0,\"depth\": 5},\"reliability\": 2,\"liveliness\": {\"kind\": 0,\"lease_duration\": \"INF\",\"announcement_period\": \"INF\"},\"durability\": 1,\"ownership\": {\"kind\": 0,\"ownership_strength\": 0},\"history_memory_policy\": 3,\"publish_mode\": 1,\"deadline\": \"INF\",\"lifespan\": \"INF\",\"auto_fill_type_object\":false,\"auto_fill_type_information\":true},\"reader_qos\": {\"history\": {\"kind\": 0,\"depth\": 5},\"reliability\": 2,\"liveliness\": {\"kind\": 0,\"lease_duration\": \"INF\",\"announcement_period\": \"INF\"},\"durability\": 1,\"ownership\": {\"kind\": 0,\"ownership_strength\": 0},\"history_memory_policy\": 3,\"deadline\": \"INF\",\"lifespan\": \"INF\",\"auto_fill_type_object\":false,\"auto_fill_type_information\":true}}"
+            },
+            {
+                "type": 2,
+                "name": "ROS",
+                "url": "null"
+            },
+            {
+                "type": 3,
+                "name": "ADSFI",
+                "url": "null"
+            },
+            {
+                "type": 4,
+                "name": "ROS2",
+                "url": "null"
+            }
+        ]
+    },
+    "shared_autonomy_conf": {
+        "enable_shared_autonomy": false,
+        "steer_angle_rate": 10,
+        "steer_angle_tolerance": 2,
+        "steer_rate_speed_scheduler": [
+            {
+                "speed": 6.0,
+                "ratio": 1.0
+            },
+            {
+                "speed": 12,
+                "ratio": 0.5
+            },
+            {
+                "speed": 18,
+                "ratio": 0.2
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.1
+            }
+        ]
+    },
+    "name": "HQ_H9",
+    "use_lidar_obstacle_avoidance": false,
+    "use_uss_obstacle_avoidance":false,
+    "obstacle_avoidance": {
+        "lidar": {
+            "k": 0.5,
+            "b": 2,
+            "side_front_k": 0.2,
+            "side_front_b": 1.5,
+            "side_back_k": 0.2,
+            "side_back_b": 1.5
+        },
+        "uss": {
+            "front_distance": 0.5,
+            "back_distance": 0.4,
+            "mid_distance": 0.6,
+            "side_distance": 0.4
+        }
+    },
+    "use_new_planning_mode": true,
+    "use_acceleration_mode": false,
+    "use_deceleration_mode": true,
+    "enable_log_debug": false,
+    "enable_speed_station_preview": false,
+    "enable_persistent_estop": false,
+    "enable_gear_dirve_negative_speed_protection": false,
+    "is_control_test_mode": false,
+    "enable_input_timestamp_check": true,
+    "max_localization_miss_num": 50,
+    "max_planning_miss_num": 60,
+    "max_chassis_miss_num": 200,
+    "max_acceleration_when_stopped": 0.01,
+    "max_path_remain_when_stopped": 0.6,
+    "min_path_remain_when_stopped": 0.3,
+    "standstill_acceleration": -0.2,
+    "max_abs_speed_when_epb_applied_duration": 6.0,
+    "steer_angle_rate": 400,
+    "set_steer_limit": true,
+    "control_period": 0.02,
+    "trajectory_period": 0.1,
+    "chassis_period": 0.01,
+    "localization_period": 0.01,
+    "soft_estop_brake": 50,
+    "minimum_speed_resolution": 0.05,
+    "query_relative_time": 0.8,
+    "minimum_speed_protection": 0.3,
+    "use_navigation_mode": true,
+    "query_time_nearest_point_only": false,
+    "query_forward_time_point_only": false,
+    "enable_navigation_mode_position_update": true,
+    "enable_navigation_mode_error_filter": false,
+    "trajectory_transform_to_com_reverse": false,
+    "trajectory_transform_to_com_drive": false,
+    "enable_feedback_augment_on_high_speed": false,
+    "enable_maximum_steer_rate_limit": true,
+    "lock_steer_speed": 0.081,
+    "is_in_zero_steer_angle": 0.17,
+    "active_controllers": {
+        "active_message": [
+            5,
+            2
+        ],
+        "active_info": [
+            {
+                "type": 0,
+                "name": "stop_distance_controller"
+            },
+            {
+                "type": 1,
+                "name": "lon_controller"
+            },
+            {
+                "type": 2,
+                "name": "lqr_controller"
+            },
+            {
+                "type": 3,
+                "name": "mpc_controller"
+            },
+            {
+                "type": 4,
+                "name": "purepursuit_controller"
+            },
+            {
+                "type": 5,
+                "name": "lon_speed_controller"
+            }
+        ]
+    },
+    "lon_speed_controller_conf": {
+        "ts" :0.02,
+        "preview_window" :2.0,
+        "use_station_pid" : false,
+        "starting_speed" : 0.5,
+        "acceleration_threshold_when_brake" :-20
+    },
+    "lqr_controller_conf": {
+        "enable_log_debug": false,
+        "lqr_print_enable": false,
+        "eps": 0.01,
+        "ts": 0.02,
+        "preview_window": 0,
+        "matrix_q": [
+            0.005,
+            0.0,
+            1.0,
+            0.0
+        ],
+        "reverse_matrix_q": [
+            2.0,
+            0.0,
+            3.0,
+            0.0
+        ],
+        "cutoff_freq": 2,
+        "mean_filter_window_size": 10,
+        "max_iteration": 300,
+        "max_lateral_acceleration": 5.0,
+        "enable_reverse_leadlag_compensation": false,
+        "enable_look_ahead_back_control": false,
+        "enable_steer_mrac_control": false,
+        "enable_gain_scheduler": true,
+        "lookahead_station": 0.1,
+        "lookback_station": 0.0,
+        "reverse_heading_control": false,
+        "use_preview_speed_for_table": false,
+        "use_lqr_calibration_table": false,
+        "enable_error_sigmoid_control": false,
+        "enable_error_apc_scheduler": true,
+        "lateral_error_threshold": 1.5,
+        "heading_error_threshold": 20.0,
+        "q_lat_err_max": 6.0,
+        "q_heading_err_max": 5.0,
+        "lat_err_gain_scheduler": [
+            {
+                "speed": 1.0,
+                "ratio": 1.5
+            },
+            {
+                "speed": 2.0,
+                "ratio": 1.3
+            },
+            {
+                "speed": 3.0,
+                "ratio": 0.8
+            },
+            {
+                "speed": 4.0,
+                "ratio": 0.4
+            },
+            {
+                "speed": 8.0,
+                "ratio": 0.2
+            },
+            {
+                "speed": 12.0,
+                "ratio": 0.1
+            },
+            {
+                "speed": 20.0,
+                "ratio": 0.04
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.02
+            }
+        ],
+        "heading_err_gain_scheduler": [
+            {
+                "speed": 1.0,
+                "ratio": 1.0
+            },
+            {
+                "speed": 2.0,
+                "ratio": 0.8
+            },
+            {
+                "speed": 3.0,
+                "ratio": 0.5
+            },
+            {
+                "speed": 4.0,
+                "ratio": 0.25
+            },
+            {
+                "speed": 8.0,
+                "ratio": 0.1
+            },
+            {
+                "speed": 12.0,
+                "ratio": 0.08
+            },
+            {
+                "speed": 20.0,
+                "ratio": 0.06
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.05
+            }
+        ],
+        "lat_err_apc_scheduler": [
+            {
+                "error": 0.1,
+                "ratio": 0.4
+            },
+            {
+                "error": 0.2,
+                "ratio": 0.5
+            },
+            {
+                "error": 0.5,
+                "ratio": 0.6
+            },
+            {
+                "error": 1.0,
+                "ratio": 0.8
+            },
+            {
+                "error": 1.5,
+                "ratio": 1.0
+            }
+        ],
+        "heading_err_apc_scheduler": [
+            {
+                "error": 1.0,
+                "ratio": 0.2
+            },
+            {
+                "error": 2.0,
+                "ratio": 0.5
+            },
+            {
+                "error": 4.0,
+                "ratio": 1.0
+            },
+            {
+                "error": 10.0,
+                "ratio": 2.0
+            },
+            {
+                "error": 20.0,
+                "ratio": 3.0
+            }
+        ],
+        "reverse_leadlag_conf": {
+            "innerstate_saturation_level": 3000,
+            "alpha": 1.0,
+            "beta": 1.0,
+            "tau": 0.0
+        },
+        "steer_mrac_conf": {
+            "mrac_model_order": 1,
+            "reference_time_constant": 0.01,
+            "reference_natural_frequency": 10,
+            "reference_damping_ratio": 0.9,
+            "adaption_state_gain": [
+                1.0
+            ],
+            "adaption_desired_gain": 1.0,
+            "adaption_nonlinear_gain": 1.0,
+            "adaption_matrix_p": [
+                1.0
+            ],
+            "mrac_saturation_level": 1.0,
+            "anti_windup_compensation_gain": [
+                0.0
+            ]
+        },
+        "error_sigmoid_conf": {
+            "lat_error_axis": 0.1,
+            "lat_error_slope": 10,
+            "heading_error_axis": 0.2,
+            "heading_error_slope": 10
+        },
+        "lat_speed_kp_scheduler": [
+            {
+                "speed": 6.0,
+                "ratio": 1.0
+            },
+            {
+                "speed": 12,
+                "ratio": 0.5
+            },
+            {
+                "speed": 18,
+                "ratio": 0.2
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.1
+            }
+        ]
+    },
+    "mpc_controller_conf": {
+        "enable_log_debug": false,
+        "ts": 0.02,
+        "eps": 0.01,
+        "preview_window": 0,
+        "matrix_q": [
+            0.04,
+            0.0,
+            1.8,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "reverse_matrix_q": [
+            1.5,
+            0.0,
+            3.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "matrix_r": [
+            1.0,
+            1.0
+        ],
+        "cutoff_freq": 10,
+        "mean_filter_window_size": 10,
+        "max_iteration": 150,
+        "max_lateral_acceleration": 5.0,
+        "enable_mpc_feedforward_compensation": false,
+        "enable_gain_scheduler": true,
+        "unconstrained_control_diff_limit": 5.0,
+        "reverse_heading_control": false,
+        "use_preview_speed_for_table": false,
+        "use_osqp_solver": false,
+        "accel_minimum_action": 0.1,
+        "brake_minimum_action": -0.1,
+        "lat_err_gain_scheduler": [
+            {
+                "speed": 4.0,
+                "ratio": 1.0
+            },
+            {
+                "speed": 8.0,
+                "ratio": 0.6
+            },
+            {
+                "speed": 12.0,
+                "ratio": 0.2
+            },
+            {
+                "speed": 20.0,
+                "ratio": 0.1
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.05
+            }
+        ],
+        "heading_err_gain_scheduler": [
+            {
+                "speed": 4.0,
+                "ratio": 1.0
+            },
+            {
+                "speed": 8.0,
+                "ratio": 0.6
+            },
+            {
+                "speed": 12.0,
+                "ratio": 0.4
+            },
+            {
+                "speed": 20.0,
+                "ratio": 0.2
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.1
+            }
+        ],
+        "feedforwardterm_gain_scheduler": [
+            {
+                "speed": 4.0,
+                "ratio": 1.0
+            },
+            {
+                "speed": 8.0,
+                "ratio": 0.6
+            },
+            {
+                "speed": 12.0,
+                "ratio": 0.4
+            },
+            {
+                "speed": 20.0,
+                "ratio": 0.2
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.1
+            }
+        ],
+        "steer_weight_gain_scheduler": [
+            {
+                "speed": 4.0,
+                "ratio": 1.0
+            },
+            {
+                "speed": 8.0,
+                "ratio": 0.6
+            },
+            {
+                "speed": 12.0,
+                "ratio": 0.4
+            },
+            {
+                "speed": 20.0,
+                "ratio": 0.2
+            },
+            {
+                "speed": 25.0,
+                "ratio": 0.1
+            }
+        ],
+        "calibration_table": [
+            {
+                "speed": 0.0,
+                "acceleration": -1.43,
+                "command": -2.0
+            },
+            {
+                "speed": 0.0,
+                "acceleration": -1.28,
+                "command": -2.0
+            },
+            {
+                "speed": 0.0,
+                "acceleration": -1.17,
+                "command": -1.0
+            },
+            {
+                "speed": 0.0,
+                "acceleration": -1.02,
+                "command": -1.0
+            },
+            {
+                "speed": 0.0,
+                "acceleration": -0.48,
+                "command": -1.0
+            }
+        ]
+    },
+    "purepursuit_controller_conf": {
+        "ts": 0.02,
+        "max_lateral_acceleration": 1.0,
+        "enable_log_debug": false,
+        "use_delay_compensation": false,
+        "use_interpolate_lookahead_point": true,
+        "minimum_lookahead_distance": 0.3,
+        "maximum_lookahead_distance": 0.5,
+        "speed_to_lookahead_ratio": 0.3,
+        "purepursuit_minimum_lookahead_distance": 5.0,
+        "purepursuit_maximum_lookahead_distance": 8.0,
+        "purepursuit_speed_to_lookahead_ratio": 0.1,
+        "lookahead_station": 0.1,
+        "lookback_station": 0.0,
+        "enable_digital_filter": true,
+        "cutoff_freq": 1,
+        "lat_error_threshold": 0.5,
+        "heading_error_threshold":8,
+        "lat_error_min_threshold":0.15,
+        "heading_error_min_threshold":3,
+        "enable_heading_error": true,
+        "heading_error_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 10,
+            "kp": 1.0,
+            "ki": 0.0,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "enable_lat_error": true,
+        "lat_error_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 0.6,
+            "kp": 1.0,
+            "ki": 0.0,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "heading_error_gain": 0.375,
+        "lat_error_gain": 0.078125
+    },
+    "stop_distance_controller_conf": {
+        "ts": 0.02,
+        "brake_delay_time_d": 0.8,
+        "brake_delay_time_r": 0.47,
+        "vehicle_speed_in_idle": 0.833,
+        "deceleration_in_idle_speed": -0.001,
+        "starting_acceleration_in_d": 0.27,
+        "starting_acceleration_in_r": 0.27,
+        "brake_switch_throttle_delay": 0,
+        "brake_sign": -1,
+        "kp_brake": 1.0,
+        "starting_speed": 0.1,
+        "pitch_offset": 0.0,
+        "brake_minimum_action": -0.01,
+        "throttle_minimum_action": 0.01,
+        "speed_controller_input_limit": 3.0,
+        "station_error_limit": 5.0,
+        "preview_window": 100.0,
+        "enable_reverse_leadlag_compensation": false,
+        "lon_print_enable": false,
+        "enable_log_debug": false,
+        "enable_slope_offset": true,
+        "enable_aero_offset": true,
+        "enable_turning_offset": true,
+        "enable_rolling_offset": false,
+        "use_calibration_table": true,
+        "stop_distance_limit_when_pid_applied": 400,
+        "max_stop_distance": 500,
+        "min_stop_distance": 15,
+        "stop_threshold": 5,
+        "pid_buffer_limit": 500,
+        "dkappa_threshold": 0.10,
+        "dkappa_stopdistance_limit": 100.0,
+        "end_s_diff_limit": 1.0,
+        "stop_distance_forward_coefficient": 2.0,
+        "stop_distance_backward_coefficient": 1.0,
+        "stop_distance_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 0.3,
+            "kp": 2.0,
+            "ki": 1.0,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "speed_limit_table": {
+            "forward_speed_limit_info": [
+                {
+                    "stop_distance": 200,
+                    "speed_limit": 3.0
+                },
+                {
+                    "stop_distance": 150,
+                    "speed_limit": 2.25
+                },
+                {
+                    "stop_distance": 50,
+                    "speed_limit": 1.0
+                },
+                {
+                    "stop_distance": 20,
+                    "speed_limit": 0.8
+                },
+                {
+                    "stop_distance": 0,
+                    "speed_limit": 0.4
+                }
+            ],
+            "backward_speed_limit_info": [
+                {
+                    "stop_distance": 200,
+                    "speed_limit": 2.0
+                },
+                {
+                    "stop_distance": 150,
+                    "speed_limit": 1.5
+                },
+                {
+                    "stop_distance": 50,
+                    "speed_limit": 1.0
+                },
+                {
+                    "stop_distance": 20,
+                    "speed_limit": 1.0
+                },
+                {
+                    "stop_distance": 0,
+                    "speed_limit": 0.4
+                }
+            ]
+        }
+    },
+    "lon_controller_conf": {
+        "ts": 0.02,
+        "brake_delay_time_d": 0.8,
+        "brake_delay_time_r": 0.47,
+        "vehicle_speed_in_idle": 0.833,
+        "deceleration_in_idle_speed": -0.001,
+        "starting_acceleration_in_d": 0.27,
+        "starting_acceleration_in_r": 0.27,
+        "brake_switch_throttle_delay": 0,
+        "brake_sign": -1,
+        "kp_brake": 1.0,
+        "starting_speed": 0.3,
+        "pitch_offset": 0.0,
+        "brake_minimum_action": -0.01,
+        "throttle_minimum_action": 0.01,
+        "speed_controller_input_limit": 3.0,
+        "station_error_limit": 5.0,
+        "preview_window": 2.0,
+        "enable_reverse_leadlag_compensation": false,
+        "lon_print_enable": false,
+        "enable_log_debug": false,
+        "enable_slope_offset": true,
+        "enable_aero_offset": true,
+        "enable_turning_offset": true,
+        "enable_rolling_offset": false,
+        "use_calibration_table": true,
+        "accel_value_kp": 30,
+        "max_accel_value": 100,
+        "downhill_scene_conf": {
+            "enable_brake_impulse": false,
+            "downhill_scene_pitch": -2.0,
+            "brake_amplitude": -0.04,
+            "min_brake_amplitude": 0,
+            "braking_duration": 0.9,
+            "driving_duration": 0.05
+        },
+        "pitch_angle_filter_conf": {
+            "cutoff_freq": 5
+        },
+        "station_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 0.3,
+            "kp": 0.2,
+            "ki": 0.0,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "low_speed_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 0.4,
+            "kp": 0.5,
+            "ki": 0.12,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "high_speed_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 0.2,
+            "kp": 1.0,
+            "ki": 0.05,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "switch_speed": 5.0,
+        "reverse_station_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 0.5,
+            "kp": 0.2,
+            "ki": 0.02,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "reverse_speed_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 0.1,
+            "kp": 0.1,
+            "ki": 0.2,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "reverse_station_leadlag_conf": {
+            "innerstate_saturation_level": 1000,
+            "alpha": 1.0,
+            "beta": 1.0,
+            "tau": 0.0
+        },
+        "reverse_speed_leadlag_conf": {
+            "innerstate_saturation_level": 1000,
+            "alpha": 1.0,
+            "beta": 1.0,
+            "tau": 0.0
+        },
+        "max_acceleration_jerk_in_large_resistance": 2.0,
+        "large_resistance_speed_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 1.0,
+            "kp": 1.6,
+            "ki": 0.3,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        },
+        "large_resistance_reverse_speed_pid_conf": {
+            "integrator_enable": true,
+            "integrator_saturation_level": 1.0,
+            "kp": 2.5,
+            "ki": 0.3,
+            "kd": 0.0,
+            "kaw": 0.0,
+            "output_saturation_level": 0.0
+        }
+    }
+}

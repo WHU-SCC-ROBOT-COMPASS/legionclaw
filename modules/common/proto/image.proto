@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+
+
+message Image{
+    //消息头
+    optional Header header = 1;
+    //image height, that is, number of rows
+    optional uint32 height = 2 [default = 0];
+    //image width, that is, number of columns
+    optional uint32 width = 3 [default = 0];
+    //图像编码方式
+    optional string encoding = 4;
+    //is this data bigendian?
+    optional uint32 is_bigendian = 5 [default = 0];
+    //Full row length in bytes
+    optional uint32 step = 6 [default = 0];
+    //actual matrix data, size is (step * rows)
+  repeated uint32 data = 7;
+}

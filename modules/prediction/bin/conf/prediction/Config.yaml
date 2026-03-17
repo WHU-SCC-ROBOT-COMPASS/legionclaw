@@ -1,0 +1,17 @@
+%YAML:1.0
+
+appName: tpre
+description: trajectory prediction
+priority: 0    #{0 ... 12} not currently used
+scheduleFrequency: 30
+isDetermineSchedule: false    #{true, false}
+logFile: ./    #logPath, Does not support dynamic modification
+logMode: 6    #{0, 1, 2}, 0: 指定文件存储， 1: 固定文件存储， 2: 指定+固定文件存储
+logLevel: 0    #{0，1，2，3，4，5}， 0：
+recvInstanceID:
+    locationInstanceID: 113
+    objectArrayInstanceID: 4001
+    egoTrajectoryInstanceID: 103
+    fusionLaneDetectionOutArrayInstanceID: 4003
+sendInstanceID:
+    preTrajectoryInstanceID: 4681

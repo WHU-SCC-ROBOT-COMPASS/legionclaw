@@ -1,0 +1,11 @@
+ #ifndef __TimeConsume__idl__
+#define __TimeConsume__idl__
+module ros2_interface{
+ module msg{
+  struct TimeConsume{
+    string   _name;
+    double   _time_consume;
+  };
+ };
+}; 
+#endif

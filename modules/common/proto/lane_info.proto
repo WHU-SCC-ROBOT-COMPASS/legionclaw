@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/lane_point.proto";
+
+
+message LaneInfo{
+    //道路优先级：0（非推荐车道）1（推荐车道）
+    optional int32 priority = 1 [default = 0];
+    //道路全局id（从左至右，从0开始）
+    optional int32 global_id = 2 [default = 0];
+    //上一车道id
+    optional int32 predecessor_id = 3 [default = 0];
+    //下一车道id
+    optional int32 successor_id = 4 [default = 0];
+    //左边相邻车道id
+    optional int32 left_neighbor_id = 5 [default = 0];
+    //右边相邻车道id
+    optional int32 right_neighbor_id = 6 [default = 0];
+    //0：未知 1：左转道不可掉头 2：直行道 3：右转道 4：直行且可左转道 5：直行且可右转道 6：左转道且可掉头 7：不可左转仅可掉头
+    optional int32 type = 7 [default = 0];
+    //道路参考线（z）
+    repeated LanePoint lane_points = 8;
+}

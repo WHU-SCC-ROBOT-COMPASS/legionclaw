@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/time.proto";
+
+
+message Fault{
+    //时间戳
+    optional Time timestamp = 1;
+    //故障码
+    optional uint64 code = 2 [default = 0];
+    //原因
+    optional string reason = 3;
+}

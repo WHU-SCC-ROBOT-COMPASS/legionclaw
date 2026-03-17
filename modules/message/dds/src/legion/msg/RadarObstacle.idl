@@ -1,0 +1,45 @@
+ #ifndef __RadarObstacle__idl__
+#define __RadarObstacle__idl__
+#include "Point2D.idl"
+#include "Status.idl"
+module ros2_interface{
+ module msg{
+  struct RadarObstacle{
+    int32   _id;
+    uint8   _life_time;
+    ros2_interface::msg::Point2D   _relative_position;
+    ros2_interface::msg::Point2D   _relative_position_rms;
+    ros2_interface::msg::Point2D   _relative_velocity;
+    ros2_interface::msg::Point2D   _relative_velocity_rms;
+    ros2_interface::msg::Point2D   _relative_acceleration;
+    ros2_interface::msg::Point2D   _relative_acceleration_rms;
+    double   _rcs;
+    double   _snr;
+    int32   _moving_status;
+    double   _width;
+    double   _length;
+    double   _height;
+    double   _theta;
+    ros2_interface::msg::Point2D   _absolute_position;
+    ros2_interface::msg::Point2D   _absolute_position_rms;
+    ros2_interface::msg::Point2D   _absolute_velocity;
+    ros2_interface::msg::Point2D   _absolute_velocity_rms;
+    ros2_interface::msg::Point2D   _absolute_acceleration;
+    ros2_interface::msg::Point2D   _absolute_acceleration_rms;
+    double   _orientation;
+    double   _orient_rms;
+    double   _yaw;
+    double   _yaw_rms;
+    int32   _count;
+    int32   _moving_frames_count;
+    ros2_interface::msg::Status   _status;
+    double   _underpass_probability;
+    double   _overpass_probability;
+    uint8   _exist_probability;
+    uint8   _mov_property;
+    uint8   _track_state;
+    uint8   _track_type;
+  };
+ };
+}; 
+#endif

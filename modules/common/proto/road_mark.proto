@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/common_enum.proto";
+
+
+message RoadMark{
+    //相对于车身坐标系原点的纵向距离,单位m
+    optional double longitude_dist = 1 [default = 0.0];
+    //相对于车身坐标系原点的横向距离,单位m
+    optional double lateral_dist = 2 [default = 0.0];
+    //质心坐标x
+    optional double x = 3 [default = 0.0];
+    //质心坐标y
+    optional double y = 4 [default = 0.0];
+    //质心坐标z
+    optional double z = 5 [default = 0.0];
+    //置信度[0 - 1]
+    optional double confidence = 6 [default = 0.0];
+    //标识类型 1 - 停止线 2 - 斑马线 3 - 禁停区 4 - 直行箭头 5 - 左转箭头 6 - 右转箭头 7 - 直行+左转 8 - 直行+右转 9 - 直行+左转+右转 10 - 掉头 11 - 左掉头 12 - 菱形(前方有人行横道) 13 - 倒三角 (减速让行) 14 - 地面文字
+    optional legion.common.RoadMarkType type = 7 [default = STOP_LINE];
+}

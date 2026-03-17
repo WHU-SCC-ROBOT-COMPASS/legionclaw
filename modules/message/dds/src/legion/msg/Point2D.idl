@@ -1,0 +1,11 @@
+ #ifndef __Point2D__idl__
+#define __Point2D__idl__
+module ros2_interface{
+ module msg{
+  struct Point2D{
+    double   _x;
+    double   _y;
+  };
+ };
+}; 
+#endif

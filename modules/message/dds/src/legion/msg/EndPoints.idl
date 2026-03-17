@@ -1,0 +1,12 @@
+ #ifndef __EndPoints__idl__
+#define __EndPoints__idl__
+#include "Point2D.idl"
+module ros2_interface{
+ module msg{
+  struct EndPoints{
+    ros2_interface::msg::Point2D   _start;
+    ros2_interface::msg::Point2D   _end;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/stop_point.proto";
+
+
+message StopInfo{
+    //timestamp is included in header
+    optional Header header = 1;
+    //停车点列表
+    repeated StopPoint stop_points = 2;
+}

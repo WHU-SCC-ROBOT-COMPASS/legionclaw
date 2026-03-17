@@ -1,0 +1,4152 @@
+types:
+    idls:
+        - >
+            module dds_interface{
+            struct Time
+            {
+                uint32   _sec;
+                uint32   _nsec;
+            };
+            }; 
+            module dds_interface{
+            struct Header
+            {
+                uint32   _seq;
+                Time   _stamp;
+                string   _frame_id;
+            };
+            }; 
+            module dds_interface{
+            struct Status
+            {
+                int32   _error_code;
+                string   _msg;
+            };
+            }; 
+            module dds_interface{
+            struct PointENU
+            {
+                double   _x;
+                double   _y;
+                double   _z;
+            };
+            }; 
+            module dds_interface{
+            struct PointBasic
+            {
+                double   _x;
+                double   _y;
+                double   _z;
+                double   _theta;
+            };
+            }; 
+            module dds_interface{
+            struct PointLLH
+            {
+                double   _lon;
+                double   _lat;
+                double   _height;
+            };
+            }; 
+            module dds_interface{
+            struct Point2D
+            {
+                double   _x;
+                double   _y;
+            };
+            }; 
+            module dds_interface{
+            struct Point3D
+            {
+                double   _x;
+                double   _y;
+                double   _z;
+            };
+            }; 
+            module dds_interface{
+            struct Quaternion
+            {
+                double   _qx;
+                double   _qy;
+                double   _qz;
+                double   _qw;
+            };
+            }; 
+            module dds_interface{
+            struct Polygon3D
+            {
+                int32   _coordinate_system;
+                sequence<Point3D> _points;
+            };
+            }; 
+            module dds_interface{
+            struct Polygon2D
+            {
+                int32   _coordinate_system;
+                sequence<Point2D> _points;
+            };
+            }; 
+            module dds_interface{
+            struct ImageKeyPoint
+            {
+                double   _x;
+                double   _y;
+                double   _confidence;
+            };
+            }; 
+            module dds_interface{
+            struct SLPoint
+            {
+                double   _s;
+                double   _l;
+            };
+            }; 
+            module dds_interface{
+            struct SLBoundary
+            {
+                double   _start_s;
+                double   _end_s;
+                double   _start_l;
+                double   _end_l;
+                sequence<SLPoint> _boundary_point;
+            };
+            }; 
+            module dds_interface{
+            struct FrenetFramePoint
+            {
+                double   _s;
+                double   _l;
+                double   _dl;
+                double   _ddl;
+            };
+            }; 
+            module dds_interface{
+            struct SpeedPoint
+            {
+                double   _s;
+                double   _t;
+                double   _v;
+                double   _a;
+                double   _da;
+            };
+            }; 
+            module dds_interface{
+            struct PathPoint
+            {
+                double   _x;
+                double   _y;
+                double   _z;
+                double   _theta;
+                double   _kappa;
+                double   _s;
+                double   _dkappa;
+                double   _ddkappa;
+                double   _lane_id;
+                double   _x_derivative;
+                double   _y_derivative;
+            };
+            }; 
+            module dds_interface{
+            struct Path
+            {
+                string   _name;
+                sequence<PathPoint> _path_points;
+            };
+            }; 
+            module dds_interface{
+            struct TrajectoryPoint
+            {
+                PathPoint   _path_point;
+                double   _v;
+                double   _a;
+                double   _relative_time;
+                double   _da;
+                boolean   _is_steer_valid;
+                double   _front_steer;
+                double   _rear_steer;
+                int32   _gear;
+            };
+            }; 
+            module dds_interface{
+            struct Trajectory
+            {
+                string   _name;
+                sequence<TrajectoryPoint> _trajectory_points;
+            };
+            }; 
+            module dds_interface{
+            struct VehicleMotionPoint
+            {
+                TrajectoryPoint   _trajectory_point;
+                double   _steer;
+            };
+            }; 
+            module dds_interface{
+            struct VehicleMotion
+            {
+                string   _name;
+                sequence<VehicleMotionPoint> _vehicle_motion_point;
+            };
+            }; 
+            module dds_interface{
+            struct GaussianInfo
+            {
+                double   _sigma_x;
+                double   _sigma_y;
+                double   _correlation;
+                double   _area_probability;
+                double   _ellipse_a;
+                double   _ellipse_b;
+                double   _theta_a;
+            };
+            }; 
+            module dds_interface{
+            struct VehicleSignal
+            {
+                int32   _turn_signal;
+                boolean   _high_beam;
+                boolean   _low_beam;
+                boolean   _horn;
+                boolean   _emergency_light;
+            };
+            }; 
+            module dds_interface{
+            struct PadMessage
+            {
+                string   _cmd;
+            };
+            }; 
+            module dds_interface{
+            struct Stories
+            {
+                string   _note;
+            };
+            }; 
+            module dds_interface{
+            struct Fault
+            {
+                Time   _timestamp;
+                uint64   _code;
+                string   _reason;
+            };
+            }; 
+            module dds_interface{
+            struct Faults
+            {
+                Header   _header;
+                int32   _version;
+                int32   _app_id;
+                boolean   _is_active;
+                sequence<Fault> _faults;
+            };
+            }; 
+            module dds_interface{
+            struct Event
+            {
+                Time   _timestamp;
+                uint64   _code;
+                string   _reason;
+            };
+            }; 
+            module dds_interface{
+            struct Events
+            {
+                Header   _header;
+                int32   _version;
+                sequence<Event> _events;
+            };
+            }; 
+            module dds_interface{
+            struct EStop
+            {
+                boolean   _is_estop;
+                string   _reason;
+            };
+            }; 
+            module dds_interface{
+            struct Matrix3D
+            {
+                double   _a00;
+                double   _a01;
+                double   _a02;
+                double   _a10;
+                double   _a11;
+                double   _a12;
+                double   _a20;
+                double   _a21;
+                double   _a22;
+            };
+            }; 
+            module dds_interface{
+            struct Pose
+            {
+                PointENU   _position;
+                Quaternion   _orientation;
+                Point3D   _linear_velocity;
+                Point3D   _linear_acceleration;
+                Point3D   _angular_velocity;
+                double   _heading;
+                Point3D   _linear_acceleration_vrf;
+                Point3D   _angular_velocity_vrf;
+                Point3D   _euler_angles;
+            };
+            }; 
+            module dds_interface{
+            struct Uncertainty
+            {
+                Point3D   _position_std_dev;
+                Point3D   _orientation_std_dev;
+                Point3D   _linear_velocity_std_dev;
+                Point3D   _linear_acceleration_std_dev;
+                Point3D   _angular_velocity_std_dev;
+            };
+            }; 
+            module dds_interface{
+            struct Chassis
+            {
+                Header   _header;
+                int32   _moving_status;
+                int32   _driving_mode;
+                int32   _steer_driving_mode;
+                int32   _steering_status;
+                double   _front_steering_value;
+                double   _rear_steering_value;
+                double   _steering_torque_nm;
+                double   _front_steering_rate_dps;
+                double   _rear_steering_rate_dps;
+                int32   _accel_driving_mode;
+                int32   _accel_status;
+                double   _accel_value;
+                int32   _brake_driving_mode;
+                int32   _brake_status;
+                double   _brake_value;
+                int32   _backup_brake_driving_mode;
+                int32   _backup_brake_status;
+                double   _backup_brake_value;
+                int32   _epb_driving_mode;
+                int32   _epb_status;
+                int32   _epb_level;
+                int32   _engine_status;
+                double   _engine_rpm;
+                double   _engine_torque;
+                double   _speed_mps;
+                double   _odometer_m;
+                int32   _fuel_range_m;
+                int32   _gear_driving_mode;
+                int32   _gear_status;
+                int32   _gear_location;
+                int32   _driver_seat_belt;
+                int32   _high_beam_status;
+                int32   _low_beam_status;
+                int32   _horn_status;
+                int32   _turn_lamp_status;
+                int32   _front_wiper_status;
+                int32   _rear_wiper_status;
+                int32   _position_lamp_status;
+                int32   _front_fog_lamp_status;
+                int32   _rear_fog_lamp_status;
+                int32   _brake_lamp_status;
+                int32   _alarm_lamp_status;
+                int32   _lf_door_status;
+                int32   _rf_door_status;
+                int32   _lr_door_status;
+                int32   _rr_door_status;
+                int32   _rearview_mirror_status;
+                int32   _trunk_status;
+                int32   _engine_bay_door_status;
+                int32   _wheel_direction_rr;
+                double   _wheel_spd_rr;
+                int32   _wheel_direction_rl;
+                double   _wheel_spd_rl;
+                int32   _wheel_direction_fr;
+                double   _wheel_spd_fr;
+                int32   _wheel_direction_fl;
+                double   _wheel_spd_fl;
+                int32   _is_tire_pressure_ok;
+                int32   _is_tire_pressure_lf_valid;
+                double   _tire_pressure_lf;
+                int32   _is_tire_pressure_rf_valid;
+                double   _tire_pressure_rf;
+                int32   _is_tire_pressure_lr_valid;
+                double   _tire_pressure_lr;
+                int32   _is_tire_pressure_rr_valid;
+                double   _tire_pressure_rr;
+                double   _battery_power_percentage;
+                int32   _air_bag_status;
+                int32   _charging_gun_status;
+                int32   _vehicle_power_status;
+                sequence<int32> _chassis_error_code;
+            };
+            }; 
+            module dds_interface{
+            struct ControlCommand
+            {
+                Header   _header;
+                int32   _steer_driving_mode;
+                double   _front_steering_target;
+                double   _rear_steering_target;
+                double   _front_steering_rate;
+                double   _rear_steering_rate;
+                int32   _accel_driving_mode;
+                double   _accel_value;
+                int32   _brake_driving_mode;
+                double   _brake_value;
+                int32   _backup_brake_driving_mode;
+                double   _backup_brake_value;
+                int32   _epb_driving_mode;
+                int32   _epb_level;
+                int32   _gear_driving_mode;
+                int8   _emergency_brake_enable;
+                int32   _gear_location;
+                double   _speed;
+                double   _acceleration;
+                int32   _turn_lamp_ctrl;
+                int32   _high_beam_ctrl;
+                int32   _low_beam_ctrl;
+                int32   _horn_ctrl;
+                int32   _front_wiper_ctrl;
+                int32   _rear_wiper_ctrl;
+                int32   _position_lamp_ctrl;
+                int32   _front_fog_lamp_ctrl;
+                int32   _rear_fog_lamp_ctrl;
+                int32   _brake_lamp_ctrl;
+                int32   _alarm_lamp_ctrl;
+                int32   _lf_door_ctrl;
+                int32   _rf_door_ctrl;
+                int32   _lr_door_ctrl;
+                int32   _rr_door_ctrl;
+            };
+            }; 
+            module dds_interface{
+            struct WheelInfo
+            {
+                Header   _header;
+                int32   _moving_status;
+                int32   _steer_driving_mode;
+                double   _steering_value;
+                double   _steering_torque_nm;
+                double   _steering_rate_dps;
+                double   _speed_mps;
+                boolean   _veh_spd_vld;
+                int32   _gear;
+                boolean   _gear_vld;
+                int32   _wheel_direction_rr;
+                double   _wheel_spd_rr;
+                int32   _wheel_direction_rl;
+                double   _wheel_spd_rl;
+                int32   _wheel_direction_fr;
+                double   _wheel_spd_fr;
+                int32   _wheel_direction_fl;
+                double   _wheel_spd_fl;
+                double   _yaw_rate;
+                int32   _wss_fl_edges_sum;
+                int32   _wss_fr_edges_sum;
+                int32   _wss_rl_edges_sum;
+                int32   _wss_rr_edges_sum;
+                boolean   _wss_fl_edges_sum_vld;
+                boolean   _wss_fr_edges_sum_vld;
+                boolean   _wss_rl_edges_sum_vld;
+                boolean   _wss_rr_edges_sum_vld;
+                double   _veh_lat_accel;
+                double   _veh_lgt_accel;
+                boolean   _veh_lat_accel_vld;
+                boolean   _veh_lgt_accel_vld;
+            };
+            }; 
+            module dds_interface{
+            struct ControlAnalysis
+            {
+                Header   _header;
+                int32   _driving_mode;
+                int32   _driving_mode_fd;
+                int32   _gear_location_fd;
+                int32   _gear_location_cmd;
+                int32   _epb_level_fd;
+                int32   _epb_level_cmd;
+                double   _speed_mps;
+                double   _speed_reference;
+                double   _accel_value_fd;
+                double   _accel_value_cmd;
+                double   _brake_value_fd;
+                double   _brake_value_cmd;
+                double   _path_remain;
+                boolean   _has_stop_point;
+                boolean   _is_full_stop;
+                boolean   _is_stopped;
+                double   _lon_acc_jerk;
+                double   _acceleration_cmd;
+                double   _acceleration_cmd_closeloop;
+                double   _preview_acceleration_reference;
+                double   _slope_offset_compensation;
+                double   _turning_offset_compensation;
+                double   _speed_error_limited;
+                double   _speed_error;
+                double   _speed_offset;
+                double   _station_error_limited;
+                double   _station_error;
+                double   _lon_target_point_s;
+                int64   _lon_calculate_time;
+                int64   _lon_calculate_time_max;
+                double   _ref_curvature;
+                double   _ref_heading;
+                double   _current_heading;
+                double   _heading_error;
+                double   _heading_error_rate;
+                double   _lateral_error;
+                double   _lateral_error_rate;
+                double   _lon_error;
+                double   _front_steering_value_fd;
+                double   _front_steering_target;
+                double   _front_steering_rate;
+                double   _front_steer_angle_feedforward;
+                double   _front_steer_angle_feedback;
+                double   _front_steer_angle_lateral_contribution;
+                double   _front_steer_angle_lateral_rate_contribution;
+                double   _front_steer_angle_heading_contribution;
+                double   _front_steer_angle_heading_rate_contribution;
+                double   _rear_steering_value_fd;
+                double   _rear_steering_target;
+                double   _rear_steering_rate;
+                double   _rear_steer_angle_feedforward;
+                double   _rear_steer_angle_feedback;
+                double   _rear_steer_angle_lateral_contribution;
+                double   _rear_steer_angle_lateral_rate_contribution;
+                double   _rear_steer_angle_heading_contribution;
+                double   _rear_steer_angle_heading_rate_contribution;
+                double   _matrix_k_00;
+                double   _matrix_k_01;
+                double   _matrix_k_02;
+                double   _matrix_k_03;
+                double   _matrix_k_10;
+                double   _matrix_k_11;
+                double   _matrix_k_12;
+                double   _matrix_k_13;
+                double   _matrix_state_0;
+                double   _matrix_state_1;
+                double   _matrix_state_2;
+                double   _matrix_state_3;
+                double   _matrix_q_updated_0;
+                double   _matrix_q_updated_1;
+                double   _matrix_q_updated_2;
+                double   _matrix_q_updated_3;
+                double   _current_x;
+                double   _current_y;
+                double   _target_point_x;
+                double   _target_point_y;
+                double   _lat_target_point_s;
+                int64   _lqr_calculate_time;
+                int64   _lqr_calculate_time_max;
+            };
+            }; 
+            module dds_interface{
+            struct VehicleParam
+            {
+                string   _brand;
+                int32   _steer_mode;
+                double   _length;
+                double   _width;
+                double   _height;
+                double   _mass_fl;
+                double   _mass_fr;
+                double   _mass_rl;
+                double   _mass_rr;
+                double   _wheel_radius;
+                double   _wheelbase;
+                double   _front_edge_to_center;
+                double   _back_edge_to_center;
+                double   _lf;
+                double   _lr;
+                double   _cf;
+                double   _cr;
+                double   _steer_ratio;
+                double   _rolling_coefficient;
+                double   _air_density;
+                double   _air_damping_coefficient;
+                double   _max_front_steer_angle;
+                double   _min_front_steer_angle;
+                double   _max_rear_steer_angle;
+                double   _min_rear_steer_angle;
+                double   _speed_limit;
+                double   _max_brake_value;
+                double   _min_brake_value;
+                double   _max_accel_value;
+                double   _min_accel_value;
+                double   _speed_deadzone;
+                double   _standstill_acceleration;
+                double   _max_front_steer_angle_rate;
+                double   _max_rear_steer_angle_rate;
+                double   _max_abs_speed_when_stopped;
+                double   _max_abs_speed_when_stopped_duration;
+                double   _brake_value_when_gear_transitioning;
+                double   _accel_deadzone;
+                double   _brake_deadzone;
+                double   _acceleration_in_idle;
+                double   _deceleration_in_idle;
+                double   _max_acceleration_jerk;
+                double   _max_acceleration;
+                double   _max_deceleration;
+                double   _min_turning_radius;
+            };
+            }; 
+            module dds_interface{
+            struct VehicleConfig
+            {
+                Header   _header;
+                VehicleParam   _vehicle_param;
+            };
+            }; 
+            module dds_interface{
+            struct Location
+            {
+                Header   _header;
+                PointLLH   _position;
+                double   _pitch;
+                double   _roll;
+                double   _heading;
+                Point3D   _linear_velocity;
+                Point3D   _linear_acceleration;
+                Point3D   _angular_velocity;
+                int32   _rtk_flag;
+                int32   _odom_type;
+                int32   _auxiliary_type;
+                int32   _location_valid_flag;
+                double   _origin_lat;
+                double   _origin_lon;
+                PointENU   _utm_position;
+                int32   _change_origin_flag;
+                PointENU   _utm_position_next;
+                Point3D   _position_std_dev;
+                Point3D   _orientation_std_dev;
+                Point3D   _linear_velocity_std_dev;
+                Point3D   _linear_acceleration_std_dev;
+                Point3D   _angular_velocity_std_dev;
+            };
+            }; 
+            module dds_interface{
+            struct Odometry
+            {
+                Header   _header;
+                PointENU   _position;
+                Quaternion   _orientation;
+                sequence<double> _covariance;
+            };
+            }; 
+            module dds_interface{
+            struct RadarObstacle
+            {
+                int32   _id;
+                uint8   _life_time;
+                Point2D   _relative_position;
+                Point2D   _relative_position_rms;
+                Point2D   _relative_velocity;
+                Point2D   _relative_velocity_rms;
+                Point2D   _relative_acceleration;
+                Point2D   _relative_acceleration_rms;
+                double   _rcs;
+                double   _snr;
+                int32   _moving_status;
+                double   _width;
+                double   _length;
+                double   _height;
+                double   _theta;
+                Point2D   _absolute_position;
+                Point2D   _absolute_position_rms;
+                Point2D   _absolute_velocity;
+                Point2D   _absolute_velocity_rms;
+                Point2D   _absolute_acceleration;
+                Point2D   _absolute_acceleration_rms;
+                double   _orientation;
+                double   _orient_rms;
+                double   _yaw;
+                double   _yaw_rms;
+                int32   _count;
+                int32   _moving_frames_count;
+                Status   _status;
+                double   _underpass_probability;
+                double   _overpass_probability;
+                uint8   _exist_probability;
+                uint8   _mov_property;
+                uint8   _track_state;
+                uint8   _track_type;
+            };
+            }; 
+            module dds_interface{
+            struct UltrasonicObstacle
+            {
+                int32   _id;
+                double   _range;
+            };
+            }; 
+            module dds_interface{
+            struct Ultrasonic
+            {
+                Header   _header;
+                sequence<UltrasonicObstacle> _ranges;
+            };
+            }; 
+            module dds_interface{
+            struct PointXYZIRT
+            {
+                double   _x;
+                double   _y;
+                double   _z;
+                uint32   _intensity;
+                uint8   _ring_id;
+                uint64   _timestamp;
+            };
+            }; 
+            module dds_interface{
+            struct PointCloud
+            {
+                Header   _header;
+                string   _frame_id;
+                boolean   _is_dense;
+                sequence<PointXYZIRT> _point;
+                double   _measurement_time;
+                uint32   _width;
+                uint32   _height;
+            };
+            }; 
+            module dds_interface{
+            struct CompressedImage
+            {
+                Header   _header;
+                string   _frame_id;
+                string   _format;
+                sequence<int8> _data;
+                double   _measurement_time;
+                uint32   _frame_type;
+            };
+            }; 
+            module dds_interface{
+            struct Image
+            {
+                Header   _header;
+                uint32   _height;
+                uint32   _width;
+                string   _encoding;
+                uint8   _is_bigendian;
+                uint32   _step;
+                sequence<uint8> _data;
+            };
+            }; 
+            module dds_interface{
+            struct Gnss
+            {
+                boolean   _is_valid;
+                Header   _header;
+                double   _latitude;
+                double   _longitude;
+                double   _elevation;
+                Point3D   _utm_position;
+                int32   _utm_zone_num;
+                uint8   _utm_zone_char;
+                Point3D   _attitude;
+                Point3D   _sd_position;
+                Point3D   _sd_velocity;
+                Point3D   _sd_attitude;
+                double   _second;
+                int32   _sat_use_num;
+                int32   _sat_in_view_num;
+                uint16   _solution_status;
+                uint16   _position_type;
+                Point3D   _linear_velocity;
+                Point3D   _attitude_dual;
+                Point3D   _sd_angle_dual;
+                double   _base_line_length_dual;
+                int32   _solution_status_dual;
+                int32   _position_type_dual;
+                int32   _solution_source_dual;
+                double   _cep68;
+                double   _cep95;
+                double   _p_dop;
+                double   _h_dop;
+                double   _v_dop;
+            };
+            }; 
+            module dds_interface{
+            struct Imu
+            {
+                Header   _header;
+                boolean   _is_valid;
+                Quaternion   _orientation;
+                sequence<double> _orientation_covariance;
+                Point3D   _angular_velocity;
+                sequence<double> _angular_velocity_covariance;
+                Point3D   _linear_acceleration;
+                sequence<double> _linear_acceleration_covariance;
+            };
+            }; 
+            module dds_interface{
+            struct Ins
+            {
+                Header   _header;
+                boolean   _is_valid;
+                double   _latitude;
+                double   _longitude;
+                double   _elevation;
+                Point3D   _utm_position;
+                int32   _utm_zone_mumber;
+                uint8   _utm_zone_char;
+                Point3D   _attitude;
+                Point3D   _linear_velocity;
+                Point3D   _sd_position;
+                Point3D   _sd_attitude;
+                Point3D   _sd_velocity;
+                double   _cep68;
+                double   _cep95;
+                double   _second;
+                int32   _sat_use_num;
+                int32   _sat_in_view_num;
+                uint16   _solution_status;
+                uint16   _position_type;
+                double   _p_dop;
+                double   _h_dop;
+                double   _v_dop;
+                Point3D   _attitude_dual;
+                Point3D   _sd_angle_dual;
+                double   _base_line_length_dual;
+                int32   _solution_status_dual;
+                int32   _position_type_dual;
+                int32   _solution_source_dual;
+                uint32   _aoc;
+                uint32   _rtk_baseline;
+                Point3D   _angular_velocity;
+                Point3D   _acceleration;
+            };
+            }; 
+            module dds_interface{
+            struct ObuCmd
+            {
+                int32   _code;
+                int32   _val;
+            };
+            }; 
+            module dds_interface{
+            struct ObuCmdMsg
+            {
+                Header   _header;
+                int32   _id;
+                string   _name;
+                sequence<ObuCmd> _obu_cmd_list;
+            };
+            }; 
+            module dds_interface{
+            struct KeyPoint
+            {
+                int16   _id;
+                double   _latitude;
+                double   _longitude;
+                double   _ele;
+                double   _heading;
+                string   _name;
+            };
+            }; 
+            module dds_interface{
+            struct RoutingRequest
+            {
+                Header   _header;
+                string   _request_source;
+                int8   _request_type;
+                int16   _num_of_kp;
+                sequence<KeyPoint> _key_point_list;
+            };
+            }; 
+            module dds_interface{
+            struct SensorCalibrator
+            {
+                Point3D   _pose;
+                Point3D   _angle;
+            };
+            }; 
+            module dds_interface{
+            struct StopPoint
+            {
+                Point3D   _point;
+                double   _theta;
+                int8   _type;
+                double   _stop_distance;
+            };
+            }; 
+            module dds_interface{
+            struct LanePoint
+            {
+                Point3D   _point;
+                double   _theta;
+                double   _mileage;
+                double   _limit_speed;
+                double   _left_road_width;
+                double   _right_road_width;
+                int32   _left_line_type;
+                int32   _right_line_type;
+            };
+            }; 
+            module dds_interface{
+            struct LaneInfoExtend
+            {
+                int8   _priority;
+                int64   _global_id;
+                sequence<int64> _predecessor_ids;
+                sequence<int64> _successor_ids;
+                int64   _left_neighbor_id;
+                int64   _right_neighbor_id;
+                int8   _type;
+                sequence<LanePoint> _lane_points;
+            };
+            }; 
+            module dds_interface{
+            struct LocalMap
+            {
+                Header   _header;
+                int32   _seq;
+                Point3D   _ego_point;
+                double   _range;
+                sequence<LaneInfoExtend> _lane_list;
+            };
+            }; 
+            module dds_interface{
+            struct LaneInfo
+            {
+                int8   _priority;
+                int8   _global_id;
+                int8   _predecessor_id;
+                int8   _successor_id;
+                int8   _left_neighbor_id;
+                int8   _right_neighbor_id;
+                int8   _type;
+                sequence<LanePoint> _lane_points;
+            };
+            }; 
+            module dds_interface{
+            struct ObstacleIntent
+            {
+                int32   _type;
+            };
+            }; 
+            module dds_interface{
+            struct RoutingResponse
+            {
+                Header   _header;
+                int32   _plan_status;
+                int32   _replan_flag;
+                int32   _route_reason;
+                sequence<LaneInfo> _lane_list;
+            };
+            }; 
+            module dds_interface{
+            struct StopInfo
+            {
+                Header   _header;
+                sequence<StopPoint> _stop_points;
+            };
+            }; 
+            module dds_interface{
+            struct BBox2D
+            {
+                int16   _xmin;
+                int16   _ymin;
+                int16   _xmax;
+                int16   _ymax;
+            };
+            }; 
+            module dds_interface{
+            struct Obstacle
+            {
+                Time   _timestamp;
+                int32   _id;
+                double   _existence_prob;
+                Time   _create_time;
+                Time   _last_updated_time;
+                Point3D   _center_pos_vehicle;
+                Point3D   _center_pos_abs;
+                double   _theta_vehicle;
+                double   _theta_abs;
+                Point3D   _velocity_vehicle;
+                Point3D   _velocity_abs;
+                double   _length;
+                double   _width;
+                double   _height;
+                sequence<ImageKeyPoint> _image_key_points;
+                sequence<Point3D> _polygon_point_abs;
+                sequence<Point3D> _polygon_point_vehicle;
+                double   _tracking_time;
+                int32   _type;
+                double   _confidence;
+                int32   _confidence_type;
+                sequence<Point3D> _drops;
+                Point3D   _acceleration_vehicle;
+                Point3D   _acceleration_abs;
+                Point2D   _anchor_point_image;
+                Point3D   _anchor_point_vehicle;
+                Point3D   _anchor_point_abs;
+                BBox2D   _bbox2d;
+                BBox2D   _bbox2d_rear;
+                int32   _sub_type;
+                double   _height_above_ground;
+                sequence<double> _position_abs_covariance;
+                sequence<double> _velocity_abs_covariance;
+                sequence<double> _acceleration_abs_covariance;
+                double   _theta_abs_covariance;
+                sequence<double> _position_vehicle_covariance;
+                sequence<double> _velocity_vehicle_covariance;
+                sequence<double> _acceleration_vehicle_covariance;
+                double   _theta_vehicle_covariance;
+                SensorCalibrator   _sensor_calibrator;
+                uint8   _cipv_flag;
+                int32   _lane_position;
+                double   _pihp_percentage;
+                int32   _blinker_flag;
+                int32   _fusion_type;
+            };
+            }; 
+            module dds_interface{
+            struct ObstacleList
+            {
+                Header   _header;
+                int32   _sensor_id;
+                sequence<Obstacle> _obstacle;
+                int32   _error_code;
+                boolean   _is_valid;
+                int32   _change_origin_flag;
+            };
+            }; 
+            module dds_interface{
+            struct RSSInfo
+            {
+                boolean   _is_rss_safe;
+                double   _cur_dist_lon;
+                double   _rss_safe_dist_lon;
+                double   _acc_lon_range_minimum;
+                double   _acc_lon_range_maximum;
+                double   _acc_lat_left_range_minimum;
+                double   _acc_lat_left_range_maximum;
+                double   _acc_lat_right_range_minimum;
+                double   _acc_lat_right_range_maximum;
+            };
+            }; 
+            module dds_interface{
+            struct ADCTrajectory
+            {
+                Header   _header;
+                double   _total_path_length;
+                double   _total_path_time;
+                sequence<TrajectoryPoint> _trajectory_points;
+                int32   _car_action;
+                int32   _behaviour_lat_state;
+                int32   _behaviour_lon_state;
+                int32   _scenario;
+                int32   _driving_mode;
+                int32   _adc_trajectory_type;
+                EStop   _estop;
+                boolean   _is_replan;
+                string   _replan_reason;
+                int32   _right_of_way_status;
+                RSSInfo   _rss_info;
+            };
+            }; 
+            module dds_interface{
+            struct ObstaclePriority
+            {
+                int32   _priority;
+            };
+            }; 
+            module dds_interface{
+            struct PlanningCmd
+            {
+                Header   _header;
+                int32   _turn_lamp_ctrl;
+                int32   _high_beam_ctrl;
+                int32   _low_beam_ctrl;
+                int32   _horn_ctrl;
+                int32   _front_wiper_ctrl;
+                int32   _rear_wiper_ctrl;
+                int32   _position_lamp_ctrl;
+                int32   _front_fog_lamp_ctrl;
+                int32   _rear_fog_lamp_ctrl;
+                int32   _brake_lamp_ctrl;
+                int32   _alarm_lamp_ctrl;
+                int32   _lf_door_ctrl;
+                int32   _rf_door_ctrl;
+                int32   _lr_door_ctrl;
+                int32   _rr_door_ctrl;
+            };
+            }; 
+            module dds_interface{
+            struct TrajectoryInPrediction
+            {
+                double   _probability;
+                sequence<TrajectoryPoint> _trajectory_points;
+            };
+            }; 
+            module dds_interface{
+            struct TrajectoryPointInPrediction
+            {
+                PathPoint   _path_point;
+                double   _v;
+                double   _a;
+                double   _relative_time;
+            };
+            }; 
+            module dds_interface{
+            struct PredictionTrajectoryPoint
+            {
+                Point3D   _predition_path_point;
+                double   _timestamp;
+            };
+            }; 
+            module dds_interface{
+            struct PerceptionObstacle
+            {
+                int32   _id;
+                Point3D   _position;
+                double   _theta;
+                Point3D   _velocity;
+                double   _length;
+                double   _width;
+                double   _height;
+                sequence<Point3D> _polygon_point;
+                double   _tracking_time;
+                int32   _type;
+                int32   _lane_position;
+                double   _confidence;
+                double   _timestamp;
+                uint8   _confidence_type;
+                Point3D   _drops;
+                Point3D   _acceleration;
+                Point3D   _anchor_point;
+                sequence<Point3D> _bounding_box;
+                int32   _sub_type;
+                double   _height_above_ground;
+                sequence<double> _position_covariance;
+                sequence<double> _velocity_covariance;
+                sequence<double> _acceleration_covariance;
+                uint8   _light_status;
+            };
+            }; 
+            module dds_interface{
+            struct ObstacleFeature
+            {
+                int32   _obstacle_id;
+                Point3D   _polygon_point;
+                Point3D   _position;
+                Point3D   _front_position;
+                Point3D   _velocity;
+                Point3D   _raw_velocity;
+                Point3D   _acceleration;
+                double   _velocity_heading;
+                double   _speed;
+                double   _acc;
+                double   _theta;
+                double   _length;
+                double   _width;
+                double   _height;
+                double   _tracking_time;
+                double   _timestamp;
+                Point3D   _t_position;
+                Point3D   _t_velocity;
+                double   _t_velocity_heading;
+                double   _t_speed;
+                Point3D   _t_acceleration;
+                double   _t_acc;
+                boolean   _is_still;
+                int32   _type;
+                double   _label_update_time_delta;
+                ObstaclePriority   _priority;
+                boolean   _is_near_junction;
+                sequence<PredictionTrajectoryPoint> _future_trajectory_points;
+                sequence<TrajectoryPointInPrediction> _short_term_predicted_trajectory_points;
+                sequence<TrajectoryInPrediction> _predicted_trajectory;
+                sequence<TrajectoryPointInPrediction> _adc_trajectory_point;
+            };
+            }; 
+            module dds_interface{
+            struct LaneLineCubicCurve
+            {
+                double   _start_x;
+                double   _end_x;
+                double   _a;
+                double   _b;
+                double   _c;
+                double   _d;
+            };
+            }; 
+            module dds_interface{
+            struct EndPoints
+            {
+                Point2D   _start;
+                Point2D   _end;
+            };
+            }; 
+            module dds_interface{
+            struct LaneLine
+            {
+                int32   _lane_type;
+                int32   _lane_color;
+                int32   _pos_type;
+                LaneLineCubicCurve   _curve_vehicle;
+                LaneLineCubicCurve   _curve_image;
+                LaneLineCubicCurve   _curve_abs;
+                sequence<Point3D> _pts_vehicle;
+                sequence<Point2D> _pts_image;
+                sequence<Point3D> _pts_abs;
+                EndPoints   _image_end_point;
+                sequence<Point2D> _pts_key;
+                uint8   _hd_lane_id;
+                double   _confidence;
+                int32   _lane_quality;
+                int32   _fused_lane_type;
+                sequence<double> _homography_mat;
+                sequence<double> _homography_mat_inv;
+                int32   _lane_coordinate_type;
+                int32   _use_type;
+                Time   _create_time;
+            };
+            }; 
+            module dds_interface{
+            struct FreeSpace
+            {
+                Header   _header;
+                int32   _sensor_id;
+                sequence<Polygon2D> _freespace_region;
+                int32   _error_code;
+                boolean   _is_valid;
+            };
+            }; 
+            module dds_interface{
+            struct HolisticPathPrediction
+            {
+                LaneLineCubicCurve   _hpp;
+                int32   _planning_source;
+                double   _ego_lane_width;
+                double   _confidence;
+            };
+            }; 
+            module dds_interface{
+            struct RoadMark
+            {
+                double   _longitude_dist;
+                double   _lateral_dist;
+                double   _x;
+                double   _y;
+                double   _z;
+                double   _confidence;
+                int32   _type;
+            };
+            }; 
+            module dds_interface{
+            struct LaneList
+            {
+                Header   _header;
+                int32   _sensor_id;
+                int8   _error_code;
+                uint8   _sensor_status;
+                int32   _change_origin_flag;
+                boolean   _is_valid;
+                SensorCalibrator   _sensor_calibrator;
+                sequence<LaneLine> _camera_laneline;
+                HolisticPathPrediction   _hpp;
+                sequence<RoadMark> _road_marks;
+            };
+            }; 
+            module dds_interface{
+            struct TrafficLightBox
+            {
+                int32   _x;
+                int32   _y;
+                int32   _width;
+                int32   _height;
+                int32   _color;
+                boolean   _selected;
+                string   _camera_name;
+            };
+            }; 
+            module dds_interface{
+            struct TrafficLightDebug
+            {
+                TrafficLightBox   _cropbox;
+                sequence<TrafficLightBox> _box;
+                int32   _signal_num;
+                int32   _valid_pos;
+                double   _ts_diff_pos;
+                double   _ts_diff_sys;
+                int32   _project_error;
+                double   _distance_to_stop_line;
+                int32   _camera_id;
+                sequence<TrafficLightBox> _crop_roi;
+                sequence<TrafficLightBox> _projected_roi;
+                sequence<TrafficLightBox> _rectified_roi;
+                sequence<TrafficLightBox> _debug_roi;
+            };
+            }; 
+            module dds_interface{
+            struct ImageRect
+            {
+                int32   _x;
+                int32   _y;
+                int32   _width;
+                int32   _height;
+            };
+            }; 
+            module dds_interface{
+            struct TrafficLight
+            {
+                int32   _color;
+                uint32   _id;
+                int32   _type;
+                double   _confidence;
+                ImageRect   _light_rect;
+                Point3D   _position;
+                double   _distance;
+                sequence<int32> _light_lanes;
+                double   _tracking_time;
+                boolean   _blink;
+                double   _blinking_time;
+                double   _remaining_time;
+                Time   _create_time;
+            };
+            }; 
+            module dds_interface{
+            struct TrafficLightMsg
+            {
+                Header   _header;
+                sequence<TrafficLight> _traffic_light;
+                TrafficLightDebug   _traffic_light_debug;
+                boolean   _contain_lights;
+                int32   _camera_id;
+                boolean   _is_valid;
+            };
+            }; 
+            module dds_interface{
+            struct RadarStateError
+            {
+                uint8   _persistent_error;
+                uint8   _temporary_error;
+                uint8   _interference_error;
+                uint8   _temperature_error;
+                uint8   _voltage_error;
+                uint8   _block_error;
+                uint8   _broadcast_error;
+                uint8   _electric_axis_error;
+                uint8   _config_error;
+                uint8   _calibration_error;
+            };
+            }; 
+            module dds_interface{
+            struct RadarStateMode
+            {
+                uint8   _can0_work_mode;
+                uint8   _can1_work_mode;
+                uint8   _dual_can_mode;
+                uint8   _timming_mode;
+                uint8   _power_mode;
+                uint8   _performance_mode;
+            };
+            }; 
+            module dds_interface{
+            struct RadarState
+            {
+                uint8   _sensor_id;
+                uint8   _nvm_read_status;
+                uint8   _nvm_write_status;
+                RadarStateError   _radar_state_error;
+                RadarStateMode   _radar_state_mode;
+                uint16   _max_distance;
+                uint8   _sort_index;
+                uint8   _radar_power;
+                uint8   _ctl_relay;
+                uint8   _output_type;
+                uint8   _send_quality;
+                uint8   _send_extinfo;
+                uint8   _motion_rx_state;
+                uint8   _rcs_threshold;
+                uint8   _connector_direction;
+                uint8   _radar_position;
+                uint8   _hw_error;
+            };
+            }; 
+            module dds_interface{
+            struct RadarObstacleListMsg
+            {
+                Header   _header;
+                sequence<RadarObstacle> _radar_obstacle;
+                uint8   _sensor_id;
+                RadarState   _radar_state;
+                boolean   _is_valid;
+            };
+            }; 
+            module dds_interface{
+            struct Region
+            {
+                int32   _name_region;
+                double   _score;
+                int32   _rank_risk;
+                sequence<Point3D> _region_polygon;
+            };
+            }; 
+            module dds_interface{
+            struct Grid
+            {
+                double   _x;
+                double   _y;
+                SLPoint   _sl_point;
+                double   _yaw;
+                double   _potential;
+                int32   _region_id;
+            };
+            }; 
+            module dds_interface{
+            struct SotifMonitorResult
+            {
+                Header   _header;
+                sequence<Region> _region_value;
+                sequence<Grid> _grid_map;
+            };
+            }; 
+            module dds_interface{
+            struct CameraParkingInfo
+            {
+                Header   _header;
+                int32   _parking_space_id;
+                int32   _parking_type;
+                boolean   _is_parking_enable;
+                double   _confidence;
+                Point3D   _center_point_of_parking;
+                double   _theta;
+                double   _width;
+                double   _length;
+                double   _yaw_offset;
+                sequence<ImageKeyPoint> _parking_points_in_image;
+            };
+            }; 
+            module dds_interface{
+            struct WarningCommand
+            {
+                int32   _sound_alarm;
+                int32   _light_alarm;
+                int32   _media_alarm;
+                int32   _motion_alarm;
+            };
+            }; 
+            module dds_interface{
+            struct TrajectoryLimitCommand
+            {
+                boolean   _speed_limit_enable;
+                double   _speed_limit;
+                boolean   _kappa_limit_enable;
+                double   _kappa_limit;
+            };
+            }; 
+            module dds_interface{
+            struct SecurityDecision
+            {
+                Header   _header;
+                WarningCommand   _warning_command;
+                int32   _brake_report;
+                int32   _change_lane_command;
+                TrajectoryLimitCommand   _trajectory_limit_command;
+                int32   _park_command;
+                int32   _drivingmode_report;
+            };
+            }; 
+            module dds_interface{
+            struct CommandRespond
+            {
+                Header   _header;
+                string   _name;
+                int8   _self_id;
+                int8   _respond_id;
+                int8   _status;
+                int32   _fail_code;
+            };
+            }; 
+            module dds_interface{
+            struct Command
+            {
+                string   _target_module;
+                int8   _target_id;
+                int32   _target_switch;
+            };
+            }; 
+            module dds_interface{
+            struct CommCommand
+            {
+                Header   _header;
+                string   _name;
+                int8   _self_id;
+                sequence<Command> _commands;
+            };
+            }; 
+            module dds_interface{
+            struct Message
+            {
+                int32   _code;
+                int32   _value;
+            };
+            }; 
+            module dds_interface{
+            struct ModuleStatus
+            {
+                Header   _header;
+                string   _name;
+                int8   _self_id;
+                int32   _status;
+                sequence<Message> _messages;
+            };
+            }; 
+            module dds_interface{
+            struct TimeConsume
+            {
+                string   _name;
+                double   _time_consume;
+            };
+            }; 
+            module dds_interface{
+            struct TrajectoryArray
+            {
+                Header   _header;
+                sequence<Path> _spline_s;
+                sequence<Path> _qp_smooth;
+                sequence<Trajectory> _trajectory_list;
+            };
+            }; 
+            module dds_interface{
+            struct VehicleState
+            {
+                Header   _header;
+                double   _x;
+                double   _y;
+                double   _z;
+                double   _timestamp;
+                double   _roll;
+                double   _pitch;
+                double   _yaw;
+                double   _heading;
+                double   _kappa;
+                double   _linear_velocity;
+                double   _angular_velocity;
+                double   _linear_acceleration;
+                int32   _gear;
+                int32   _driving_mode;
+                Pose   _pose;
+                double   _front_steering_value;
+                double   _rear_steering_value;
+            };
+            }; 
+            module dds_interface{
+            struct DrivableRegion
+            {
+                Header   _header;
+                sequence<Polygon3D> _drivable_region;
+            };
+            }; 
+            module dds_interface{
+            struct ObstacleInteractiveTag
+            {
+                int32   _interactive_tag;
+            };
+            }; 
+            module dds_interface{
+            struct PredictionObstacle
+            {
+                PerceptionObstacle   _perception_obstacle;
+                double   _timestamp;
+                double   _predicted_period;
+                sequence<TrajectoryInPrediction> _trajectory;
+                ObstacleIntent   _intent;
+                ObstaclePriority   _priority;
+                ObstacleInteractiveTag   _interactive_tag;
+                boolean   _is_static;
+            };
+            }; 
+            module dds_interface{
+            struct Twist
+            {
+                Header   _header;
+                Point3D   _linear;
+                Point3D   _angular;
+            };
+            }; 
+            module dds_interface{
+            struct PredictionObstacles
+            {
+                Header   _header;
+                sequence<PredictionObstacle> _prediction_obstacles;
+                int32   _change_origin_flag;
+                double   _start_timestamp;
+                double   _end_timestamp;
+                int32   _self_intent;
+                int32   _scenario;
+            };
+            }; 
+            module dds_interface{
+            struct ParkingStateDisplay
+            {
+                Header   _header;
+                int32   _parking_type;
+                int32   _moves_counter;
+                double   _remian_distance;
+                int32   _display_info;
+                double   _distance_to_leader_obj;
+                int32   _state;
+            };
+            }; 
+            module dds_interface{
+            struct Point2dList
+            {
+                sequence<Point2D> _point2d_list;
+            };
+            }; 
+            module dds_interface{
+            struct PlanningParkingDebug
+            {
+                sequence<Polygon2D> _vehicle_preiew_polygon;
+                sequence<Polygon2D> _obstacles_polygon;
+                sequence<PathPoint> _path_points;
+                double   _lat_error;
+                double   _lon_error;
+                double   _yaw_error;
+                sequence<Point2dList> _obstacles_vec;
+                sequence<TrajectoryPoint> _warm_start_traj;
+                sequence<TrajectoryPoint> _smoothed_traj_stage1;
+                sequence<TrajectoryPoint> _smoothed_traj_stage2;
+                Trajectory   _reference_line;
+                sequence<Trajectory> _trajectory_array;
+                Trajectory   _optimal_coarse_trajectory;
+                Trajectory   _optimal_smooth_trajectory;
+                double   _hybrid_a_star_map_time;
+                double   _hybrid_a_star_heuristic_time;
+                double   _hybrid_a_star_rs_time;
+                double   _hybrid_a_star_total_time;
+                double   _ias_collision_avoidance_time;
+                double   _ias_path_smooth_time;
+                double   _ias_speed_smooth_time;
+                double   _ias_total_time;
+                double   _samping_trajectory_time;
+                boolean   _is_replan;
+                string   _replan_reason;
+                double   _replan_time;
+                int32   _replan_num;
+                int32   _optimizer_thread_counter;
+                int32   _replan_by_context_update_counter;
+                int32   _replan_by_large_error_counter;
+                int32   _parking_type;
+                int32   _moves_counter;
+                double   _remain_distance;
+                double   _distance_to_leader_obj;
+                int32   _state;
+            };
+            }; 
+            module dds_interface{
+            struct ParkingRoi
+            {
+                Header   _header;
+                sequence<Point2dList> _obstacles_vec;
+            };
+            }; 
+            module dds_interface{
+            struct ParkingOutInfo
+            {
+                Header   _header;
+                int32   _parking_out_id;
+                int32   _parking_direction_type;
+                boolean   _is_parking_out_enable;
+                Point3D   _parking_out_point;
+                double   _theta;
+            };
+            }; 
+            module dds_interface{
+            struct PlanningAnalysis
+            {
+                Header   _header;
+                double   _frame_update_time;
+                double   _generator_time;
+                sequence<TimeConsume> _evaluator_time;
+                double   _selector_time;
+                PlanningParkingDebug   _planning_parking_debug;
+                double   _dis_to_center_line;
+                double   _diff_to_velocity;
+                double   _referencline_kappa;
+            };
+            }; 
+            module dds_interface{
+            struct JunctionInfo
+            {
+                int32   _id;
+                int32   _light_flag;
+                int32   _light_color;
+                double   _light_remain_time;
+                double   _distance_to_stop;
+                int32   _direction_flag;
+                int32   _direction;
+                double   _distance_to_junction;
+                sequence<Point3D> _stop_line;
+            };
+            }; 
+            module dds_interface{
+            struct LimitSpeedInfo
+            {
+                int32   _limitspeed_valid_flag;
+                double   _limit_speed;
+                double   _limit_distance;
+            };
+            }; 
+            module dds_interface{
+            struct Log
+            {
+                Time   _stamp;
+                uint8   _level;
+                string   _name;
+                string   _msg;
+                string   _file;
+                string   _function;
+                uint32   _line;
+            };
+            }; 
+            module dds_interface{
+            struct Pavementype
+            {
+                Header   _header;
+                int32   _type;
+                double   _confidence;
+            };
+            }; 
+            module dds_interface{
+            struct WLConstraintInfo
+            {
+                Header   _header;
+                int32   _id;
+                Point3D   _vehicle_point1;
+                Point3D   _vehicle_point2;
+                Point3D   _abs_point1;
+                Point3D   _abs_point2;
+            };
+            }; 
+            module dds_interface{
+            struct WLConstraintInfoList
+            {
+                Header   _header;
+                sequence<WLConstraintInfo> _wl_constraint_info;
+                int32   _error_code;
+                boolean   _is_valid;
+            };
+            }; 
+            module dds_interface{
+            struct UssObstacle
+            {
+                Header   _header;
+                int32   _uss_obstacle_region;
+                double   _mx;
+                double   _my;
+            };
+            }; 
+            module dds_interface{
+            struct UssObstacleList
+            {
+                Header   _header;
+                sequence<UssObstacle> _uss_obstacles;
+                sequence<double> _uss_ranges;
+                int32   _error_code;
+                boolean   _is_valid;
+            };
+            }; 
+            module dds_interface{
+            struct UssParkingInfo
+            {
+                Header   _header;
+                int32   _uss_parking_type;
+                Point3D   _parking_point0;
+                Point3D   _parking_point1;
+                Point3D   _parking_point2;
+                Point3D   _parking_point3;
+            };
+            }; 
+            module dds_interface{
+            struct UssParkingInfoList
+            {
+                Header   _header;
+                sequence<UssParkingInfo> _uss_parking_info;
+                int32   _error_code;
+                boolean   _is_valid;
+            };
+            }; 
+            module dds_interface{
+            struct CameraParkingStopper
+            {
+                Header   _header;
+                BBox2D   _bbox2d;
+            };
+            }; 
+            module dds_interface{
+            struct CameraParkingInfoList
+            {
+                Header   _header;
+                int32   _sensor_id;
+                sequence<CameraParkingInfo> _camera_parking;
+                sequence<CameraParkingStopper> _camera_parking_stoppers;
+                int32   _error_code;
+                boolean   _is_valid;
+            };
+            }; 
+            module dds_interface{
+            struct ParkingStopper
+            {
+                Header   _header;
+                Point3D   _center_point_vehicle;
+                Point3D   _center_point_abs;
+                sequence<Point3D> _stopper_points_vehicle;
+                sequence<Point3D> _stopper_points_abs;
+            };
+            }; 
+            module dds_interface{
+            struct ParkingInfo
+            {
+                Header   _header;
+                int32   _parking_space_id;
+                int32   _parking_type;
+                int32   _parking_status;
+                double   _confidence;
+                Point3D   _center_point_of_parking;
+                double   _theta;
+                double   _width;
+                double   _length;
+                double   _yaw_offset;
+                Polygon3D   _polygon;
+                int32   _sensor_id;
+                boolean   _is_lane_width_valid;
+                double   _lane_width;
+                sequence<ParkingStopper> _parking_stoppers;
+                int32   _parking_direction_type;
+                int32   _left_occupied_status;
+                int32   _right_occupied_status;
+                int32   _parking_source_type;
+            };
+            }; 
+            module dds_interface{
+            struct ParkingInfoList
+            {
+                Header   _header;
+                sequence<ParkingInfo> _parking_info;
+                int32   _error_code;
+                boolean   _is_valid;
+                boolean   _parking_out_enable;
+                int32   _parking_out_direction;
+                int32   _parking_out_id;
+            };
+            }; 
+            module dds_interface{
+            struct KeyValues
+            {
+                string   _key;
+                string   _value;
+            };
+            }; 
+            module dds_interface{
+            struct DiagnosticStatus
+            {
+                Header   _header;
+                int32   _id;
+                int32   _level;
+                string   _name;
+                string   _message;
+                string   _hardware_id;
+                sequence<KeyValues> _values;
+            };
+            }; 
+            module dds_interface{
+            struct AlarmMessage
+            {
+                Header   _header;
+                string   _alarm_proc;
+                int32   _alarm_level;
+                int32   _alarm_type;
+                int32   _alarm_id;
+                int32   _alarm_display;
+                string   _alarm_data;
+            };
+            }; 
+            module dds_interface{
+            struct DiagnosticArray
+            {
+                Header   _header;
+                sequence<DiagnosticStatus> _status;
+            };
+            }; 
+            module dds_interface{
+            struct LaneletInfo
+            {
+                int32   _lanelet_id;
+                double   _length;
+            };
+            }; 
+            module dds_interface{
+            struct GlobalRouteMsg
+            {
+                Header   _header;
+                sequence<LaneletInfo> _route;
+                LaneletInfo   _current_lanelet;
+                double   _total_mileage;
+                double   _cur_mileage;
+                sequence<LaneletInfo> _cur_slice;
+            };
+            }; 
+            module dds_interface{
+            struct RouteFusionInfo
+            {
+                int32   _fusion_flag;
+                string   _fusion_reason;
+            };
+            }; 
+            module dds_interface{
+            struct TrafficEvents
+            {
+                Header   _header;
+                RouteFusionInfo   _route_fusion_info;
+                JunctionInfo   _junction_info;
+                LimitSpeedInfo   _limit_speed_info;
+            };
+            }; 
+            module dds_interface{
+            struct RoadMarkList
+            {
+                Header   _header;
+                sequence<RoadMark> _roadmarks;
+            };
+            }; 
+            module dds_interface{
+            struct HMIObuCmd
+            {
+                int32   _code;
+                int32   _val;
+            };
+            }; 
+            module dds_interface{
+            struct HMIObuCmdMsg
+            {
+                Header   _header;
+                int32   _id;
+                string   _name;
+                sequence<HMIObuCmd> _obu_cmd_list;
+            };
+            }; 
+            module dds_interface{
+            struct HMIParkingStateDisplay
+            {
+                Header   _header;
+                int32   _parking_type;
+                int32   _moves_counter;
+                double   _remian_distance;
+                int32   _display_info;
+                double   _distance_to_leader_obj;
+                int32   _state;
+            };
+            }; 
+            module dds_interface{
+            struct HMIParkingInfo
+            {
+                Header   _header;
+                int32   _parking_space_id;
+                int32   _parking_type;
+                int32   _parking_status;
+                Point3D   _center_point_of_parking;
+                double   _theta;
+                double   _width;
+                double   _length;
+                boolean   _is_custom_parking;
+                Polygon3D   _polygon;
+                int32   _parking_source_type;
+            };
+            }; 
+            module dds_interface{
+            struct HMIParkingInfoList
+            {
+                Header   _header;
+                sequence<HMIParkingInfo> _parking_info;
+                boolean   _parking_out_enable;
+                int32   _parking_out_direction;
+                int32   _parking_out_id;
+            };
+            }; 
+            module dds_interface{
+            struct HMIVehicleMsg
+            {
+                Header   _header;
+                int32   _driving_mode;
+                int32   _gear_location;
+                double   _steering_value;
+                double   _accel_value;
+                double   _brake_value;
+                double   _speed_mps;
+                PointLLH   _position;
+                PointENU   _utm_position;
+                double   _pitch;
+                double   _roll;
+                double   _heading;
+                int32   _rtk_flag;
+                double   _origin_lat;
+                double   _origin_lon;
+                double   _current_ins_yaw;
+                int32   _auto_safe;
+                double   _battery_power_percentage;
+                int32   _charging_gun_status;
+                sequence<int32> _chassis_error_code;
+                int32   _brake_lamp_status;
+                int32   _turn_lamp_status;
+                PointENU   _mercator_position;
+            };
+            }; 
+            module dds_interface{
+            struct HMIObstacle
+            {
+                int32   _id;
+                Point3D   _center_pos_vehicle;
+                Point3D   _center_pos_abs;
+                double   _theta_vehicle;
+                double   _theta_abs;
+                double   _length;
+                double   _width;
+                double   _height;
+                int32   _type;
+                double   _confidence;
+                int32   _confidence_type;
+                int32   _sub_type;
+                sequence<Point3D> _points;
+                uint8   _cipv_flag;
+                int32   _fusion_type;
+            };
+            }; 
+            module dds_interface{
+            struct HMIObstacleList
+            {
+                Header   _header;
+                int32   _sensor_id;
+                sequence<HMIObstacle> _obstacle;
+                int32   _error_code;
+                boolean   _is_valid;
+                int32   _change_origin_flag;
+            };
+            }; 
+            module dds_interface{
+            struct HMITrajectoryPoint
+            {
+                Point3D   _point;
+                double   _v;
+            };
+            }; 
+            module dds_interface{
+            struct HMITrajectory
+            {
+                Header   _header;
+                sequence<HMITrajectoryPoint> _trajectory_points;
+            };
+            }; 
+            module dds_interface{
+            struct HMIDiagnosticStatus
+            {
+                int32   _id;
+                int32   _level;
+                string   _name;
+                string   _message;
+                string   _hardware_id;
+            };
+            }; 
+            module dds_interface{
+            struct HMIDiagnosticArray
+            {
+                Header   _header;
+                sequence<HMIDiagnosticStatus> _status;
+            };
+            }; 
+            module dds_interface{
+            struct CurvatureInfo
+            {
+                double   _offset;
+                double   _value;
+            };
+            }; 
+            module dds_interface{
+            struct GuideRoad
+            {
+                int64   _road_id;
+                int8   _road_type;
+                int8   _turn_type;
+                double   _avg_curvature;
+                int32   _curvature_size;
+                sequence<CurvatureInfo> _curvature;
+            };
+            }; 
+            module dds_interface{
+            struct GuideInfo
+            {
+                Header   _header;
+                double   _next_dis;
+                GuideRoad   _current_road;
+                GuideRoad   _next_road;
+                int8   _round_status;
+                int8   _intersection_status;
+                int8   _roads_status;
+            };
+            }; 
+systems:
+    dds: { type: fastdds }
+    ros1: { type: ros1 }
+
+routes:
+    ros1_to_dds: { from: ros1, to: dds }
+
+topics:
+    Imu_output_dds: {
+        type: "ros_interface/Imu",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Imu, topic: /drivers/ins/Imu },
+            ros1: { topic: "/drivers/ins/Imu" }
+        }
+    }
+    Ins_output_dds: {
+        type: "ros_interface/Ins",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Ins, topic: /drivers/ins/Ins },
+            ros1: { topic: "/drivers/ins/Ins" }
+        }
+    }
+    Gnss_output_dds: {
+        type: "ros_interface/Gnss",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Gnss, topic: /drivers/ins/Gnss },
+            ros1: { topic: "/drivers/ins/Gnss" }
+        }
+    }
+    Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /drivers/ins/Faults },
+            ros1: { topic: "/drivers/ins/Faults" }
+        }
+    }
+    ObuCmdMsg_input_dds: {
+        type: "ros_interface/ObuCmdMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObuCmdMsg, topic: /vui_client/ObuCmdMsg },
+            ros1: { topic: "/vui_client/ObuCmdMsg" }
+        }
+    }
+    Image_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /drivers/camera/Image },
+            ros1: { topic: "/drivers/camera/Image" }
+        }
+    }
+    RadarObstacleListMsg_output_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg" }
+        }
+    }
+    RadarObstacleListMsg_F_r_output_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_F_r },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_F_r" }
+        }
+    }
+    RadarObstacleListMsg_B_r_output_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_B_r },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_B_r" }
+        }
+    }
+    RadarObstacleListMsg_B_l_output_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_B_l },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_B_l" }
+        }
+    }
+    RadarObstacleListMsg_F_l_output_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_F_l },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_F_l" }
+        }
+    }
+    PointCloud_output_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /drivers/lidar/PointCloud },
+            ros1: { topic: "/drivers/lidar/PointCloud" }
+        }
+    }
+    Ultrasonic_output_dds: {
+        type: "ros_interface/Ultrasonic",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Ultrasonic, topic: /drivers/uss/Ultrasonic },
+            ros1: { topic: "/drivers/uss/Ultrasonic" }
+        }
+    }
+    Chassis_input_dds: {
+        type: "ros_interface/Chassis",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Chassis, topic: /drivers/canbus/Chassis },
+            ros1: { topic: "/drivers/canbus/Chassis" }
+        }
+    }
+    WheelInfo_output_dds: {
+        type: "ros_interface/WheelInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::WheelInfo, topic: /drivers/canbus/WheelInfo },
+            ros1: { topic: "/drivers/canbus/WheelInfo" }
+        }
+    }
+    Chassis_output_dds: {
+        type: "ros_interface/Chassis",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Chassis, topic: /drivers/canbus/Chassis },
+            ros1: { topic: "/drivers/canbus/Chassis" }
+        }
+    }
+    Canbus_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /drivers/canbus/Faults },
+            ros1: { topic: "/drivers/canbus/Faults" }
+        }
+    }
+    SafeControlCommand_input_dds: {
+        type: "ros_interface/ControlCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ControlCommand, topic: /safety/safeguard/SafeControlCommand },
+            ros1: { topic: "/safety/safeguard/SafeControlCommand" }
+        }
+    }
+    ControlCommand_output_dds: {
+        type: "ros_interface/ControlCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ControlCommand, topic: /control/ControlCommand },
+            ros1: { topic: "/control/ControlCommand" }
+        }
+    }
+    ControlAnalysis_output_dds: {
+        type: "ros_interface/ControlAnalysis",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ControlAnalysis, topic: /control/ControlAnalysis },
+            ros1: { topic: "/control/ControlAnalysis" }
+        }
+    }
+    Control_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /control/Faults },
+            ros1: { topic: "/control/Faults" }
+        }
+    }
+    Events_output_dds: {
+        type: "ros_interface/Events",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Events, topic: /control/Events },
+            ros1: { topic: "/control/Events" }
+        }
+    }
+    ADCTrajectory_input_dds: {
+        type: "ros_interface/ADCTrajectory",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ADCTrajectory, topic: /planning/ADCTrajectory },
+            ros1: { topic: "/planning/ADCTrajectory" }
+        }
+    }
+    Location_input_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /localization/global_fusion/Location },
+            ros1: { topic: "/localization/global_fusion/Location" }
+        }
+    }
+    PlanningCmd_input_dds: {
+        type: "ros_interface/PlanningCmd",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PlanningCmd, topic: /planning/PlanningCmd },
+            ros1: { topic: "/planning/PlanningCmd" }
+        }
+    }
+    ADCTrajectory_output_dds: {
+        type: "ros_interface/ADCTrajectory",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ADCTrajectory, topic: /planning/ADCTrajectory },
+            ros1: { topic: "/planning/ADCTrajectory" }
+        }
+    }
+    PlanningCmd_output_dds: {
+        type: "ros_interface/PlanningCmd",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PlanningCmd, topic: /planning/PlanningCmd },
+            ros1: { topic: "/planning/PlanningCmd" }
+        }
+    }
+    PlanningAnalysis_output_dds: {
+        type: "ros_interface/PlanningAnalysis",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PlanningAnalysis, topic: /planning/PlanningAnalysis },
+            ros1: { topic: "/planning/PlanningAnalysis" }
+        }
+    }
+    ParkingStateDisplay_output_dds: {
+        type: "ros_interface/ParkingStateDisplay",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingStateDisplay, topic: /planning/ParkingStateDisplay },
+            ros1: { topic: "/planning/ParkingStateDisplay" }
+        }
+    }
+    TrajectoryArray_output_dds: {
+        type: "ros_interface/TrajectoryArray",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrajectoryArray, topic: /planning/TrajectoryArray },
+            ros1: { topic: "/planning/TrajectoryArray" }
+        }
+    }
+    Planning_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /planning/Faults },
+            ros1: { topic: "/planning/Faults" }
+        }
+    }
+    Planning_Events_output_dds: {
+        type: "ros_interface/Events",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Events, topic: /planning/Events },
+            ros1: { topic: "/planning/Events" }
+        }
+    }
+    RoutingResponse_input_dds: {
+        type: "ros_interface/RoutingResponse",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoutingResponse, topic: /routing/RoutingResponse },
+            ros1: { topic: "/routing/RoutingResponse" }
+        }
+    }
+    LocalRoutingResponse_input_dds: {
+        type: "ros_interface/RoutingResponse",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoutingResponse, topic: /local_map/LocalRoutingResponse },
+            ros1: { topic: "/local_map/LocalRoutingResponse" }
+        }
+    }
+    ParkingInfo_input_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /routing/ParkingInfo },
+            ros1: { topic: "/routing/ParkingInfo" }
+        }
+    }
+    StopInfo_input_dds: {
+        type: "ros_interface/StopInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::StopInfo, topic: /routing/StopInfo },
+            ros1: { topic: "/routing/StopInfo" }
+        }
+    }
+    TrafficLightMsg_input_dds: {
+        type: "ros_interface/TrafficLightMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficLightMsg, topic: /perception/fusion/traffic_sign_fusion/TrafficLightMsg },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/TrafficLightMsg" }
+        }
+    }
+    PredictionObstacles_input_dds: {
+        type: "ros_interface/PredictionObstacles",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PredictionObstacles, topic: /prediction/PredictionObstacles },
+            ros1: { topic: "/prediction/PredictionObstacles" }
+        }
+    }
+    LaneList_input_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: LaneList },
+            ros1: { topic: "LaneList" }
+        }
+    }
+    SotifMonitorResult_input_dds: {
+        type: "ros_interface/SotifMonitorResult",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::SotifMonitorResult, topic: /safety/sotif_monitor/SotifMonitorResult },
+            ros1: { topic: "/safety/sotif_monitor/SotifMonitorResult" }
+        }
+    }
+    DrivableRegion_input_dds: {
+        type: "ros_interface/DrivableRegion",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::DrivableRegion, topic: /perception/fusion/traffic_sign_fusion/DrivableRegion },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/DrivableRegion" }
+        }
+    }
+    ParkingOutInfo_input_dds: {
+        type: "ros_interface/ParkingOutInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingOutInfo, topic: /avp/parking_out/ParkingOutInfo },
+            ros1: { topic: "/avp/parking_out/ParkingOutInfo" }
+        }
+    }
+    GuideInfo_input_dds: {
+        type: "ros_interface/GuideInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::GuideInfo, topic: /routing/GuideInfo },
+            ros1: { topic: "/routing/GuideInfo" }
+        }
+    }
+    TrafficEvents_input_dds: {
+        type: "ros_interface/TrafficEvents",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficEvents, topic: /routing/TrafficEvents },
+            ros1: { topic: "/routing/TrafficEvents" }
+        }
+    }
+    RoutingResponse_output_dds: {
+        type: "ros_interface/RoutingResponse",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoutingResponse, topic: /routing/RoutingResponse },
+            ros1: { topic: "/routing/RoutingResponse" }
+        }
+    }
+    ParkingInfo_output_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /routing/ParkingInfo },
+            ros1: { topic: "/routing/ParkingInfo" }
+        }
+    }
+    StopInfo_output_dds: {
+        type: "ros_interface/StopInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::StopInfo, topic: /routing/StopInfo },
+            ros1: { topic: "/routing/StopInfo" }
+        }
+    }
+    GlobalRouteMsg_output_dds: {
+        type: "ros_interface/GlobalRouteMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::GlobalRouteMsg, topic: /routing/GlobalRouteMsg },
+            ros1: { topic: "/routing/GlobalRouteMsg" }
+        }
+    }
+    Routing_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /routing/Faults },
+            ros1: { topic: "/routing/Faults" }
+        }
+    }
+    MapBoundary_output_dds: {
+        type: "ros_interface/Polygon2D",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Polygon2D, topic: /routing/MapBoundary },
+            ros1: { topic: "/routing/MapBoundary" }
+        }
+    }
+    TrafficEvents_output_dds: {
+        type: "ros_interface/TrafficEvents",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficEvents, topic: /routing/TrafficEvents },
+            ros1: { topic: "/routing/TrafficEvents" }
+        }
+    }
+    SpeedLimit_input_dds: {
+        type: "ros_interface/TrafficEvents",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficEvents, topic: /vui_client/SpeedLimit },
+            ros1: { topic: "/vui_client/SpeedLimit" }
+        }
+    }
+    Map2LocalTF_input_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/local_map_location/Map2LocalTF },
+            ros1: { topic: "/localization/local_map_location/Map2LocalTF" }
+        }
+    }
+    RoutingRequest_input_dds: {
+        type: "ros_interface/RoutingRequest",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoutingRequest, topic: /vui_client/RoutingRequest },
+            ros1: { topic: "/vui_client/RoutingRequest" }
+        }
+    }
+    PredictionObstacles_output_dds: {
+        type: "ros_interface/PredictionObstacles",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PredictionObstacles, topic: /prediction/PredictionObstacles },
+            ros1: { topic: "/prediction/PredictionObstacles" }
+        }
+    }
+    Prediction_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /prediction/Faults },
+            ros1: { topic: "/prediction/Faults" }
+        }
+    }
+    MMObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/fusion/motion_manager/MMObstacleList },
+            ros1: { topic: "/perception/fusion/motion_manager/MMObstacleList" }
+        }
+    }
+    TrafficEventsLocal_input_dds: {
+        type: "ros_interface/TrafficEvents",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficEvents, topic: /routing/TrafficEventsLocal },
+            ros1: { topic: "/routing/TrafficEventsLocal" }
+        }
+    }
+    LocalMap_input_dds: {
+        type: "ros_interface/LocalMap",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LocalMap, topic: /prediction/LocalMap },
+            ros1: { topic: "/prediction/LocalMap" }
+        }
+    }
+    MFLaneList_input_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: MFLaneList },
+            ros1: { topic: "MFLaneList" }
+        }
+    }
+    VIOOdometry_output_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/visual_inertial_odometry/VIOOdometry },
+            ros1: { topic: "/localization/visual_inertial_odometry/VIOOdometry" }
+        }
+    }
+    Visual_Inertial_Odometry_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /localization/visual_inertial_odometry/Faults },
+            ros1: { topic: "/localization/visual_inertial_odometry/Faults" }
+        }
+    }
+    Imu_input_dds: {
+        type: "ros_interface/Imu",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Imu, topic: /drivers/ins/Imu },
+            ros1: { topic: "/drivers/ins/Imu" }
+        }
+    }
+    WOOdometry_output_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/wheel_odometry/WOOdometry },
+            ros1: { topic: "/localization/wheel_odometry/WOOdometry" }
+        }
+    }
+    Wheel_Odometry_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /localization/wheel_odometry/Faults },
+            ros1: { topic: "/localization/wheel_odometry/Faults" }
+        }
+    }
+    Ins_input_dds: {
+        type: "ros_interface/Ins",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Ins, topic: /drivers/ins/Ins },
+            ros1: { topic: "/drivers/ins/Ins" }
+        }
+    }
+    Map2LocalTF_output_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/local_map_location/Map2LocalTF },
+            ros1: { topic: "/localization/local_map_location/Map2LocalTF" }
+        }
+    }
+    Location_output_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /localization/local_map_location/Location },
+            ros1: { topic: "/localization/local_map_location/Location" }
+        }
+    }
+    VWGLOdometry_output_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/visual_wheel_gps_localization/VWGLOdometry },
+            ros1: { topic: "/localization/visual_wheel_gps_localization/VWGLOdometry" }
+        }
+    }
+    Visual_Wheel_Gps_Localization_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /localization/visual_wheel_gps_localization/Faults },
+            ros1: { topic: "/localization/visual_wheel_gps_localization/Faults" }
+        }
+    }
+    Image_input_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /drivers/camera/Image },
+            ros1: { topic: "/drivers/camera/Image" }
+        }
+    }
+    Map_Matcher_Location_output_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /localization/map_matcher/Location },
+            ros1: { topic: "/localization/map_matcher/Location" }
+        }
+    }
+    Map_Matcher_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /localization/map_matcher/Faults },
+            ros1: { topic: "/localization/map_matcher/Faults" }
+        }
+    }
+    MMLaneList_input_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: /perception/fusion/motion_manager/MMLaneList },
+            ros1: { topic: "/perception/fusion/motion_manager/MMLaneList" }
+        }
+    }
+    Global_Fusion_Location_output_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /localization/global_fusion/Location },
+            ros1: { topic: "/localization/global_fusion/Location" }
+        }
+    }
+    Global_Fusion_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /localization/global_fusion/Faults },
+            ros1: { topic: "/localization/global_fusion/Faults" }
+        }
+    }
+    Gnss_input_dds: {
+        type: "ros_interface/Gnss",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Gnss, topic: /drivers/ins/Gnss },
+            ros1: { topic: "/drivers/ins/Gnss" }
+        }
+    }
+    VIOOdometry_input_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/visual_inertial_odometry/VIOOdometry },
+            ros1: { topic: "/localization/visual_inertial_odometry/VIOOdometry" }
+        }
+    }
+    WOOdometry_input_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/wheel_odometry/WOOdometry },
+            ros1: { topic: "/localization/wheel_odometry/WOOdometry" }
+        }
+    }
+    VWGLOdometry_input_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/visual_wheel_gps_localization/VWGLOdometry },
+            ros1: { topic: "/localization/visual_wheel_gps_localization/VWGLOdometry" }
+        }
+    }
+    NMOdometry_output_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/ndt_matching/NMOdometry },
+            ros1: { topic: "/localization/ndt_matching/NMOdometry" }
+        }
+    }
+    Ndt_Matching_Location_output_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /localization/ndt_matching/Location },
+            ros1: { topic: "/localization/ndt_matching/Location" }
+        }
+    }
+    Ndt_Matching_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /localization/ndt_matching/Faults },
+            ros1: { topic: "/localization/ndt_matching/Faults" }
+        }
+    }
+    NOPOdometry_input_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/ndt_odom_predictor/NOPOdometry },
+            ros1: { topic: "/localization/ndt_odom_predictor/NOPOdometry" }
+        }
+    }
+    PointCloud_input_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /drivers/lidar/PointCloud },
+            ros1: { topic: "/drivers/lidar/PointCloud" }
+        }
+    }
+    NOPOdometry_output_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/ndt_odom_predictor/NOPOdometry },
+            ros1: { topic: "/localization/ndt_odom_predictor/NOPOdometry" }
+        }
+    }
+    Ndt_Odom_Predictor_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /localization/ndt_odom_predictor/Faults },
+            ros1: { topic: "/localization/ndt_odom_predictor/Faults" }
+        }
+    }
+    NMOdometry_input_dds: {
+        type: "ros_interface/Odometry",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Odometry, topic: /localization/ndt_matching/NMOdometry },
+            ros1: { topic: "/localization/ndt_matching/NMOdometry" }
+        }
+    }
+    Wheel_Location_Location_output_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /localization/wheel_location/Location },
+            ros1: { topic: "/localization/wheel_location/Location" }
+        }
+    }
+    WheelInfo_input_dds: {
+        type: "ros_interface/WheelInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::WheelInfo, topic: /drivers/canbus/WheelInfo },
+            ros1: { topic: "/drivers/canbus/WheelInfo" }
+        }
+    }
+    ParkingInfoList_input_dds: {
+        type: "ros_interface/ParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfoList, topic: /perception/fusion/traffic_sign_fusion/ParkingInfoList },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/ParkingInfoList" }
+        }
+    }
+    Orb_Slam2_Location_output_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /localization/orb_slam2/Location },
+            ros1: { topic: "/localization/orb_slam2/Location" }
+        }
+    }
+    LeftImage_input_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /drivers/camera/LeftImage },
+            ros1: { topic: "/drivers/camera/LeftImage" }
+        }
+    }
+    RightImage_input_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /drivers/camera/RightImage },
+            ros1: { topic: "/drivers/camera/RightImage" }
+        }
+    }
+    PObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/fusion/preprocessor/PObstacleList },
+            ros1: { topic: "/perception/fusion/preprocessor/PObstacleList" }
+        }
+    }
+    Preprocessor_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/fusion/preprocessor/Faults },
+            ros1: { topic: "/perception/fusion/preprocessor/Faults" }
+        }
+    }
+    C3ODObstacleList4_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList4 },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList4" }
+        }
+    }
+    C3ODObstacleList3_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList3 },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList3" }
+        }
+    }
+    C3ODObstacleList2_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList2 },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList2" }
+        }
+    }
+    C3ODObstacleList1_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList1 },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList1" }
+        }
+    }
+    Ultrasonic_input_dds: {
+        type: "ros_interface/Ultrasonic",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Ultrasonic, topic: /drivers/uss/Ultrasonic },
+            ros1: { topic: "/drivers/uss/Ultrasonic" }
+        }
+    }
+    RadarObstacleListMsg_input_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg" }
+        }
+    }
+    RadarObstacleListMsg_F_r_input_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_F_r },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_F_r" }
+        }
+    }
+    RadarObstacleListMsg_B_r_input_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_B_r },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_B_r" }
+        }
+    }
+    RadarObstacleListMsg_B_l_input_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_B_l },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_B_l" }
+        }
+    }
+    RadarObstacleListMsg_F_l_input_dds: {
+        type: "ros_interface/RadarObstacleListMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RadarObstacleListMsg, topic: /drivers/radar/RadarObstacleListMsg_F_l },
+            ros1: { topic: "/drivers/radar/RadarObstacleListMsg_F_l" }
+        }
+    }
+    MMObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/fusion/motion_manager/MMObstacleList },
+            ros1: { topic: "/perception/fusion/motion_manager/MMObstacleList" }
+        }
+    }
+    Motion_Manager_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/fusion/motion_manager/Faults },
+            ros1: { topic: "/perception/fusion/motion_manager/Faults" }
+        }
+    }
+    PObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/fusion/preprocessor/PObstacleList },
+            ros1: { topic: "/perception/fusion/preprocessor/PObstacleList" }
+        }
+    }
+    BevTrackingObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: BevTrackingObstacleList },
+            ros1: { topic: "BevTrackingObstacleList" }
+        }
+    }
+    TrafficLightMsg_output_dds: {
+        type: "ros_interface/TrafficLightMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficLightMsg, topic: /perception/fusion/traffic_sign_fusion/TrafficLightMsg },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/TrafficLightMsg" }
+        }
+    }
+    MFLaneList_output_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: /perception/fusion/traffic_sign_fusion/MFLaneList },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/MFLaneList" }
+        }
+    }
+    ParkingInfoList_output_dds: {
+        type: "ros_interface/ParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfoList, topic: /perception/fusion/traffic_sign_fusion/ParkingInfoList },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/ParkingInfoList" }
+        }
+    }
+    WLParkingInfoList_output_dds: {
+        type: "ros_interface/ParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfoList, topic: /perception/fusion/traffic_sign_fusion/WLParkingInfoList },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/WLParkingInfoList" }
+        }
+    }
+    Traffic_Sign_Fusion_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/fusion/traffic_sign_fusion/Faults },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/Faults" }
+        }
+    }
+    DrivableRegion_output_dds: {
+        type: "ros_interface/DrivableRegion",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::DrivableRegion, topic: /perception/fusion/traffic_sign_fusion/DrivableRegion },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/DrivableRegion" }
+        }
+    }
+    FisheyeCameraParkingInfoList3_input_dds: {
+        type: "ros_interface/CameraParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CameraParkingInfoList, topic: /perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList3 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList3" }
+        }
+    }
+    FisheyeCameraParkingInfoList4_input_dds: {
+        type: "ros_interface/CameraParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CameraParkingInfoList, topic: /perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList4 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList4" }
+        }
+    }
+    Multi_Lidar_Concate_PointCloud_output_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /perception/lidar/multi_lidar_concate/PointCloud },
+            ros1: { topic: "/perception/lidar/multi_lidar_concate/PointCloud" }
+        }
+    }
+    Multi_Lidar_Concate_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/lidar/multi_lidar_concate/Faults },
+            ros1: { topic: "/perception/lidar/multi_lidar_concate/Faults" }
+        }
+    }
+    GroundPoints_output_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /perception/lidar/lidar_segment_ground/GroundPoints },
+            ros1: { topic: "/perception/lidar/lidar_segment_ground/GroundPoints" }
+        }
+    }
+    NoGroundPoints_output_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /perception/lidar/lidar_segment_ground/NoGroundPoints },
+            ros1: { topic: "/perception/lidar/lidar_segment_ground/NoGroundPoints" }
+        }
+    }
+    Lidar_Segment_Ground_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/lidar/lidar_segment_ground/Faults },
+            ros1: { topic: "/perception/lidar/lidar_segment_ground/Faults" }
+        }
+    }
+    MLCPointCloud_input_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /perception/lidar/multi_lidar_concate/MLCPointCloud },
+            ros1: { topic: "/perception/lidar/multi_lidar_concate/MLCPointCloud" }
+        }
+    }
+    Lidar_Gridmap_Segment_Ground_GroundPoints_output_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /perception/lidar/lidar_gridmap_segment_ground/GroundPoints },
+            ros1: { topic: "/perception/lidar/lidar_gridmap_segment_ground/GroundPoints" }
+        }
+    }
+    Lidar_Gridmap_Segment_Ground_NoGroundPoints_output_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: /perception/lidar/lidar_gridmap_segment_ground/NoGroundPoints },
+            ros1: { topic: "/perception/lidar/lidar_gridmap_segment_ground/NoGroundPoints" }
+        }
+    }
+    Lidar_Gridmap_Segment_Ground_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/lidar/lidar_gridmap_segment_ground/Faults },
+            ros1: { topic: "/perception/lidar/lidar_gridmap_segment_ground/Faults" }
+        }
+    }
+    LCDObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/lidar/lidar_cluster_detect/LCDObstacleList },
+            ros1: { topic: "/perception/lidar/lidar_cluster_detect/LCDObstacleList" }
+        }
+    }
+    Lidar_Cluster_Detect_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/lidar/lidar_cluster_detect/Faults },
+            ros1: { topic: "/perception/lidar/lidar_cluster_detect/Faults" }
+        }
+    }
+    NoGroundPoints_input_dds: {
+        type: "ros_interface/PointCloud",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::PointCloud, topic: NoGroundPoints },
+            ros1: { topic: "NoGroundPoints" }
+        }
+    }
+    LUTObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/lidar/lidar_ukf_tracker/LUTObstacleList },
+            ros1: { topic: "/perception/lidar/lidar_ukf_tracker/LUTObstacleList" }
+        }
+    }
+    Lidar_Ukf_Tracker_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/lidar/lidar_ukf_tracker/Faults },
+            ros1: { topic: "/perception/lidar/lidar_ukf_tracker/Faults" }
+        }
+    }
+    LCDObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/lidar/lidar_cluster_detect/LCDObstacleList },
+            ros1: { topic: "/perception/lidar/lidar_cluster_detect/LCDObstacleList" }
+        }
+    }
+    C2ODObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_2d_object_detect/C2ODObstacleList },
+            ros1: { topic: "/perception/camera/camera_2d_object_detect/C2ODObstacleList" }
+        }
+    }
+    Camera_2d_Object_Detect_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_2d_object_detect/Faults },
+            ros1: { topic: "/perception/camera/camera_2d_object_detect/Faults" }
+        }
+    }
+    C3ODObstacleList1_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList1 },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList1" }
+        }
+    }
+    C3ODObstacleList3_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList3 },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList3" }
+        }
+    }
+    C3ODObstacleList4_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList4 },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList4" }
+        }
+    }
+    Camera_3d_Object_Detect_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_3d_object_detect/Faults },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/Faults" }
+        }
+    }
+    COTObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_object_tracker/COTObstacleList },
+            ros1: { topic: "/perception/camera/camera_object_tracker/COTObstacleList" }
+        }
+    }
+    Camera_Object_Tracker_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_object_tracker/Faults },
+            ros1: { topic: "/perception/camera/camera_object_tracker/Faults" }
+        }
+    }
+    COFObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_objects_fusion/COFObstacleList },
+            ros1: { topic: "/perception/camera/camera_objects_fusion/COFObstacleList" }
+        }
+    }
+    COFObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_objects_fusion/COFObstacleList },
+            ros1: { topic: "/perception/camera/camera_objects_fusion/COFObstacleList" }
+        }
+    }
+    Camera_Objects_Fusion_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_objects_fusion/Faults },
+            ros1: { topic: "/perception/camera/camera_objects_fusion/Faults" }
+        }
+    }
+    C2ODObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_2d_object_detect/C2ODObstacleList },
+            ros1: { topic: "/perception/camera/camera_2d_object_detect/C2ODObstacleList" }
+        }
+    }
+    C3ODObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_3d_object_detect/C3ODObstacleList },
+            ros1: { topic: "/perception/camera/camera_3d_object_detect/C3ODObstacleList" }
+        }
+    }
+    CLDLaneList_output_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: /perception/camera/camera_lane_detect/CLDLaneList },
+            ros1: { topic: "/perception/camera/camera_lane_detect/CLDLaneList" }
+        }
+    }
+    Camera_Lane_Detect_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_lane_detect/Faults },
+            ros1: { topic: "/perception/camera/camera_lane_detect/Faults" }
+        }
+    }
+    CLPPLaneList_output_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: /perception/camera/camera_lane_post_process/CLPPLaneList },
+            ros1: { topic: "/perception/camera/camera_lane_post_process/CLPPLaneList" }
+        }
+    }
+    Camera_Lane_Post_Process_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_lane_post_process/Faults },
+            ros1: { topic: "/perception/camera/camera_lane_post_process/Faults" }
+        }
+    }
+    CLDLaneList_input_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: /perception/camera/camera_lane_detect/CLDLaneList },
+            ros1: { topic: "/perception/camera/camera_lane_detect/CLDLaneList" }
+        }
+    }
+    CameraParkingInfoList1_output_dds: {
+        type: "ros_interface/CameraParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CameraParkingInfoList, topic: /perception/camera/camera_parking_detect/CameraParkingInfoList1 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/CameraParkingInfoList1" }
+        }
+    }
+    CameraParkingInfoList3_output_dds: {
+        type: "ros_interface/CameraParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CameraParkingInfoList, topic: /perception/camera/camera_parking_detect/CameraParkingInfoList3 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/CameraParkingInfoList3" }
+        }
+    }
+    CameraParkingInfoList4_output_dds: {
+        type: "ros_interface/CameraParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CameraParkingInfoList, topic: /perception/camera/camera_parking_detect/CameraParkingInfoList4 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/CameraParkingInfoList4" }
+        }
+    }
+    FisheyeCameraParkingInfoList3_output_dds: {
+        type: "ros_interface/CameraParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CameraParkingInfoList, topic: /perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList3 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList3" }
+        }
+    }
+    FisheyeCameraParkingInfoList4_output_dds: {
+        type: "ros_interface/CameraParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CameraParkingInfoList, topic: /perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList4 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/FisheyeCameraParkingInfoList4" }
+        }
+    }
+    Camera_Parking_Detect_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_parking_detect/Faults },
+            ros1: { topic: "/perception/camera/camera_parking_detect/Faults" }
+        }
+    }
+    Camera_Parking_Detect_C3ODObstacleList1_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_parking_detect/C3ODObstacleList1 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/C3ODObstacleList1" }
+        }
+    }
+    Camera_Parking_Detect_C3ODObstacleList3_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_parking_detect/C3ODObstacleList3 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/C3ODObstacleList3" }
+        }
+    }
+    Camera_Parking_Detect_C3ODObstacleList4_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_parking_detect/C3ODObstacleList4 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/C3ODObstacleList4" }
+        }
+    }
+    Outputimage1_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_parking_detect/Outputimage1 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/Outputimage1" }
+        }
+    }
+    OutputImage2_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_parking_detect/OutputImage2 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/OutputImage2" }
+        }
+    }
+    OutputImage3_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_parking_detect/OutputImage3 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/OutputImage3" }
+        }
+    }
+    OutputImage4_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_parking_detect/OutputImage4 },
+            ros1: { topic: "/perception/camera/camera_parking_detect/OutputImage4" }
+        }
+    }
+    FreeSpace_output_dds: {
+        type: "ros_interface/FreeSpace",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::FreeSpace, topic: /perception/camera/camera_free_space_detect/FreeSpace },
+            ros1: { topic: "/perception/camera/camera_free_space_detect/FreeSpace" }
+        }
+    }
+    Camera_Free_Space_Detect_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /perception/camera/camera_free_space_detect/Faults },
+            ros1: { topic: "/perception/camera/camera_free_space_detect/Faults" }
+        }
+    }
+    Pavementype_output_dds: {
+        type: "ros_interface/Pavementype",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Pavementype, topic: /perception/camera/camera_pavemen_type/Pavementype },
+            ros1: { topic: "/perception/camera/camera_pavemen_type/Pavementype" }
+        }
+    }
+    Camera_Pavemen_Type_Image_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_pavemen_type/Image },
+            ros1: { topic: "/perception/camera/camera_pavemen_type/Image" }
+        }
+    }
+    BevTrackingObstacleList_output_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/camera/camera_bev_tracking/BevTrackingObstacleList },
+            ros1: { topic: "/perception/camera/camera_bev_tracking/BevTrackingObstacleList" }
+        }
+    }
+    CameraBevOutputImage_input_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_bev_detect/CameraBevOutputImage },
+            ros1: { topic: "/perception/camera/camera_bev_detect/CameraBevOutputImage" }
+        }
+    }
+    CamerBevSingleOutputImage_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_bev_detect/CamerBevSingleOutputImage },
+            ros1: { topic: "/perception/camera/camera_bev_detect/CamerBevSingleOutputImage" }
+        }
+    }
+    CameraBevOutputImage_output_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_bev_detect/CameraBevOutputImage },
+            ros1: { topic: "/perception/camera/camera_bev_detect/CameraBevOutputImage" }
+        }
+    }
+    CameraBevInputImage_input_dds: {
+        type: "ros_interface/Image",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Image, topic: /perception/camera/camera_bev_detect/CameraBevInputImage },
+            ros1: { topic: "/perception/camera/camera_bev_detect/CameraBevInputImage" }
+        }
+    }
+    SafeControlCommand_output_dds: {
+        type: "ros_interface/ControlCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ControlCommand, topic: /safety/safeguard/SafeControlCommand },
+            ros1: { topic: "/safety/safeguard/SafeControlCommand" }
+        }
+    }
+    Safeguard_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /safety/safeguard/Faults },
+            ros1: { topic: "/safety/safeguard/Faults" }
+        }
+    }
+    SecurityDecision_output_dds: {
+        type: "ros_interface/SecurityDecision",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::SecurityDecision, topic: /safety/safeguard/SecurityDecision },
+            ros1: { topic: "/safety/safeguard/SecurityDecision" }
+        }
+    }
+    ControlCommand_input_dds: {
+        type: "ros_interface/ControlCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ControlCommand, topic: /control/ControlCommand },
+            ros1: { topic: "/control/ControlCommand" }
+        }
+    }
+    Faults_input_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: Faults },
+            ros1: { topic: "Faults" }
+        }
+    }
+    SotifMonitorResult_output_dds: {
+        type: "ros_interface/SotifMonitorResult",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::SotifMonitorResult, topic: /safety/sotif_monitor/SotifMonitorResult },
+            ros1: { topic: "/safety/sotif_monitor/SotifMonitorResult" }
+        }
+    }
+    Sotif_Monitor_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /safety/sotif_monitor/Faults },
+            ros1: { topic: "/safety/sotif_monitor/Faults" }
+        }
+    }
+    ObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /perception/fusion/motion_manager/ObstacleList },
+            ros1: { topic: "/perception/fusion/motion_manager/ObstacleList" }
+        }
+    }
+    RoutingRequest_output_dds: {
+        type: "ros_interface/RoutingRequest",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoutingRequest, topic: /vui_client/RoutingRequest },
+            ros1: { topic: "/vui_client/RoutingRequest" }
+        }
+    }
+    ObuCmdMsg_output_dds: {
+        type: "ros_interface/ObuCmdMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObuCmdMsg, topic: /vui_client/ObuCmdMsg },
+            ros1: { topic: "/vui_client/ObuCmdMsg" }
+        }
+    }
+    SpeedLimit_output_dds: {
+        type: "ros_interface/TrafficEvents",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficEvents, topic: /vui_client/SpeedLimit },
+            ros1: { topic: "/vui_client/SpeedLimit" }
+        }
+    }
+    Local_Map_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /local_map/Faults },
+            ros1: { topic: "/local_map/Faults" }
+        }
+    }
+    Local_Map_Events_output_dds: {
+        type: "ros_interface/Events",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Events, topic: /local_map/Events },
+            ros1: { topic: "/local_map/Events" }
+        }
+    }
+    LaneList_output_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: /local_map/LaneList },
+            ros1: { topic: "/local_map/LaneList" }
+        }
+    }
+    RoadMarkList_output_dds: {
+        type: "ros_interface/RoadMarkList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoadMarkList, topic: /local_map/RoadMarkList },
+            ros1: { topic: "/local_map/RoadMarkList" }
+        }
+    }
+    Local_Map_FreeSpace_output_dds: {
+        type: "ros_interface/FreeSpace",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::FreeSpace, topic: /local_map/FreeSpace },
+            ros1: { topic: "/local_map/FreeSpace" }
+        }
+    }
+    LocalRoutingResponse_output_dds: {
+        type: "ros_interface/RoutingResponse",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoutingResponse, topic: /local_map/LocalRoutingResponse },
+            ros1: { topic: "/local_map/LocalRoutingResponse" }
+        }
+    }
+    Local_Map_MFLaneList_input_dds: {
+        type: "ros_interface/LaneList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::LaneList, topic: /perception/fusion/traffic_sign_fusion/MFLaneList },
+            ros1: { topic: "/perception/fusion/traffic_sign_fusion/MFLaneList" }
+        }
+    }
+    CommCommand_output_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /hmi/CommCommand },
+            ros1: { topic: "/hmi/CommCommand" }
+        }
+    }
+    Hmi_ParkingInfo_output_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /hmi/ParkingInfo },
+            ros1: { topic: "/hmi/ParkingInfo" }
+        }
+    }
+    CommandRespond_input_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /arbitration/CommandRespond },
+            ros1: { topic: "/arbitration/CommandRespond" }
+        }
+    }
+    ModuleStatus_input_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /avp/apa_state_machine/ModuleStatus },
+            ros1: { topic: "/avp/apa_state_machine/ModuleStatus" }
+        }
+    }
+    Hmi_ModuleStatus_input_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /avp/parking_in/ModuleStatus },
+            ros1: { topic: "/avp/parking_in/ModuleStatus" }
+        }
+    }
+    HMIDiagnosticArray_output_dds: {
+        type: "ros_interface/HMIDiagnosticArray",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMIDiagnosticArray, topic: /hmi_bridge/HMIDiagnosticArray },
+            ros1: { topic: "/hmi_bridge/HMIDiagnosticArray" }
+        }
+    }
+    HMIADCTrajectory_output_dds: {
+        type: "ros_interface/HMITrajectory",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMITrajectory, topic: /hmi_bridge/HMIADCTrajectory },
+            ros1: { topic: "/hmi_bridge/HMIADCTrajectory" }
+        }
+    }
+    HMIParkingStateDisplay_output_dds: {
+        type: "ros_interface/HMIParkingStateDisplay",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMIParkingStateDisplay, topic: /hmi_bridge/HMIParkingStateDisplay },
+            ros1: { topic: "/hmi_bridge/HMIParkingStateDisplay" }
+        }
+    }
+    HMIObstacleList_output_dds: {
+        type: "ros_interface/HMIObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMIObstacleList, topic: /hmi_bridge/HMIObstacleList },
+            ros1: { topic: "/hmi_bridge/HMIObstacleList" }
+        }
+    }
+    HMIParkingInfoList_output_dds: {
+        type: "ros_interface/HMIParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMIParkingInfoList, topic: /hmi_bridge/HMIParkingInfoList },
+            ros1: { topic: "/hmi_bridge/HMIParkingInfoList" }
+        }
+    }
+    HMIVehicleMsg_output_dds: {
+        type: "ros_interface/HMIVehicleMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMIVehicleMsg, topic: /hmi_bridge/HMIVehicleMsg },
+            ros1: { topic: "/hmi_bridge/HMIVehicleMsg" }
+        }
+    }
+    Hmi_Bridge_ParkingInfo_output_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /hmi_bridge/ParkingInfo },
+            ros1: { topic: "/hmi_bridge/ParkingInfo" }
+        }
+    }
+    Hmi_Bridge_ObuCmdMsg_output_dds: {
+        type: "ros_interface/ObuCmdMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObuCmdMsg, topic: /hmi_bridge/ObuCmdMsg },
+            ros1: { topic: "/hmi_bridge/ObuCmdMsg" }
+        }
+    }
+    HMIParkingInfo_input_dds: {
+        type: "ros_interface/HMIParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMIParkingInfo, topic: /hmi/HMIParkingInfo },
+            ros1: { topic: "/hmi/HMIParkingInfo" }
+        }
+    }
+    HMIObuCmdMsg_input_dds: {
+        type: "ros_interface/HMIObuCmdMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::HMIObuCmdMsg, topic: /hmi/HMIObuCmdMsg },
+            ros1: { topic: "/hmi/HMIObuCmdMsg" }
+        }
+    }
+    DiagnosticArray_input_dds: {
+        type: "ros_interface/DiagnosticArray",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::DiagnosticArray, topic: /hmi_bridge/DiagnosticArray },
+            ros1: { topic: "/hmi_bridge/DiagnosticArray" }
+        }
+    }
+    Hmi_Bridge_ADCTrajectory_input_dds: {
+        type: "ros_interface/ADCTrajectory",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ADCTrajectory, topic: /hmi_bridge/ADCTrajectory },
+            ros1: { topic: "/hmi_bridge/ADCTrajectory" }
+        }
+    }
+    ParkingStateDisplay_input_dds: {
+        type: "ros_interface/ParkingStateDisplay",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingStateDisplay, topic: /hmi_bridge/ParkingStateDisplay },
+            ros1: { topic: "/hmi_bridge/ParkingStateDisplay" }
+        }
+    }
+    Events_input_dds: {
+        type: "ros_interface/Events",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Events, topic: /hmi_bridge/Events },
+            ros1: { topic: "/hmi_bridge/Events" }
+        }
+    }
+    Hmi_Bridge_ObstacleList_input_dds: {
+        type: "ros_interface/ObstacleList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObstacleList, topic: /hmi_bridge/ObstacleList },
+            ros1: { topic: "/hmi_bridge/ObstacleList" }
+        }
+    }
+    Hmi_Bridge_ParkingInfoList_input_dds: {
+        type: "ros_interface/ParkingInfoList",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfoList, topic: /hmi_bridge/ParkingInfoList },
+            ros1: { topic: "/hmi_bridge/ParkingInfoList" }
+        }
+    }
+    Hmi_Bridge_Location_input_dds: {
+        type: "ros_interface/Location",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Location, topic: /hmi_bridge/Location },
+            ros1: { topic: "/hmi_bridge/Location" }
+        }
+    }
+    Hmi_Bridge_Chassis_input_dds: {
+        type: "ros_interface/Chassis",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Chassis, topic: /hmi_bridge/Chassis },
+            ros1: { topic: "/hmi_bridge/Chassis" }
+        }
+    }
+    State_Function_Events_output_dds: {
+        type: "ros_interface/Events",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Events, topic: /state_function/Events },
+            ros1: { topic: "/state_function/Events" }
+        }
+    }
+    State_Function_StopInfo_output_dds: {
+        type: "ros_interface/StopInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::StopInfo, topic: /state_function/StopInfo },
+            ros1: { topic: "/state_function/StopInfo" }
+        }
+    }
+    State_Function_RoutingRequest_output_dds: {
+        type: "ros_interface/RoutingRequest",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::RoutingRequest, topic: /state_function/RoutingRequest },
+            ros1: { topic: "/state_function/RoutingRequest" }
+        }
+    }
+    State_Function_ObuCmdMsg_output_dds: {
+        type: "ros_interface/ObuCmdMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObuCmdMsg, topic: /state_function/ObuCmdMsg },
+            ros1: { topic: "/state_function/ObuCmdMsg" }
+        }
+    }
+    State_Function_SpeedLimit_output_dds: {
+        type: "ros_interface/TrafficEvents",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::TrafficEvents, topic: /state_function/SpeedLimit },
+            ros1: { topic: "/state_function/SpeedLimit" }
+        }
+    }
+    State_Function_ParkingInfo_output_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /state_function/ParkingInfo },
+            ros1: { topic: "/state_function/ParkingInfo" }
+        }
+    }
+    State_Function_Faults_output_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /state_function/Faults },
+            ros1: { topic: "/state_function/Faults" }
+        }
+    }
+    State_Function_Events_input_dds: {
+        type: "ros_interface/Events",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Events, topic: /planning/Events },
+            ros1: { topic: "/planning/Events" }
+        }
+    }
+    container_input_dds: {
+        type: "ros_interface/Events",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Events, topic: /state_function/container },
+            ros1: { topic: "/state_function/container" }
+        }
+    }
+    State_Function_Faults_input_dds: {
+        type: "ros_interface/Faults",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::Faults, topic: /safety/safeguard/Faults },
+            ros1: { topic: "/safety/safeguard/Faults" }
+        }
+    }
+    SecurityDecision_input_dds: {
+        type: "ros_interface/SecurityDecision",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::SecurityDecision, topic: /safety/safeguard/SecurityDecision },
+            ros1: { topic: "/safety/safeguard/SecurityDecision" }
+        }
+    }
+    Arbitration_CommCommand_output_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /arbitration/CommCommand },
+            ros1: { topic: "/arbitration/CommCommand" }
+        }
+    }
+    CommandRespond_output_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /arbitration/CommandRespond },
+            ros1: { topic: "/arbitration/CommandRespond" }
+        }
+    }
+    CommCommand_input_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /hmi/CommCommand },
+            ros1: { topic: "/hmi/CommCommand" }
+        }
+    }
+    Arbitration_CommandRespond_input_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /avp/apa_state_machine/CommandRespond },
+            ros1: { topic: "/avp/apa_state_machine/CommandRespond" }
+        }
+    }
+    Apa_State_Machine_CommandRespond_output_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /avp/apa_state_machine/CommandRespond },
+            ros1: { topic: "/avp/apa_state_machine/CommandRespond" }
+        }
+    }
+    PSCommCommand_output_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /avp/apa_state_machine/PSCommCommand },
+            ros1: { topic: "/avp/apa_state_machine/PSCommCommand" }
+        }
+    }
+    PICommCommand_output_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /avp/apa_state_machine/PICommCommand },
+            ros1: { topic: "/avp/apa_state_machine/PICommCommand" }
+        }
+    }
+    ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /avp/apa_state_machine/ModuleStatus },
+            ros1: { topic: "/avp/apa_state_machine/ModuleStatus" }
+        }
+    }
+    Apa_State_Machine_CommCommand_input_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /arbitration/CommCommand },
+            ros1: { topic: "/arbitration/CommCommand" }
+        }
+    }
+    PICommandRespond_input_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /avp/parking_in/PICommandRespond },
+            ros1: { topic: "/avp/parking_in/PICommandRespond" }
+        }
+    }
+    PSCommandRespond_input_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /avp/parking_search/PSCommandRespond },
+            ros1: { topic: "/avp/parking_search/PSCommandRespond" }
+        }
+    }
+    PIModuleStatus_input_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /avp/parking_in/PIModuleStatus },
+            ros1: { topic: "/avp/parking_in/PIModuleStatus" }
+        }
+    }
+    PSModuleStatus_input_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /avp/parking_search/PSModuleStatus },
+            ros1: { topic: "/avp/parking_search/PSModuleStatus" }
+        }
+    }
+    Parking_In_CommandRespond_output_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /avp/parking_in/CommandRespond },
+            ros1: { topic: "/avp/parking_in/CommandRespond" }
+        }
+    }
+    Parking_In_ObuCmdMsg_output_dds: {
+        type: "ros_interface/ObuCmdMsg",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ObuCmdMsg, topic: /avp/parking_in/ObuCmdMsg },
+            ros1: { topic: "/avp/parking_in/ObuCmdMsg" }
+        }
+    }
+    Parking_In_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /avp/parking_in/ModuleStatus },
+            ros1: { topic: "/avp/parking_in/ModuleStatus" }
+        }
+    }
+    Parking_In_ParkingInfo_output_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /avp/parking_in/ParkingInfo },
+            ros1: { topic: "/avp/parking_in/ParkingInfo" }
+        }
+    }
+    PICommCommand_input_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /avp/apa_state_machine/PICommCommand },
+            ros1: { topic: "/avp/apa_state_machine/PICommCommand" }
+        }
+    }
+    Parking_In_CommandRespond_input_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /planning/CommandRespond },
+            ros1: { topic: "/planning/CommandRespond" }
+        }
+    }
+    Parking_In_ParkingInfo_input_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /avp/parking_search/ParkingInfo },
+            ros1: { topic: "/avp/parking_search/ParkingInfo" }
+        }
+    }
+    ParkingOutInfo_output_dds: {
+        type: "ros_interface/ParkingOutInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingOutInfo, topic: /avp/parking_out/ParkingOutInfo },
+            ros1: { topic: "/avp/parking_out/ParkingOutInfo" }
+        }
+    }
+    Parking_Search_CommandRespond_output_dds: {
+        type: "ros_interface/CommandRespond",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommandRespond, topic: /avp/parking_search/CommandRespond },
+            ros1: { topic: "/avp/parking_search/CommandRespond" }
+        }
+    }
+    Parking_Search_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /avp/parking_search/ModuleStatus },
+            ros1: { topic: "/avp/parking_search/ModuleStatus" }
+        }
+    }
+    Parking_Search_ParkingInfo_output_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /avp/parking_search/ParkingInfo },
+            ros1: { topic: "/avp/parking_search/ParkingInfo" }
+        }
+    }
+    PSCommCommand_input_dds: {
+        type: "ros_interface/CommCommand",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::CommCommand, topic: /avp/apa_state_machine/PSCommCommand },
+            ros1: { topic: "/avp/apa_state_machine/PSCommCommand" }
+        }
+    }
+    Parking_Search_ParkingInfo_input_dds: {
+        type: "ros_interface/ParkingInfo",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ParkingInfo, topic: /hmi/ParkingInfo },
+            ros1: { topic: "/hmi/ParkingInfo" }
+        }
+    }
+    AVP_Single_Statemachine_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /AVP/AVP_single_statemachine/ModuleStatus },
+            ros1: { topic: "/AVP/AVP_single_statemachine/ModuleStatus" }
+        }
+    }
+    AVP_Multi_Statemachine_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /AVP/AVP_multi_statemachine/ModuleStatus },
+            ros1: { topic: "/AVP/AVP_multi_statemachine/ModuleStatus" }
+        }
+    }
+    AVP_Area_Statemachine_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /AVP/AVP_area_statemachine/ModuleStatus },
+            ros1: { topic: "/AVP/AVP_area_statemachine/ModuleStatus" }
+        }
+    }
+    APA_Statemachine_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /AVP/APA_statemachine/ModuleStatus },
+            ros1: { topic: "/AVP/APA_statemachine/ModuleStatus" }
+        }
+    }
+    Parkingout_Statemachine_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /AVP/Parkingout_statemachine/ModuleStatus },
+            ros1: { topic: "/AVP/Parkingout_statemachine/ModuleStatus" }
+        }
+    }
+    AVP_ModuleStatus_output_dds: {
+        type: "ros_interface/ModuleStatus",
+        route: ros1_to_dds,
+        remap: {
+            dds: { type: dds_interface::ModuleStatus, topic: /AVP/ModuleStatus },
+            ros1: { topic: "/AVP/ModuleStatus" }
+        }
+    }

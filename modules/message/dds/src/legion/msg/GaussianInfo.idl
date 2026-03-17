@@ -1,0 +1,16 @@
+ #ifndef __GaussianInfo__idl__
+#define __GaussianInfo__idl__
+module ros2_interface{
+ module msg{
+  struct GaussianInfo{
+    double   _sigma_x;
+    double   _sigma_y;
+    double   _correlation;
+    double   _area_probability;
+    double   _ellipse_a;
+    double   _ellipse_b;
+    double   _theta_a;
+  };
+ };
+}; 
+#endif

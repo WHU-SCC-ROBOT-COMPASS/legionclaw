@@ -1,0 +1,94 @@
+// Copyright 2020 Tier IV, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+//
+// Author: v1.0 Yukihiro Saito
+//
+
+#ifndef MULTI_OBJECT_TRACKER__TRACKER__MODEL__BIG_VEHICLE_TRACKER_HPP_
+#define MULTI_OBJECT_TRACKER__TRACKER__MODEL__BIG_VEHICLE_TRACKER_HPP_
+
+#include "multi_object_tracker/tracker/model/tracker_base.hpp"
+
+#include <kalman_filter/kalman_filter.hpp>
+class BigVehicleTracker : public Tracker
+{
+private:
+  motion_manager::interface::DetectedObject object_;
+  // rclcpp::Logger logger_;
+  int last_nearest_corner_index_;
+
+private:
+  KalmanFilter ekf_;
+  motion_manager::interface::Time last_update_time_;
+  enum IDX { X = 0, Y = 1, YAW = 2, VEL = 3, SLIP = 4 };
+  struct EkfParams
+  {
+    char dim_x = 5;
+    float q_stddev_acc_long;
+    float q_stddev_acc_lat;
+    float q_stddev_yaw_rate_min;
+    float q_stddev_yaw_rate_max;
+    float q_cov_slip_rate_min;
+    float q_cov_slip_rate_max;
+    float q_max_slip_angle;
+    float p0_cov_vel;
+    float p0_cov_slip;
+    float r_cov_x;
+    float r_cov_y;
+    float r_cov_yaw;
+    float r_cov_vel;
+    float p0_cov_x;
+    float p0_cov_y;
+    float p0_cov_yaw;
+  } ekf_params_;
+  double max_vel_;
+  double max_slip_;
+  double lf_;
+  double lr_;
+  float z_;
+  double velocity_deviation_threshold_;
+
+private:
+  struct BoundingBox
+  {
+    double length;
+    double width;
+    double height;
+  };
+  BoundingBox bounding_box_;
+  BoundingBox last_input_bounding_box_;
+  Eigen::Vector2d tracking_offset_;
+
+public:
+  BigVehicleTracker(
+    const motion_manager::interface::Time & time, const motion_manager::interface::DetectedObject & object,
+    const tf2_geometry_msgs::Transform & self_transform);
+
+  bool predict(const motion_manager::interface::Time & time) override;
+  bool predict(const double dt, KalmanFilter & ekf) const;
+  bool measure(
+    const motion_manager::interface::DetectedObject & object, const motion_manager::interface::Time & time,
+    const tf2_geometry_msgs::Transform & self_transform) override;
+  bool measureWithPose(const motion_manager::interface::DetectedObject & object);
+  bool measureWithShape(const motion_manager::interface::DetectedObject & object);
+  bool getTrackedObject(
+    const motion_manager::interface::Time & time,
+    motion_manager::interface::TrackedObject & object) const override;
+  double getMeasurementYaw(const motion_manager::interface::DetectedObject & object);
+  void setNearestCornerOrSurfaceIndex(const tf2_geometry_msgs::Transform & self_transform);
+  virtual ~BigVehicleTracker() {}
+};
+
+#endif  // MULTI_OBJECT_TRACKER__TRACKER__MODEL__BIG_VEHICLE_TRACKER_HPP_

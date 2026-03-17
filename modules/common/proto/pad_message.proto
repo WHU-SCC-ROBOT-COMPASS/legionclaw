@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message PadMessage{
+    //命令
+    optional string cmd = 1;
+}

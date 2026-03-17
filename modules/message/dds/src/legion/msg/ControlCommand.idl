@@ -1,0 +1,44 @@
+ #ifndef __ControlCommand__idl__
+#define __ControlCommand__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct ControlCommand{
+    ros2_interface::msg::Header   _header;
+    int32   _steer_driving_mode;
+    double   _front_steering_target;
+    double   _rear_steering_target;
+    double   _front_steering_rate;
+    double   _rear_steering_rate;
+    int32   _accel_driving_mode;
+    double   _accel_value;
+    int32   _brake_driving_mode;
+    double   _brake_value;
+    int32   _backup_brake_driving_mode;
+    double   _backup_brake_value;
+    int32   _epb_driving_mode;
+    int32   _epb_level;
+    int32   _gear_driving_mode;
+    int8   _emergency_brake_enable;
+    int32   _gear_location;
+    double   _speed;
+    double   _acceleration;
+    int32   _turn_lamp_ctrl;
+    int32   _high_beam_ctrl;
+    int32   _low_beam_ctrl;
+    int32   _horn_ctrl;
+    int32   _front_wiper_ctrl;
+    int32   _rear_wiper_ctrl;
+    int32   _position_lamp_ctrl;
+    int32   _front_fog_lamp_ctrl;
+    int32   _rear_fog_lamp_ctrl;
+    int32   _brake_lamp_ctrl;
+    int32   _alarm_lamp_ctrl;
+    int32   _lf_door_ctrl;
+    int32   _rf_door_ctrl;
+    int32   _lr_door_ctrl;
+    int32   _rr_door_ctrl;
+  };
+ };
+}; 
+#endif

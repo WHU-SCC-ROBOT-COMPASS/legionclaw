@@ -1,0 +1,19 @@
+ #ifndef __SecurityDecision__idl__
+#define __SecurityDecision__idl__
+#include "Header.idl"
+#include "TrajectoryLimitCommand.idl"
+#include "WarningCommand.idl"
+module ros2_interface{
+ module msg{
+  struct SecurityDecision{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::WarningCommand   _warning_command;
+    int32   _brake_report;
+    int32   _change_lane_command;
+    ros2_interface::msg::TrajectoryLimitCommand   _trajectory_limit_command;
+    int32   _park_command;
+    int32   _drivingmode_report;
+  };
+ };
+}; 
+#endif

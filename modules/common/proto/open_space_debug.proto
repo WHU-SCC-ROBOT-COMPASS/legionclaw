@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/trajectory.proto";
+import "modules/common/proto/polygon_2d.proto";
+import "modules/common/proto/point_2d_list.proto";
+
+
+message OpenSpaceDebug{
+    //横向误差
+    optional double lat_error = 1 [default = 0.0];
+    //纵向误差
+    optional double lon_error = 2 [default = 0.0];
+    //角度误差(度)
+    optional double yaw_error = 3 [default = 0.0];
+    //位置误差
+    optional double pos_error = 4 [default = 0.0];
+    //粗轨迹
+    optional Trajectory warm_start_path = 5;
+    //平滑轨迹
+    optional Trajectory smoothed_path = 6;
+    //动态障碍物
+    repeated Polygon2D obstacle_list = 7;
+    //静态障碍物
+    repeated Point2dList obstacles_vec = 8;
+    //车辆预测多边形
+    repeated Polygon2D vehicle_preiew_polygon = 9;
+}

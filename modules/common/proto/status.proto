@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/common_enum.proto";
+
+
+message Status{
+    //错误码
+    optional legion.common.ErrorCode error_code = 1 [default = LOCALIZATION_ERROR];
+    //错误码描述
+    optional string msg = 2;
+}

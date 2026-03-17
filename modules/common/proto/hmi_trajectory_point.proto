@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+
+
+message HMITrajectoryPoint{
+    optional Point3D point = 1;
+    optional double v = 2 [default = 0.0];
+}

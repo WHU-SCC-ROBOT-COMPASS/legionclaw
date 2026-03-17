@@ -1,0 +1,110 @@
+syntax = "proto2";
+
+package legionclaw.planning;
+
+message ParkingConf {
+  optional ParkingManagerConf parking_manager_conf = 1;
+  optional ParallelParkingConf parallel_parking_conf = 2;
+  optional VerticalParkingConf vertical_parking_conf = 3;
+  optional SpiralCurveConf spiral_curve_conf = 4;
+  optional NLPPlannerConf nlp_planner = 5;
+}
+
+message ParkingManagerConf {
+  optional double is_near_theta = 1;
+  optional double in_parking_area_distance = 2;
+  optional double in_parking_area_angle = 3;
+  optional double ttc_window_size = 4;
+  optional double dtc_window_size = 5;
+  optional double safe_distance = 6;
+  optional double suggest_speed_forward = 7;
+  optional double suggest_speed_backward = 8;
+  optional double extend_length = 9;
+  optional double threshold_static_speed = 10;
+  optional double threshold_lon_error = 11;
+  optional double threshold_lat_error = 12;
+  optional double threshold_pos_error = 13;
+  optional double threshold_yaw_error = 14;
+  optional double threshold_remian_length = 15;
+  optional int32 start_pose_mode = 16;
+  optional bool parking_log_enable = 17;
+  optional int32 max_re_planning_count = 18;
+}
+
+message ParallelParkingConf {
+  optional double parallel_min_forward_extend_distance = 1;
+  optional double parallel_forward_extend_distance_keep = 2;
+  optional double parallel_lon_safe_distance = 3;
+  optional double parallel_lat_safe_distance = 4;
+  optional double parallel_park_lane_width = 5;
+  optional double parallel_path_interval = 6;
+  optional int32 parallel_parking_order = 7;
+  optional double parallel_parking_start_rad_offset = 8;
+  optional double parallel_parking_end_rad_offset = 9;
+}
+
+message VerticalParkingConf {
+  optional double vertical_min_forward_extend_distance = 1;
+  optional double vertical_forward_extend_distance_keep = 2;
+  optional double vertical_lon_safe_distance = 3;
+  optional double vertical_lat_safe_distance = 4;
+  optional double vertical_park_lane_width = 5;
+  optional double vertical_path_interval = 6;
+  optional int32 vertical_parking_order = 7;
+  optional double vertical_parking_start_rad_offset = 8;
+  optional double vertical_parking_end_rad_offset = 9;
+  optional double caculate_turning_radius = 10;
+  optional double forward_distance = 11;
+  optional double upward_distance = 12;
+  optional int32 scheme = 13;
+  optional double road_width = 14;
+  optional double d1 = 15;
+  optional double R1 = 16;
+  optional double theta_4 = 17;
+  optional double vehicle_lat_buffer = 18;
+  optional double vehicle_lon_buffer = 19;
+  optional double out_d = 20;
+  optional double backword_distance = 21;
+}
+
+message SpiralCurveConf {
+  optional int32 simpson_size = 1;
+  optional double newton_raphson_tol = 2;
+  optional int32 newton_raphson_max_iter = 3;
+}
+
+message NLPPlannerConf {
+  optional OptimizationWeightsConf optimization_weights = 1;
+  optional StateBoundsConf state_bounds = 2;
+  optional CommandBoundsConf command_bounds = 3;
+}
+
+message OptimizationWeightsConf {
+  optional double steering = 1;
+  optional double throttle = 2;
+  optional double goal = 3;
+}
+
+message StateBoundsConf {
+  optional StateConf lower = 1;
+  optional StateConf upper = 2;
+}
+
+message StateConf {
+  optional double x_m = 1;
+  optional double y_m = 2;
+  optional double velocity_mps = 3;
+  optional double heading_rad = 4;
+  optional double steering_rad = 5;
+}
+
+message CommandBoundsConf {
+  optional CommandConf lower = 1;
+  optional CommandConf upper = 2;
+}
+
+message CommandConf {
+  optional double steering_rate_rps = 1;
+  optional double throttle_mps2 = 2;
+}
+

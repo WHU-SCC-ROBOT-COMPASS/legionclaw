@@ -1,0 +1,29 @@
+ #ifndef __VehicleState__idl__
+#define __VehicleState__idl__
+#include "Pose.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct VehicleState{
+    ros2_interface::msg::Header   _header;
+    double   _x;
+    double   _y;
+    double   _z;
+    double   _timestamp;
+    double   _roll;
+    double   _pitch;
+    double   _yaw;
+    double   _heading;
+    double   _kappa;
+    double   _linear_velocity;
+    double   _angular_velocity;
+    double   _linear_acceleration;
+    int32   _gear;
+    int32   _driving_mode;
+    ros2_interface::msg::Pose   _pose;
+    double   _front_steering_value;
+    double   _rear_steering_value;
+  };
+ };
+}; 
+#endif

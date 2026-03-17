@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+
+
+message StopPoint{
+    //点xyz
+    optional Point3D point = 1;
+    //方向（与东方向夹角，逆时针方向为正，单位为弧度）
+    optional double theta = 2 [default = 0.0];
+    //STOP_TYPE_TERMINAL=0 //目的地终点 STOP_TYPE_JUNCTION=1 //路口停止线
+    optional int32 type = 3 [default = 0];
+    //距停止点多少米停车
+    optional double stop_distance = 4 [default = 0.0];
+}

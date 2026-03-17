@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message UssObstacle{
+    //timestamp is included in header
+    optional Header header = 1;
+    //超声波障碍物点区域 0-车辆后方区域 1-车辆前方区域 2-车辆右方区域 3-车辆左方区域
+    optional legion.common.UssObstacleRegion uss_obstacle_region = 2 [default = USS_BACK];
+    //车体中心坐标系下，超声波障碍物点x坐标
+    optional double mx = 3 [default = 0.0];
+    //车体中心坐标系下，超声波障碍物点y坐标
+    optional double my = 4 [default = 0.0];
+}

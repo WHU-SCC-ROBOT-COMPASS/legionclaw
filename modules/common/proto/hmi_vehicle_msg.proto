@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/chassis.proto";
+import "modules/common/proto/location.proto";
+import "modules/common/proto/point_enu.proto";
+import "modules/common/proto/point_llh.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message HMIVehicleMsg{
+    optional Header header = 1;
+    //驾驶状态
+    optional legion.common.DrivingMode driving_mode = 2 [default = COMPLETE_MANUAL];
+    //档位值
+    optional legion.common.GearPosition gear_location = 3 [default = GEAR_NEUTRAL];
+    //方向盘转角
+    optional double steering_value = 4 [default = 0.0];
+    //线控驱动值（油门值）
+    optional double accel_value = 5 [default = 0.0];
+    //线控制动值（刹车值）
+    optional double brake_value = 6 [default = 0.0];
+    //车速（m/s）
+    optional double speed_mps = 7 [default = 0.0];
+    //经纬度高程
+    optional PointLLH position = 8;
+    //相对参考点xyz坐标
+    optional PointENU utm_position = 9;
+    //方向(单位弧度，-π～π,正东:0, 逆时针。都满足右手定则)
+    optional double pitch = 10 [default = 0.0];
+    optional double roll = 11 [default = 0.0];
+    optional double heading = 12 [default = 0.0];
+    //RTK标志值
+    optional Location.RTKFlag rtk_flag = 13 [default = RTK_NULL];
+    //// 参考点纬度 GCJ-02格式
+    optional double origin_lat = 14 [default = 0.0];
+    //// 参考点经度 GCJ-02格式
+    optional double origin_lon = 15 [default = 0.0];
+    optional double current_ins_yaw = 16 [default = 0.0];
+    ////  安全驾驶0:正常 1:左前车门没关 2:右前车门没关 3:左后车门没关 4:右后车门没关 5:未系安全带 6: 未打开反观镜 7:车辆未静止
+    optional int32 auto_safe = 17 [default = 0];
+    //电池电量值
+    optional double battery_power_percentage = 18 [default = 0.0];
+    //充电枪状态
+    optional legion.common.PlugStatus charging_gun_status = 19 [default = PLUG_STATUS_UNKNOWN];
+    //底盘错误码
+    repeated ErrorCode chassis_error_code = 20;
+    //刹车灯状态
+    optional legion.common.SwitchStatus brake_lamp_status = 21 [default = SWITCH_STATUS_OFF];
+    //转向灯状态
+    optional legion.common.TurnSignal turn_lamp_status = 22 [default = TURN_INACTIVE_SIGNAL];
+    //转坐标系后的参考点
+    optional PointENU mercator_position = 23;
+}

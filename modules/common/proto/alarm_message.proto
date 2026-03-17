@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message AlarmMessage{
+    //消息头
+    optional Header header = 1;
+    //产生告警的进程名
+    optional string alarm_proc = 2;
+    //告警等级
+    optional legion.common.AlarmLevel alarm_level = 3 [default = ALARM_INFO];
+    //告警类型
+    optional legion.common.AlarmType alarm_type = 4 [default = ALARM_TYPE_REPORT];
+    //告警序列号，用于恢复告警
+    optional int32 alarm_id = 5 [default = 0];
+    //告警展示类型
+    optional legion.common.AlarmDisplay alarm_display = 6 [default = ALARM_DISPLAY_TEXT];
+    //告警正文
+    optional string alarm_data = 7;
+}

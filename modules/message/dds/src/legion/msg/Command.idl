@@ -1,0 +1,12 @@
+ #ifndef __Command__idl__
+#define __Command__idl__
+module ros2_interface{
+ module msg{
+  struct Command{
+    string   _target_module;
+    int8   _target_id;
+    int32   _target_switch;
+  };
+ };
+}; 
+#endif

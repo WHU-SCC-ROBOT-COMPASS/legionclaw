@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/message.proto";
+
+
+message ModuleStatus{
+    optional Header header = 1;
+    //发送指令的节点名称
+    optional string name = 2;
+    //发送节点的ID号，参考apps描述
+    optional int32 self_id = 3 [default = 0];
+    // 枚举方式 sef_id+status,比如设置1为开，2为关，当前sef_id是21，则在关闭状态下反馈值是 212
+    optional int32 status = 4 [default = 0];
+    //需要输出的消息列表：eg:要求显示剩余里程数为100米，self_id 为21，里程数id为08，code值为2108，value值为10000，精度为cm
+    repeated Message messages = 5;
+}

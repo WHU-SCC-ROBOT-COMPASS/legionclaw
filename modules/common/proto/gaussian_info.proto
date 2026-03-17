@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message GaussianInfo{
+    //标准差x
+    optional double sigma_x = 1 [default = 0.0];
+    //标准差y
+    optional double sigma_y = 2 [default = 0.0];
+    //相关性
+    optional double correlation = 3 [default = 0.0];
+    //Information of representative uncertainty area
+    optional double area_probability = 4 [default = 0.0];
+    //椭圆长轴
+    optional double ellipse_a = 5 [default = 0.0];
+    //椭圆短轴
+    optional double ellipse_b = 6 [default = 0.0];
+    //椭圆朝向
+    optional double theta_a = 7 [default = 0.0];
+}

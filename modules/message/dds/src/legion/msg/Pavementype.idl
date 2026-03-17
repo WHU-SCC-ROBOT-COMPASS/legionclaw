@@ -1,0 +1,13 @@
+ #ifndef __Pavementype__idl__
+#define __Pavementype__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct Pavementype{
+    ros2_interface::msg::Header   _header;
+    int32   _type;
+    double   _confidence;
+  };
+ };
+}; 
+#endif

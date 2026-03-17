@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+import "modules/control/src/proto/pid_conf.proto";
+
+message PurePursuitControllerConf{
+    optional bool use_delay_compensation = 1;
+    optional bool use_interpolate_lookahead_point = 2;
+    optional double minimum_lookahead_distance = 3;
+    optional double maximum_lookahead_distance = 4;
+    optional double speed_to_lookahead_ratio = 5;
+    optional bool enable_log_debug = 6;
+    optional double max_lateral_acceleration = 7;
+    optional double ts = 8;
+    optional double lookahead_station = 9;
+    optional double lookback_station = 10;
+    optional bool enable_digital_filter = 11;
+    optional double cutoff_freq = 12;
+    optional bool enable_heading_error = 13;
+    optional PIDConf heading_error_pid_conf = 14;
+    optional bool enable_lat_error = 15;
+    optional PIDConf lat_error_pid_conf = 16;
+    optional double heading_error_gain = 17;
+    optional double lat_error_gain = 18;
+    optional double lat_error_threshold= 19;  // 横向偏差阈值（米），用于偏差判断和归一化
+    optional double heading_error_threshold = 20;  // 航向角误差阈值，单位：度，用于航向误差标准化和归一化
+    optional double purepursuit_minimum_lookahead_distance = 21;  // Pure Pursuit算法最小预瞄距离（米）
+    optional double purepursuit_maximum_lookahead_distance = 22;  // Pure Pursuit算法最大预瞄距离（米）
+    optional double purepursuit_speed_to_lookahead_ratio = 23;  // Pure Pursuit算法预瞄距离计算的速度参数
+    optional double lat_error_min_threshold = 24;  // 横向偏差最小值阈值（度），当横向偏差角度小于此值时，贡献值清零
+    optional double heading_error_min_threshold = 25;  // 航向角偏差最小值阈值（度），当航向角偏差小于此值时，贡献值清零
+}

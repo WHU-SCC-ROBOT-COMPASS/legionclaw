@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+
+
+message Region{
+    enum RankRisk{
+        NO_RISK = 0;
+        FIRST_RANK_RISK = 1;
+        SECOND_RANK_RISK = 2;
+        THIRD_RANK_RISK = 3;
+    }
+
+    enum RegionID{
+        REGION_ID_UNKNOWN = 0;
+        REGION_ID_FL = 1;
+        REGION_ID_FM = 2;
+        REGION_ID_FR = 3;
+        REGION_ID_RL = 4;
+        REGION_ID_RM = 5;
+        REGION_ID_RR = 6;
+    }
+
+    //前后左右区域
+    optional Region.RegionID name_region = 1 [default = REGION_ID_UNKNOWN];
+    //车辆前后左右的区域打分获得的分值(0-100表示逐步危险程度)
+    optional double score = 2 [default = 0.0];
+    //危险程度(0-3四级划分，不同分级对应不同驾驶处理策略)
+    optional Region.RankRisk rank_risk = 3 [default = NO_RISK];
+    //世界坐标系下的区域多边形
+    repeated Point3D region_polygon = 4;
+}

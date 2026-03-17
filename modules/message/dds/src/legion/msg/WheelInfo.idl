@@ -1,0 +1,41 @@
+ #ifndef __WheelInfo__idl__
+#define __WheelInfo__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct WheelInfo{
+    ros2_interface::msg::Header   _header;
+    int32   _moving_status;
+    int32   _steer_driving_mode;
+    double   _steering_value;
+    double   _steering_torque_nm;
+    double   _steering_rate_dps;
+    double   _speed_mps;
+    boolean   _veh_spd_vld;
+    int32   _gear;
+    boolean   _gear_vld;
+    int32   _wheel_direction_rr;
+    double   _wheel_spd_rr;
+    int32   _wheel_direction_rl;
+    double   _wheel_spd_rl;
+    int32   _wheel_direction_fr;
+    double   _wheel_spd_fr;
+    int32   _wheel_direction_fl;
+    double   _wheel_spd_fl;
+    double   _yaw_rate;
+    int32   _wss_fl_edges_sum;
+    int32   _wss_fr_edges_sum;
+    int32   _wss_rl_edges_sum;
+    int32   _wss_rr_edges_sum;
+    boolean   _wss_fl_edges_sum_vld;
+    boolean   _wss_fr_edges_sum_vld;
+    boolean   _wss_rl_edges_sum_vld;
+    boolean   _wss_rr_edges_sum_vld;
+    double   _veh_lat_accel;
+    double   _veh_lgt_accel;
+    boolean   _veh_lat_accel_vld;
+    boolean   _veh_lgt_accel_vld;
+  };
+ };
+}; 
+#endif

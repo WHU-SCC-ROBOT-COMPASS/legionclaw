@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message KeyPoint{
+    //关键点id
+    optional int32 id = 1 [default = 0];
+    //关键点纬度
+    optional double latitude = 2 [default = 0.0];
+    //关键点经度
+    optional double longitude = 3 [default = 0.0];
+    //关键点海拔
+    optional double ele = 4 [default = 0.0];
+    //关键点航向角（与北方向夹角，顺时针方向为正，单位为°）
+    optional double heading = 5 [default = 0.0];
+    //关键点名称
+    optional string name = 6;
+}

@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/grid.proto";
+import "modules/common/proto/header.proto";
+import "modules/common/proto/region.proto";
+
+
+message SotifMonitorResult{
+    optional Header header = 1;
+    //区域态势
+    repeated Region region_value = 2;
+    //栅格地图
+    repeated Grid grid_map = 3;
+}

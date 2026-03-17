@@ -1,0 +1,15 @@
+ #ifndef __SotifMonitorResult__idl__
+#define __SotifMonitorResult__idl__
+#include "Region.idl"
+#include "Header.idl"
+#include "Grid.idl"
+module ros2_interface{
+ module msg{
+  struct SotifMonitorResult{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::Region> _region_value;
+    sequence<ros2_interface::msg::Grid> _grid_map;
+  };
+ };
+}; 
+#endif

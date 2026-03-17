@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/ultrasonic_obstacle.proto";
+
+
+message Ultrasonic{
+    //消息头
+    optional Header header = 1;
+    //超声波障碍物数组
+    repeated UltrasonicObstacle ranges = 2;
+}

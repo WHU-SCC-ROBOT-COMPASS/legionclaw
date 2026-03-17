@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/uss_obstacle.proto";
+
+
+message UssObstacleList{
+    //消息头
+    optional Header header = 1;
+    //检测出的超声波障碍物数组
+    repeated UssObstacle uss_obstacles = 2;
+    //超声波检测的距离数组，存放顺序按照FA,FB,FC,FD,FE,FF,RA,RB,RC,RD,RE,RF
+  repeated double uss_ranges = 3;
+    //错误码（default = OK）
+    optional legion.common.ErrorCode error_code = 4 [default = LOCALIZATION_ERROR];
+    //超声波障碍物数据是否合法
+    optional bool is_valid = 5 [default = false];
+}

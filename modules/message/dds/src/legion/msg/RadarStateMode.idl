@@ -1,0 +1,15 @@
+ #ifndef __RadarStateMode__idl__
+#define __RadarStateMode__idl__
+module ros2_interface{
+ module msg{
+  struct RadarStateMode{
+    uint8   _can0_work_mode;
+    uint8   _can1_work_mode;
+    uint8   _dual_can_mode;
+    uint8   _timming_mode;
+    uint8   _power_mode;
+    uint8   _performance_mode;
+  };
+ };
+}; 
+#endif

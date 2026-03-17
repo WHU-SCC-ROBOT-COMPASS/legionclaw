@@ -1,0 +1,13 @@
+ #ifndef __DrivableRegion__idl__
+#define __DrivableRegion__idl__
+#include "Polygon3D.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct DrivableRegion{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::Polygon3D> _drivable_region;
+  };
+ };
+}; 
+#endif

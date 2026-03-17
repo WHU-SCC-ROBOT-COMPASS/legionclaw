@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/time.proto";
+
+
+message Log{
+    //时间戳
+    optional Time stamp = 1;
+    //log等级 DEBUG   : 10  INFO       : 20   WARN     : 30   ERROR   : 40  FATAL     : 50 
+    optional uint32 level = 2 [default = 0];
+    //节点名
+    optional string name = 3;
+    //log消息
+    optional string msg = 4;
+    //发送log文件路径
+    optional string file = 5;
+    //模块名
+    optional string function = 6;
+    //消息行
+    optional uint32 line = 7 [default = 0];
+}

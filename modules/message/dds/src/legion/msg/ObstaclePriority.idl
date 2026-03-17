@@ -1,0 +1,10 @@
+ #ifndef __ObstaclePriority__idl__
+#define __ObstaclePriority__idl__
+module ros2_interface{
+ module msg{
+  struct ObstaclePriority{
+    int32   _priority;
+  };
+ };
+}; 
+#endif

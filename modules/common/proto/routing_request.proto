@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/key_point.proto";
+
+
+message RoutingRequest{
+    //timestamp is included in header
+    optional Header header = 1;
+    //发起请求的来源名称
+    optional string request_source = 2;
+    //REQUEST_TYPE=0//无效 REQUEST_TYPE=1//正常路由 REQUEST_TYPE=2//泊车路由
+    optional int32 request_type = 3 [default = 0];
+    //关键点数量
+    optional int32 num_of_kp = 4 [default = 0];
+    //关键点列表，第一个为起点，最后一个为终点，中间为途经点
+    repeated KeyPoint key_point_list = 5;
+}

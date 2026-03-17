@@ -1,0 +1,20 @@
+ #ifndef __PathPoint__idl__
+#define __PathPoint__idl__
+module ros2_interface{
+ module msg{
+  struct PathPoint{
+    double   _x;
+    double   _y;
+    double   _z;
+    double   _theta;
+    double   _kappa;
+    double   _s;
+    double   _dkappa;
+    double   _ddkappa;
+    double   _lane_id;
+    double   _x_derivative;
+    double   _y_derivative;
+  };
+ };
+}; 
+#endif

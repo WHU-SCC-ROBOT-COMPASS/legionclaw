@@ -1,0 +1,16 @@
+ #ifndef __HMIParkingInfoList__idl__
+#define __HMIParkingInfoList__idl__
+#include "HMIParkingInfo.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct HMIParkingInfoList{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::HMIParkingInfo> _parking_info;
+    boolean   _parking_out_enable;
+    int32   _parking_out_direction;
+    int32   _parking_out_id;
+  };
+ };
+}; 
+#endif

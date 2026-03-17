@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message Stories{
+    optional string note = 1;
+}

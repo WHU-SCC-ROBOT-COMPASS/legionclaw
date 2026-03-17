@@ -1,0 +1,11 @@
+ #ifndef __Point2dList__idl__
+#define __Point2dList__idl__
+#include "Point2D.idl"
+module ros2_interface{
+ module msg{
+  struct Point2dList{
+    sequence<ros2_interface::msg::Point2D> _point2d_list;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/trajectory_point.proto";
+
+
+message TrajectoryInPrediction{
+    //probability of this trajectory
+    optional double probability = 1 [default = 0.0];
+    repeated TrajectoryPoint trajectory_points = 2;
+}

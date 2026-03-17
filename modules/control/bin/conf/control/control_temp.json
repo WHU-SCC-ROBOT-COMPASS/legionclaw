@@ -1,0 +1,8 @@
+{
+    "app_name": "control",
+    "description": "control module",
+    "log_file_path": "./log",
+    "log_level": 1,
+    "logging_data_enable": false,
+    "use_system_timestamp":true
+}

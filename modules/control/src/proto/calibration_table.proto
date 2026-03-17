@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+message LonControlCalibrationTable {
+  repeated LonControlCalibrationInfo calibration = 1;
+}
+
+message LonCalibrationTable {
+  repeated LonControlCalibrationInfo calibration_table = 1;
+}
+
+message LonControlCalibrationInfo {
+  optional double speed = 1;
+  optional double acceleration = 2;
+  optional double command = 3;
+}
+
+
+message StopDistanceControlCalibrationTable {
+  repeated StopDistanceControlCalibrationInfo calibration = 1;
+}
+
+message StopDistanceCalibrationTable{
+    repeated  StopDistanceControlCalibrationInfo calibration_table = 1;
+}
+
+message StopDistanceControlCalibrationInfo{
+    optional int32 stop_distance = 1;
+    optional bool direction = 2;
+    optional double speed = 3;
+}
+
+message SpeedLimitTableInfo{
+    optional double stop_distance = 1;
+    optional double speed_limit = 2;
+}
+message SpeedLimitTable{
+    repeated  SpeedLimitTableInfo forward_speed_limit_info = 1;
+    repeated  SpeedLimitTableInfo backward_speed_limit_info = 2;
+}

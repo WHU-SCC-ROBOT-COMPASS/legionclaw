@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message PlanningCmd{
+    optional Header header = 1;
+    //转向灯 TURN_INACTIVE_SIGNAL:0 TURN_LEFT_SIGNAL:1 TURN_RIGHT_SIGNAL:2 TURN_INVALID_SIGNAL:3
+    optional legion.common.TurnSignal turn_lamp_ctrl = 2 [default = TURN_INACTIVE_SIGNAL];
+    //0 关闭 1 开启 2 不响应
+    optional legion.common.SwitchStatus high_beam_ctrl = 3 [default = SWITCH_STATUS_OFF];
+    //0 关闭 1 开启 2 不响应
+    optional legion.common.SwitchStatus low_beam_ctrl = 4 [default = SWITCH_STATUS_OFF];
+    //0 关闭 1 开启 2 不响应
+    optional legion.common.SwitchStatus horn_ctrl = 5 [default = SWITCH_STATUS_OFF];
+    //前雨刮器 0 关闭 1 开启
+    optional legion.common.SwitchStatus front_wiper_ctrl = 6 [default = SWITCH_STATUS_OFF];
+    //后雨刮器 0 关闭 1 开启
+    optional legion.common.SwitchStatus rear_wiper_ctrl = 7 [default = SWITCH_STATUS_OFF];
+    //位置灯 0 关闭 1 开启
+    optional legion.common.SwitchStatus position_lamp_ctrl = 8 [default = SWITCH_STATUS_OFF];
+    //前雾灯 0 关闭 1 开启
+    optional legion.common.SwitchStatus front_fog_lamp_ctrl = 9 [default = SWITCH_STATUS_OFF];
+    //后雾灯 0 关闭 1 开启
+    optional legion.common.SwitchStatus rear_fog_lamp_ctrl = 10 [default = SWITCH_STATUS_OFF];
+    //刹车灯 一般情况自动控制 0 关闭 1 开启
+    optional legion.common.SwitchStatus brake_lamp_ctrl = 11 [default = SWITCH_STATUS_OFF];
+    //警报灯 双闪 0 关闭 1 开启
+    optional legion.common.SwitchStatus alarm_lamp_ctrl = 12 [default = SWITCH_STATUS_OFF];
+    //左前门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus lf_door_ctrl = 13 [default = CLOSEED];
+    //右前门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus rf_door_ctrl = 14 [default = CLOSEED];
+    //左后门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus lr_door_ctrl = 15 [default = CLOSEED];
+    //右后门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus rr_door_ctrl = 16 [default = CLOSEED];
+}

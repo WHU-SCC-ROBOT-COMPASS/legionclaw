@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+
+
+message PredictionTrajectoryPoint{
+    optional Point3D predition_path_point = 1;
+    optional double timestamp = 2 [default = 0.0];
+}

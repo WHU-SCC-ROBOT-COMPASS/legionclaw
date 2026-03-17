@@ -1,0 +1,18 @@
+ #ifndef __RSSInfo__idl__
+#define __RSSInfo__idl__
+module ros2_interface{
+ module msg{
+  struct RSSInfo{
+    boolean   _is_rss_safe;
+    double   _cur_dist_lon;
+    double   _rss_safe_dist_lon;
+    double   _acc_lon_range_minimum;
+    double   _acc_lon_range_maximum;
+    double   _acc_lat_left_range_minimum;
+    double   _acc_lat_left_range_maximum;
+    double   _acc_lat_right_range_minimum;
+    double   _acc_lat_right_range_maximum;
+  };
+ };
+}; 
+#endif

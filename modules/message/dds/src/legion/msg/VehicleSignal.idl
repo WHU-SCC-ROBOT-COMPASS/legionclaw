@@ -1,0 +1,14 @@
+ #ifndef __VehicleSignal__idl__
+#define __VehicleSignal__idl__
+module ros2_interface{
+ module msg{
+  struct VehicleSignal{
+    int32   _turn_signal;
+    boolean   _high_beam;
+    boolean   _low_beam;
+    boolean   _horn;
+    boolean   _emergency_light;
+  };
+ };
+}; 
+#endif

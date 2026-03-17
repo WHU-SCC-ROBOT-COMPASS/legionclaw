@@ -1,0 +1,17 @@
+ #ifndef __ParkingStateDisplay__idl__
+#define __ParkingStateDisplay__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct ParkingStateDisplay{
+    ros2_interface::msg::Header   _header;
+    int32   _parking_type;
+    int32   _moves_counter;
+    double   _remian_distance;
+    int32   _display_info;
+    double   _distance_to_leader_obj;
+    int32   _state;
+  };
+ };
+}; 
+#endif

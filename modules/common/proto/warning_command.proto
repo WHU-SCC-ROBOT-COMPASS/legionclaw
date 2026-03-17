@@ -1,0 +1,44 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message WarningCommand{
+    enum SoundAlarm{
+        NO_SOUND = 0;
+        SOUND_NORMAL = 1;
+        SOUND_HIGH = 2;
+        SOUND_URGENT = 3;
+    }
+
+    enum MotionAlarm{
+        NO_MOTION = 0;
+        MOTION_NORMAL = 1;
+        MOTION_URGENT = 2;
+    }
+
+    enum LightAlarm{
+        NO_LIGHT = 0;
+        LIGHT_NORMAL = 1;
+        LIGHT_HIGH = 2;
+        LIGHT_URGENT = 3;
+    }
+
+    enum MediaAlarm{
+        NO_MEDIA = 0;
+        MEDIA_PROMPT = 1;
+        MEDIA_NORMAL = 2;
+        MEDIA_HIGH = 3;
+        MEDIA_URGENT = 4;
+    }
+
+    //声音告警
+    optional WarningCommand.SoundAlarm sound_alarm = 1 [default = NO_SOUND];
+    //车灯告警
+    optional WarningCommand.LightAlarm light_alarm = 2 [default = NO_LIGHT];
+    //媒体告警
+    optional WarningCommand.MediaAlarm media_alarm = 3 [default = NO_MEDIA];
+    //震动告警
+    optional WarningCommand.MotionAlarm motion_alarm = 4 [default = NO_MOTION];
+}

@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_2d.proto";
+
+
+message EndPoints{
+    //车道线上顶点
+    optional Point2D start = 1;
+    //车道线下顶点
+    optional Point2D end = 2;
+}

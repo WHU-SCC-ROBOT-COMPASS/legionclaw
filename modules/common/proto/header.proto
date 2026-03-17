@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/time.proto";
+
+
+message Header{
+    //Sequence number for each message. Each module maintains its own counter for sequence_num, always starting from 1 on boot.
+    optional uint32 seq = 1 [default = 0];
+    //时间戳
+    optional Time stamp = 2;
+    //帧id
+    optional string frame_id = 3;
+}

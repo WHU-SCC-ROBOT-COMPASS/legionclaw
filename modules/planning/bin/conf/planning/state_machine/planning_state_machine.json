@@ -1,0 +1,188 @@
+{
+    "planning_state_machine": [
+        {
+            "StateName": "Start",
+            "Transition": [
+                {
+                    "Key": "Auto",
+                    "Target": "AutoDriving"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "AutoDriving",
+            "Transition": [
+                {
+                    "Key": "Human",
+                    "Target": "HumanDriving"
+                },
+                {
+                    "Key": "Planning",
+                    "Target": "PlanningStart"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "HumanDriving",
+            "Transition": [
+                {
+                    "Key": "Auto",
+                    "Target": "AutoDriving"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "PlanningStart",
+            "Transition": [
+                {
+                    "Key": "Auto",
+                    "Target": "AutoDriving"
+                },
+                {
+                    "Key": "Driving",
+                    "Target": "DrivingPlanning"
+                },
+                {
+                    "Key": "Parking",
+                    "Target": "ParkingPlanning"
+                },
+                {
+                    "Key": "ParkingOut",
+                    "Target": "ParkingOutPlanning"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "DrivingPlanning",
+            "Transition": [
+                {
+                    "Key": "Planning",
+                    "Target": "PlanningStart"
+                },
+                {
+                    "Key": "LatticePlan",
+                    "Target": "LatticePlanner"
+                },
+                {
+                    "Key": "EmergencyIPlan",
+                    "Target": "ESlowStopPlan"
+                },
+                {
+                    "Key": "EmergencyIIPlan",
+                    "Target": "EQuickStopPlan"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "LatticePlanner",
+            "Transition": [
+                {
+                    "Key": "Driving",
+                    "Target": "DrivingPlanning"
+                }
+            ],
+            "Parent": "DrivingPlanning"
+        },
+        {
+            "StateName": "ESlowStopPlan",
+            "Transition": [
+                {
+                    "Key": "Driving",
+                    "Target": "DrivingPlanning"
+                }
+            ],
+            "Parent": "DrivingPlanning"
+        },
+        {
+            "StateName": "EQuickStopPlan",
+            "Transition": [
+                {
+                    "Key": "Driving",
+                    "Target": "DrivingPlanning"
+                }
+            ],
+            "Parent": "DrivingPlanning"
+        },
+        {
+            "StateName": "ParkingPlanning",
+            "Transition": [
+                {
+                    "Key": "Planning",
+                    "Target": "PlanningStart"
+                },
+                {
+                    "Key": "ParkingPlan",
+                    "Target": "ParkingPlanner"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParkingPlanner",
+            "Transition": [
+                {
+                    "Key": "Parking",
+                    "Target": "ParkingPlanning"
+                },
+                {
+                    "Key": "Publish",
+                    "Target": "ParkingPublisher"
+                }
+            ],
+            "Parent": "ParkingPlanning"
+        },
+        {
+            "StateName": "ParkingPublisher",
+            "Transition": [
+                {
+                    "Key": "ParkingPlan",
+                    "Target": "ParkingPlanner"
+                }
+            ],
+            "Parent": "ParkingPlanning"
+        },
+        {
+            "StateName": "ParkingOutPlanning",
+            "Transition": [
+                {
+                    "Key": "Planning",
+                    "Target": "PlanningStart"
+                },
+                {
+                    "Key": "ParkingOutPlan",
+                    "Target": "ParkingOutPlanner"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParkingOutPlanner",
+            "Transition": [
+                {
+                    "Key": "ParkingOut",
+                    "Target": "ParkingOutPlanning"
+                },
+                {
+                    "Key": "Publish",
+                    "Target": "ParkingOutPublisher"
+                }
+            ],
+            "Parent": "ParkingOutPlanning"
+        },
+        {
+            "StateName": "ParkingOutPublisher",
+            "Transition": [
+                {
+                    "Key": "ParkingOutPlan",
+                    "Target": "ParkingOutPlanner"
+                }
+            ],
+            "Parent": "ParkingOutPlanning"
+        }
+    ]
+}

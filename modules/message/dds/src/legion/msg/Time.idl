@@ -1,0 +1,11 @@
+ #ifndef __Time__idl__
+#define __Time__idl__
+module ros2_interface{
+ module msg{
+  struct Time{
+    uint32   _sec;
+    uint32   _nsec;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,10 @@
+ #ifndef __ObstacleIntent__idl__
+#define __ObstacleIntent__idl__
+module ros2_interface{
+ module msg{
+  struct ObstacleIntent{
+    int32   _type;
+  };
+ };
+}; 
+#endif

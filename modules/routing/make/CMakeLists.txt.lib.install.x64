@@ -1,0 +1,271 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(routing
+		VERSION 1.0.0
+		DESCRIPTION "Routing Library"
+)
+
+include(GNUInstallDirs)
+
+set(APP_NAME routing)
+set(THIRD_PATH_HOME_PATH /usr/local/legionclaw/third_party)
+set(LEGION_ALGORITHM_PATH_HOME_PATH /usr/local/legionclaw/legionclaw_algorithm)
+
+set(CMAKE_INSTALL_PREFIX /home/zhihui/AutoDS/LIBS_HUMBLE/legion CACHE PATH "Installation prefix" FORCE)
+set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR}/modules/${APP_NAME})
+
+set(CMAKE_CXX_STANDARD 17)
+
+option(ROS2_ENABLE "option for ros2 enable" ON)
+if(ROS2_ENABLE)
+    set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
+	add_definitions(-DROS2_ENABLE)
+	find_package(rclcpp REQUIRED)
+	find_package(ros2_interface REQUIRED)
+	include_directories(
+	${rclcpp_INCLUDE_DIRS}
+	${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/include
+	)
+endif()
+#
+#option(ROS_ENABLE "option for ros enable" OFF)
+#if(ROS_ENABLE)
+#	add_definitions(-DROS_ENABLE)
+#	find_package(roscpp REQUIRED)
+#	include_directories(
+#	${roscpp_INCLUDE_DIRS}
+#	${PROJECT_SOURCE_DIR}/../message/ros/devel/include
+#	)
+#endif()
+#
+#option(LCM_ENABLE "option for lcm enable" OFF)
+#if(LCM_ENABLE)
+#	add_definitions(-DLCM_ENABLE)
+#	include_directories(
+#	${PROJECT_SOURCE_DIR}/../message/lcm/src/legion
+#	)
+#endif()
+#
+#option(DDS_ENABLE "option for dds enable" OFF)
+#if(DDS_ENABLE)
+#	add_definitions(-DDDS_ENABLE)
+#		include_directories(
+#	${PROJECT_SOURCE_DIR}/../message/dds/src/legion
+#	)
+#endif()
+
+#option(MDCLOG_ENABLE "option for dds enable" OFF)
+#option(GLOG_ENABLE "option for dds enable" OFF)
+#if(MDCLOG_ENABLE)
+#	add_definitions(-DMDCLOG_ENABLE)
+#elseif(GLOG_ENABLE)
+add_definitions(-DGLOG_ENABLE)
+#endif()
+
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -pie -fstack-protector-all -Wtrampolines)
+elseif (CMAKE_BUILD_TYPE MATCHES Release)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O3 -Wall -c -fmessage-length=0 -fPIC -pie -fstack-protector-all -Wtrampolines)
+endif()
+
+add_compile_options(${DEFAULT_COMPILE})
+
+macro(LISTSUBDIR result currentdir)
+file(GLOB_RECURSE children LIST_DIRECTORIES true  ${currentdir}/*)
+set(dirlist ${currentdir})
+foreach(child ${children})
+	if(IS_DIRECTORY ${child})
+		list(APPEND dirlist ${child})
+	endif()
+endforeach()
+set(${result} ${dirlist})
+endmacro()
+
+LISTSUBDIR(SOURCE_DIRS src)
+
+include_directories(${SOURCE_DIRS})
+
+include_directories(
+    ${PROJECT_SOURCE_DIR}/..
+    ${PROJECT_SOURCE_DIR}/../..
+)
+
+include_directories(
+	${THIRD_PATH_HOME_PATH}/x64/include
+	${THIRD_PATH_HOME_PATH}/x64/include/eigen3
+	${THIRD_PATH_HOME_PATH}/x64/include/pugixml
+	${THIRD_PATH_HOME_PATH}/x64/include/lcm
+	${THIRD_PATH_HOME_PATH}/x64/include/boost
+	${THIRD_PATH_HOME_PATH}/x64/include/GeographicLib
+	${THIRD_PATH_HOME_PATH}/x64/include/google/protobuf
+	)
+
+link_directories(
+	${THIRD_PATH_HOME_PATH}/x64/lib/boost
+	${THIRD_PATH_HOME_PATH}/x64/lib/lcm
+	${THIRD_PATH_HOME_PATH}/x64/lib/glog
+	${THIRD_PATH_HOME_PATH}/x64/lib/gflags
+	${THIRD_PATH_HOME_PATH}/x64/lib/glib
+	${THIRD_PATH_HOME_PATH}/x64/lib/gthread
+	${THIRD_PATH_HOME_PATH}/x64/lib/pugixml
+	${THIRD_PATH_HOME_PATH}/x64/lib/Geographic
+	${THIRD_PATH_HOME_PATH}/x64/lib/zlib
+	${THIRD_PATH_HOME_PATH}/x64/lib/protobuf
+)
+
+set(BOOST_LINK_LIBS "-lboost_iostreams -lboost_serialization -lboost_filesystem -lboost_system -lboost_atomic")
+
+file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc  ../common/*.c ../common/*.cxx ../common/*.cpp ../common/*.cc
+	EXCLUDE src/apps/* src/message_manager/*
+)
+
+#if(DDS_ENABLE)
+#find_package(fastcdr HINTS ${THIRD_PATH_HOME_PATH}/x64/lib/cmake/fastcdr)
+#find_package(fastrtps REQUIRED HINTS ${THIRD_PATH_HOME_PATH}/x64/lib/cmake/fastrtps)
+#file(GLOB_RECURSE DDS_SOURCE_FILES  ../message/dds/*.cxx)
+#endif()
+
+add_library(${APP_NAME} SHARED ${SOURCE_FILES} ${DDS_SOURCE_FILES})
+
+set_target_properties(${APP_NAME} PROPERTIES
+		VERSION ${PROJECT_VERSION}
+		SOVERSION ${PROJECT_VERSION_MAJOR}
+		OUTPUT_NAME ${APP_NAME}
+)
+target_link_libraries(${APP_NAME} Geographic pugixml protobuf pthread gflags glog dl z ${BOOST_LINK_LIBS} )
+
+#if(ROS_ENABLE)
+#	target_link_libraries(${APP_NAME}  ${roscpp_LIBRARIES})
+#endif()
+if(ROS2_ENABLE)
+	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface)
+endif()
+#if(LCM_ENABLE)
+#	target_link_libraries(${APP_NAME}  lcm glib-2.0)
+#endif()
+#if(DDS_ENABLE)
+#	target_link_libraries(${APP_NAME}  fastrtps fastcdr)
+#endif()
+
+include(CMakePackageConfigHelpers)
+
+function(install_lanelet2_module MODULE_NAME)
+	set(include_patterns
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/lanelet2/${MODULE_NAME}/include/${MODULE_NAME}"
+			"${CMAKE_CURRENT_SOURCE_DIR}/src/lanelet2/${MODULE_NAME}/include/"
+	)
+
+	foreach(pattern ${include_patterns})
+		if(EXISTS ${pattern})
+			set(include_dir ${pattern})
+			break()
+		endif()
+	endforeach()
+
+	if(include_dir)
+		get_filename_component(last_dir "${include_dir}" NAME)
+
+		if("${last_dir}" STREQUAL "${MODULE_NAME}")
+			set(install_subdir "${MODULE_NAME}")
+		else()
+			set(install_subdir "")
+		endif()
+
+		install(DIRECTORY ${include_dir}/
+				DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${install_subdir}
+				FILES_MATCHING
+				PATTERN "*.h"
+				PATTERN "*.hpp"
+				PATTERN "*.hxx"
+				PATTERN "*.inl"
+				PATTERN ".svn" EXCLUDE
+				PATTERN ".git" EXCLUDE
+		)
+	else()
+		message(WARNING "Module ${MODULE_NAME} does not have include directory")
+	endif()
+endfunction()
+
+set(LANELET2_MODULES
+		lanelet2_core
+		lanelet2_io
+		lanelet2_projection
+		lanelet2_routing
+		lanelet2_traffic_rules
+		extension_reg
+		lanelet2_ex
+)
+
+foreach(module ${LANELET2_MODULES})
+	install_lanelet2_module(${module})
+endforeach()
+install(DIRECTORY src
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+		FILES_MATCHING
+		PATTERN "*.h"
+		PATTERN "*.hpp"
+		PATTERN "*.hxx"
+		PATTERN "*.inl"
+		PATTERN "lanelet2" EXCLUDE
+		PATTERN "apps" EXCLUDE
+		PATTERN "message_manager" EXCLUDE
+		PATTERN "ros_interface" EXCLUDE
+		PATTERN ".vscode" EXCLUDE
+		PATTERN ".svn" EXCLUDE
+		PATTERN ".git" EXCLUDE
+)
+
+install(DIRECTORY ../common
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/..
+		FILES_MATCHING
+		PATTERN "*.h"
+		PATTERN "*.hpp"
+		PATTERN "*.hxx"
+		PATTERN "*.inl"
+		PATTERN "apps" EXCLUDE
+		PATTERN "message_manager" EXCLUDE
+		PATTERN "ros_interface" EXCLUDE
+		PATTERN ".vscode" EXCLUDE
+		PATTERN ".svn" EXCLUDE
+		PATTERN ".git" EXCLUDE
+)
+
+install(TARGETS ${APP_NAME}
+		EXPORT ${APP_NAME}Targets
+		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+		INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(EXPORT ${APP_NAME}Targets
+		FILE ${APP_NAME}Targets.cmake
+		NAMESPACE legionclaw::
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${APP_NAME}
+)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+		${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+		${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}Config.cmake
+		INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${APP_NAME}
+		PATH_VARS
+		CMAKE_INSTALL_INCLUDEDIR
+		CMAKE_INSTALL_LIBDIR
+)
+
+write_basic_package_version_file(
+		${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}ConfigVersion.cmake
+		VERSION ${PROJECT_VERSION}
+		COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+		${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}Config.cmake
+		${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}ConfigVersion.cmake
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${APP_NAME}
+)
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

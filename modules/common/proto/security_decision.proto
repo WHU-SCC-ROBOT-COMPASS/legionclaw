@@ -1,0 +1,54 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/warning_command.proto";
+import "modules/common/proto/trajectory_limit_command.proto";
+
+
+message SecurityDecision{
+    enum BrakeReport{
+        NO_BRAKE = 0;
+        ZERO_BRAKE = 1;
+        NORMAL_BRAKE = 2;
+        EMERGENT_BRAKE = 3;
+    }
+
+    enum ChangeLaneCommand{
+        NO_CHANGE_ACTION = 0;
+        LEFT_PROHIBIT = 1;
+        RIGHT_PROHIBIT = 2;
+        BOTH_PROHIBIT = 3;
+    }
+
+    enum ParkCommand{
+        NO_PARK = 0;
+        EMERGENT_LANE = 1;
+        PULL_OVER = 2;
+        STOP = 3;
+    }
+
+    enum DrivingModeReport{
+        NO_DRIVINGMODE_ACTION = 0;
+        EXIT_AFTER_STOP = 1;
+        NO_ENTRY = 2;
+        ABANDON_LONGITUDINAL = 3;
+        ABANDON_LATERAL = 4;
+        ABANDON_BOTH = 5;
+    }
+
+    optional Header header = 1;
+    //告警指令
+    optional WarningCommand warning_command = 2 ;
+    //刹车报告
+    optional SecurityDecision.BrakeReport brake_report = 3 [default = NO_BRAKE];
+    //换道指令
+    optional SecurityDecision.ChangeLaneCommand change_lane_command = 4 [default = NO_CHANGE_ACTION];
+    //轨迹限制指令
+    optional TrajectoryLimitCommand trajectory_limit_command = 5 ;
+    //停车指令
+    optional SecurityDecision.ParkCommand park_command = 6 [default = NO_PARK];
+    //驾驶模式报告
+    optional SecurityDecision.DrivingModeReport drivingmode_report = 7 [default = NO_DRIVINGMODE_ACTION];
+}

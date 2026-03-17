@@ -1,0 +1,11 @@
+ #ifndef __SLPoint__idl__
+#define __SLPoint__idl__
+module ros2_interface{
+ module msg{
+  struct SLPoint{
+    double   _s;
+    double   _l;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,12 @@
+ #ifndef __Path__idl__
+#define __Path__idl__
+#include "PathPoint.idl"
+module ros2_interface{
+ module msg{
+  struct Path{
+    string   _name;
+    sequence<ros2_interface::msg::PathPoint> _path_points;
+  };
+ };
+}; 
+#endif

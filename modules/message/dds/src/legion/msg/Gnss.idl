@@ -1,0 +1,40 @@
+ #ifndef __Gnss__idl__
+#define __Gnss__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct Gnss{
+    boolean   _is_valid;
+    ros2_interface::msg::Header   _header;
+    double   _latitude;
+    double   _longitude;
+    double   _elevation;
+    ros2_interface::msg::Point3D   _utm_position;
+    int32   _utm_zone_num;
+    uint8   _utm_zone_char;
+    ros2_interface::msg::Point3D   _attitude;
+    ros2_interface::msg::Point3D   _sd_position;
+    ros2_interface::msg::Point3D   _sd_velocity;
+    ros2_interface::msg::Point3D   _sd_attitude;
+    double   _second;
+    int32   _sat_use_num;
+    int32   _sat_in_view_num;
+    uint16   _solution_status;
+    uint16   _position_type;
+    ros2_interface::msg::Point3D   _linear_velocity;
+    ros2_interface::msg::Point3D   _attitude_dual;
+    ros2_interface::msg::Point3D   _sd_angle_dual;
+    double   _base_line_length_dual;
+    int32   _solution_status_dual;
+    int32   _position_type_dual;
+    int32   _solution_source_dual;
+    double   _cep68;
+    double   _cep95;
+    double   _p_dop;
+    double   _h_dop;
+    double   _v_dop;
+  };
+ };
+}; 
+#endif

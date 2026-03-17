@@ -1,0 +1,153 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+import "modules/control/src/proto/stop_distance_controller_conf.proto";
+import "modules/control/src/proto/lon_controller_conf.proto";
+import "modules/control/src/proto/lon_speed_controller_conf.proto";
+import "modules/control/src/proto/lqr_controller_conf.proto";
+import "modules/control/src/proto/mpc_controller_conf.proto";
+import "modules/control/src/proto/purepursuit_controller_conf.proto";
+import "modules/control/src/proto/gain_scheduler_conf.proto";
+import "modules/common/base_message/message.proto";
+import "modules/common/data/vehicle_param/proto/vehicle_param.proto";
+
+message ControlConf {
+  enum ControllerType {
+    STOP_DISTANCE_CONTROLLER = 0;
+    LON_CONTROLLER = 1;
+    LQR_LAT_CONTROLLER = 2;
+    MPC_CONTROLLER = 3;
+    PUREPURSUIT_CONTROLLER =4;
+    LON_SPEED_CONTROLLER =5;
+  }
+
+    optional string app_name = 1;
+    optional string description = 2 ;
+    optional string log_file_path = 3;
+    optional int32 log_level = 4 ;
+    optional bool logging_data_enable = 5  ;
+    optional bool use_system_timestamp = 6 ;
+    optional double produce_control_command_duration = 7 ;
+    optional double publish_control_command_duration = 8 ;
+    optional Vehicle vehicle = 9;
+    optional legion.common.Message messages = 10;
+    optional SharedAutonomyConf shared_autonomy_conf = 11;
+    
+    optional string name = 21;
+    optional bool use_new_planning_mode = 22 ;
+    optional bool use_acceleration_mode = 23;
+    optional bool use_deceleration_mode = 24 ;
+    optional bool enable_log_debug = 25  ;
+    optional bool enable_speed_station_preview = 26 ;
+    optional bool enable_persistent_estop = 27 ;
+    optional bool enable_gear_dirve_negative_speed_protection = 28;
+    optional bool is_control_test_mode = 29;
+    optional bool enable_input_timestamp_check=30;
+    optional double max_localization_miss_num = 31;
+    optional double max_planning_miss_num =32;
+    optional double max_chassis_miss_num =33;
+    optional double max_acceleration_when_stopped =34;
+    optional double max_path_remain_when_stopped = 35;
+    optional double min_path_remain_when_stopped = 36;
+    optional double standstill_acceleration=37;
+    optional double max_abs_speed_when_epb_applied_duration= 38;
+    optional double steer_angle_rate = 39;
+    optional bool set_steer_limit= 40;
+    optional double control_period = 41;
+    optional double trajectory_period = 42;
+    optional double chassis_period = 43;
+    optional double localization_period = 44;
+    optional double soft_estop_brake = 45;
+    optional double minimum_speed_resolution = 46;
+    optional double query_relative_time = 47;
+    optional double minimum_speed_protection= 48;
+    optional bool use_navigation_mode = 49;
+    optional bool query_time_nearest_point_only = 50;
+    optional bool query_forward_time_point_only = 51;
+    optional bool enable_navigation_mode_position_update = 52;
+    optional bool enable_navigation_mode_error_filter = 53;
+    optional bool trajectory_transform_to_com_reverse= 54;
+    optional bool trajectory_transform_to_com_drive= 55;
+    optional bool enable_feedback_augment_on_high_speed = 56;
+    optional bool enable_maximum_steer_rate_limit = 57;
+    optional double lock_steer_speed = 58;
+    optional double is_in_zero_steer_angle = 59;
+    optional ActiveController active_controllers = 60;
+    optional LQRControllerConf lqr_controller_conf = 61;
+    optional LonControllerConf lon_controller_conf = 62;
+    optional LonSpeedControllerConf lon_speed_controller_conf = 63;
+    optional StopDistanceControllerConf stop_distance_controller_conf = 64;
+    optional MPCControllerConf mpc_controller_conf = 65;
+    optional PurePursuitControllerConf purepursuit_controller_conf = 66;
+    optional legion.interface.VehicleParam vehicle_param = 67;
+    optional bool use_lidar_obstacle_avoidance = 68;
+    optional bool use_uss_obstacle_avoidance = 69;
+    optional ObstacleAvoidance obstacle_avoidance =70;
+    optional bool use_adctrajectory_system_timestamp_enable =71;
+    optional bool enable_lateral_error_estop = 72;  // 是否启用横向偏差EStop
+    optional double max_lateral_error = 73;  // 最大横向偏差（米），超过此值触发EStop
+    optional double max_heading_error = 74;  // 最大航向角偏差（弧度），超过此值触发EStop
+}
+
+  enum VehicleBrand {
+    CS55 = 1;
+    EV350 = 2;
+    SHARING_VAN = 3;
+    T15 = 4;
+    YT = 5;
+    AGV = 6;
+    SHARING_VAN_3in1 = 7;
+    HQ_H9 = 8;
+    FY = 9;
+    FREE_H97 = 10;
+    PATROL = 11;
+  }
+
+message Vehicle {
+    optional int32 brand = 1;
+    optional string name = 2;
+}
+
+message ActiveController{
+  repeated int32 active_message=1;
+  repeated ActiveInfo active_info=2;
+}
+message ActiveInfo{
+  optional int32 type =1;
+  optional string name =2;
+}
+
+message SharedAutonomyConf{
+    optional bool enable_shared_autonomy = 1;
+    optional double steer_angle_rate = 2;
+    optional double steer_angle_tolerance = 3;
+    repeated GainSchedulerInfo steer_rate_speed_scheduler = 4;
+}
+
+message ObstacleAvoidance {
+  optional ObstacleLidar lidar = 1;
+  optional ObstacleUss uss = 2;
+}
+
+message ObstacleLidar
+{
+  optional double k = 1;
+  optional double b = 2;
+  optional double side_front_k = 3;
+  optional double side_front_b = 4;
+  optional double side_back_k = 5;
+  optional double side_back_b = 6;
+}
+
+message ObstacleUss
+{
+  optional double front_distance = 1;
+  optional double back_distance = 2;
+  optional double mid_distance = 3;
+  optional double side_distance = 4;
+}
+
+
+
+

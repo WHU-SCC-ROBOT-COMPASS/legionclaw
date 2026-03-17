@@ -1,0 +1,11 @@
+ #ifndef __HMIObuCmd__idl__
+#define __HMIObuCmd__idl__
+module ros2_interface{
+ module msg{
+  struct HMIObuCmd{
+    int32   _code;
+    int32   _val;
+  };
+ };
+}; 
+#endif

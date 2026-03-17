@@ -1,0 +1,18 @@
+ #ifndef __GuideInfo__idl__
+#define __GuideInfo__idl__
+#include "Header.idl"
+#include "GuideRoad.idl"
+module ros2_interface{
+ module msg{
+  struct GuideInfo{
+    ros2_interface::msg::Header   _header;
+    double   _next_dis;
+    ros2_interface::msg::GuideRoad   _current_road;
+    ros2_interface::msg::GuideRoad   _next_road;
+    int8   _round_status;
+    int8   _intersection_status;
+    int8   _roads_status;
+  };
+ };
+}; 
+#endif

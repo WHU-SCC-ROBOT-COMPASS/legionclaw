@@ -1,0 +1,12 @@
+ #ifndef __VehicleMotionPoint__idl__
+#define __VehicleMotionPoint__idl__
+#include "TrajectoryPoint.idl"
+module ros2_interface{
+ module msg{
+  struct VehicleMotionPoint{
+    ros2_interface::msg::TrajectoryPoint   _trajectory_point;
+    double   _steer;
+  };
+ };
+}; 
+#endif

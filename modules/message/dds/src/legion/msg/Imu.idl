@@ -1,0 +1,20 @@
+ #ifndef __Imu__idl__
+#define __Imu__idl__
+#include "Header.idl"
+#include "Quaternion.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct Imu{
+    ros2_interface::msg::Header   _header;
+    boolean   _is_valid;
+    ros2_interface::msg::Quaternion   _orientation;
+    sequence<double> _orientation_covariance;
+    ros2_interface::msg::Point3D   _angular_velocity;
+    sequence<double> _angular_velocity_covariance;
+    ros2_interface::msg::Point3D   _linear_acceleration;
+    sequence<double> _linear_acceleration_covariance;
+  };
+ };
+}; 
+#endif

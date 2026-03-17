@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message RSSInfo{
+    optional bool is_rss_safe = 1 [default = false];
+    //current longitudinal distance
+    optional double cur_dist_lon = 2 [default = 0.0];
+    //longitudinal safe distance of rss
+    optional double rss_safe_dist_lon = 3 [default = 0.0];
+    //Minimum range of longitudinal acceleration
+    optional double acc_lon_range_minimum = 4 [default = 0.0];
+    //Maximum range of longitudinal acceleration
+    optional double acc_lon_range_maximum = 5 [default = 0.0];
+    //Minimum left range of lateral acceleration
+    optional double acc_lat_left_range_minimum = 6 [default = 0.0];
+    //Maximum left range of lateral acceleration
+    optional double acc_lat_left_range_maximum = 7 [default = 0.0];
+    //Minimum right range of lateral acceleration
+    optional double acc_lat_right_range_minimum = 8 [default = 0.0];
+    //Maximum right range of lateral acceleration
+    optional double acc_lat_right_range_maximum = 9 [default = 0.0];
+}

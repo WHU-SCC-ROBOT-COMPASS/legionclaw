@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/junction_info.proto";
+import "modules/common/proto/limit_speed_info.proto";
+import "modules/common/proto/route_fusion_info.proto";
+
+
+message TrafficEvents{
+    //timestamp is included in header
+    optional Header header = 1;
+    //地图融合信息
+    optional RouteFusionInfo route_fusion_info = 2 ;
+    //路口信息
+    optional JunctionInfo junction_info = 3 ;
+    //限速消息
+    optional LimitSpeedInfo limit_speed_info = 4 ;
+}

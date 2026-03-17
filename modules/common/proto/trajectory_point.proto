@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/path_point.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message TrajectoryPoint{
+    //path point
+    optional PathPoint path_point = 1;
+    //linear velocity
+    optional double v = 2 [default = 0.0];
+    //linear acceleration
+    optional double a = 3 [default = 0.0];
+    //relative time from beginning of the trajectory
+    optional double relative_time = 4 [default = 0.0];
+    //longitudinal jerk
+    optional double da = 5 [default = 0.0];
+    //转向是否有效
+    optional bool is_steer_valid = 6 [default = false];
+    //The angle between vehicle front wheel and vehicle longitudinal axis
+    optional double front_steer = 7 [default = 0.0];
+    //后轮转角
+    optional double rear_steer = 8 [default = 0.0];
+    //档位
+    optional legion.common.GearPosition gear = 9 [default = GEAR_NEUTRAL];
+}

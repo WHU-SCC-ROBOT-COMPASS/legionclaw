@@ -1,0 +1,66 @@
+syntax = "proto2";
+
+package legionclaw.prediction;
+
+import "modules/common/base_message/message.proto";
+
+message PredictionConf {
+  optional string app_name = 1;
+  optional string description = 2;
+  optional string log_file_path = 3;
+  optional int32 log_level = 4;
+  optional bool logging_data_enable = 5;
+  optional double produce_prediction_command_duration = 6;
+  optional double publish_prediction_command_duration = 7;
+  optional bool use_system_timestamp = 8;
+  optional legion.common.Message messages = 9;
+  optional StatusConfig status = 10;
+  optional double predict_length_interval = 11;
+  optional double predict_time_interval = 12;
+  optional int32 predict_traj_num = 13;
+  optional double max_history_time = 14;
+  optional int32 prediction_horizon = 15;
+  optional double local_map_horizon = 16;
+  optional double threshold_static_speed = 17;
+  optional int32 filter_mode_by_lane = 18;
+  optional int32 filter_mode = 19;
+  optional double filter_range = 20;
+  optional int32 theta_mode = 21;
+  optional int32 map_mode = 22;
+  optional double ele_diff_threshold = 23;
+  optional double dynamic_obstacle_speed_threshold = 24;
+  optional double road_curvature_threshold = 25;
+  optional ModelPaths models = 26;
+}
+
+message StatusConfig {
+  optional double status_detect_duration = 1;
+}
+
+message ModelPaths {
+  optional string pedestrian_node_history_encoder_model = 1;
+  optional string pp_edge_encoder_model = 2;
+  optional string pedestrian_edge_influence_encoder_model = 3;
+  optional string pedestrian_decoder_rnn_cell_model = 4;
+  optional string pedestrian_decoder_initial_h_model = 5;
+  optional string pedestrian_decoder_state_action_model = 6;
+  optional string pedestrian_decoder_proj_to_gmm_corrs_model = 7;
+  optional string pedestrian_decoder_proj_to_gmm_log_pis_model = 8;
+  optional string pedestrian_decoder_proj_to_gmm_log_sigmas_model = 9;
+  optional string pedestrian_decoder_proj_to_gmm_mus_model = 10;
+  optional string pedestrian_p_z_x_model = 11;
+  optional string pedestrian_hx_to_z_model = 12;
+  optional string vehicle_node_history_encoder_model = 13;
+  optional string vv_edge_encoder_model = 14;
+  optional string vehicle_edge_influence_encoder_model = 15;
+  optional string vehicle_p_z_x_model = 16;
+  optional string vehicle_hx_to_z_model = 17;
+  optional string vehicle_decoder_initial_h_model = 18;
+  optional string vehicle_decoder_state_action_model = 19;
+  optional string vehicle_decoder_rnn_cell_model = 20;
+  optional string vehicle_decoder_proj_to_gmm_corrs_model = 21;
+  optional string vehicle_decoder_proj_to_gmm_log_pis_model = 22;
+  optional string vehicle_decoder_proj_to_gmm_log_sigmas_model = 23;
+  optional string vehicle_decoder_proj_to_gmm_mus_model = 24;
+  optional string vehicle_map_encoder_model = 25;
+}

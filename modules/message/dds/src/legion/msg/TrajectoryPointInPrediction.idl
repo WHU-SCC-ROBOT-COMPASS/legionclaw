@@ -1,0 +1,14 @@
+ #ifndef __TrajectoryPointInPrediction__idl__
+#define __TrajectoryPointInPrediction__idl__
+#include "PathPoint.idl"
+module ros2_interface{
+ module msg{
+  struct TrajectoryPointInPrediction{
+    ros2_interface::msg::PathPoint   _path_point;
+    double   _v;
+    double   _a;
+    double   _relative_time;
+  };
+ };
+}; 
+#endif

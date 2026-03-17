@@ -1,0 +1,15 @@
+ #ifndef __HMIObuCmdMsg__idl__
+#define __HMIObuCmdMsg__idl__
+#include "Header.idl"
+#include "HMIObuCmd.idl"
+module ros2_interface{
+ module msg{
+  struct HMIObuCmdMsg{
+    ros2_interface::msg::Header   _header;
+    int32   _id;
+    string   _name;
+    sequence<ros2_interface::msg::HMIObuCmd> _obu_cmd_list;
+  };
+ };
+}; 
+#endif

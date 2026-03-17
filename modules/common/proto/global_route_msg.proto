@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/lanelet_info.proto";
+
+
+message GlobalRouteMsg{
+    //消息头
+    optional Header header = 1;
+    //一次导航的全程道路集合，从起点到终点排序
+    repeated LaneletInfo route = 2;
+    //当前所在车道的信息
+    optional LaneletInfo current_lanelet = 3 ;
+    //总里程
+    optional double total_mileage = 4 [default = 0.0];
+    //当前里程
+    optional double cur_mileage = 5 [default = 0.0];
+    //当前地图切片,用来绘制局部地图
+    repeated LaneletInfo cur_slice = 6;
+}

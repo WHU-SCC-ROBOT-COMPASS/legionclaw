@@ -1,0 +1,12 @@
+ #ifndef __PointLLH__idl__
+#define __PointLLH__idl__
+module ros2_interface{
+ module msg{
+  struct PointLLH{
+    double   _lon;
+    double   _lat;
+    double   _height;
+  };
+ };
+}; 
+#endif

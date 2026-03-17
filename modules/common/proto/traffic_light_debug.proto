@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/traffic_light_box.proto";
+
+
+message TrafficLightDebug{
+    optional TrafficLightBox cropbox = 1 ;
+    repeated TrafficLightBox box = 2;
+    optional int32 signal_num = 3 [default = 0];
+    optional int32 valid_pos = 4 [default = 0];
+    optional double ts_diff_pos = 5 [default = 0.0];
+    optional double ts_diff_sys = 6 [default = 0.0];
+    optional int32 project_error = 7 [default = 0];
+    optional double distance_to_stop_line = 8 [default = 0.0];
+    optional int32 camera_id = 9 [default = 0];
+    repeated TrafficLightBox crop_roi = 10;
+    repeated TrafficLightBox projected_roi = 11;
+    repeated TrafficLightBox rectified_roi = 12;
+    repeated TrafficLightBox debug_roi = 13;
+}

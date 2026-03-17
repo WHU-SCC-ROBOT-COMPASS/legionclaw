@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/diagnostic_status.proto";
+
+
+message DiagnosticArray{
+    //timestamp is  included in header
+    optional Header header = 1;
+    //诊断状态
+    repeated DiagnosticStatus status = 2;
+}

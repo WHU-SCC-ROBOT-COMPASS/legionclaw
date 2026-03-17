@@ -1,0 +1,54 @@
+ #ifndef __VehicleParam__idl__
+#define __VehicleParam__idl__
+module ros2_interface{
+ module msg{
+  struct VehicleParam{
+    string   _brand;
+    int32   _steer_mode;
+    double   _length;
+    double   _width;
+    double   _height;
+    double   _mass_fl;
+    double   _mass_fr;
+    double   _mass_rl;
+    double   _mass_rr;
+    double   _wheel_radius;
+    double   _wheelbase;
+    double   _front_edge_to_center;
+    double   _back_edge_to_center;
+    double   _lf;
+    double   _lr;
+    double   _cf;
+    double   _cr;
+    double   _steer_ratio;
+    double   _rolling_coefficient;
+    double   _air_density;
+    double   _air_damping_coefficient;
+    double   _max_front_steer_angle;
+    double   _min_front_steer_angle;
+    double   _max_rear_steer_angle;
+    double   _min_rear_steer_angle;
+    double   _speed_limit;
+    double   _max_brake_value;
+    double   _min_brake_value;
+    double   _max_accel_value;
+    double   _min_accel_value;
+    double   _speed_deadzone;
+    double   _standstill_acceleration;
+    double   _max_front_steer_angle_rate;
+    double   _max_rear_steer_angle_rate;
+    double   _max_abs_speed_when_stopped;
+    double   _max_abs_speed_when_stopped_duration;
+    double   _brake_value_when_gear_transitioning;
+    double   _accel_deadzone;
+    double   _brake_deadzone;
+    double   _acceleration_in_idle;
+    double   _deceleration_in_idle;
+    double   _max_acceleration_jerk;
+    double   _max_acceleration;
+    double   _max_deceleration;
+    double   _min_turning_radius;
+  };
+ };
+}; 
+#endif

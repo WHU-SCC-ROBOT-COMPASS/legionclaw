@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message PointLLH{
+    //Longitude in degrees, ranging from -180 to 180.
+    optional double lon = 1 [default = 0.0];
+    //Latitude in degrees, ranging from -90 to 90.
+    optional double lat = 2 [default = 0.0];
+    //WGS-84 ellipsoid height in meters.
+    optional double height = 3 [default = 0.0];
+}

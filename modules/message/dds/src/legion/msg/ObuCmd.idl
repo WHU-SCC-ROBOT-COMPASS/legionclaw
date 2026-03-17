@@ -1,0 +1,11 @@
+ #ifndef __ObuCmd__idl__
+#define __ObuCmd__idl__
+module ros2_interface{
+ module msg{
+  struct ObuCmd{
+    int32   _code;
+    int32   _val;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,60 @@
+ #ifndef __Obstacle__idl__
+#define __Obstacle__idl__
+#include "Point3D.idl"
+#include "ImageKeyPoint.idl"
+#include "Point2D.idl"
+#include "BBox2D.idl"
+#include "SensorCalibrator.idl"
+#include "Time.idl"
+module ros2_interface{
+ module msg{
+  struct Obstacle{
+    ros2_interface::msg::Time   _timestamp;
+    int32   _id;
+    double   _existence_prob;
+    ros2_interface::msg::Time   _create_time;
+    ros2_interface::msg::Time   _last_updated_time;
+    ros2_interface::msg::Point3D   _center_pos_vehicle;
+    ros2_interface::msg::Point3D   _center_pos_abs;
+    double   _theta_vehicle;
+    double   _theta_abs;
+    ros2_interface::msg::Point3D   _velocity_vehicle;
+    ros2_interface::msg::Point3D   _velocity_abs;
+    double   _length;
+    double   _width;
+    double   _height;
+    sequence<ros2_interface::msg::ImageKeyPoint> _image_key_points;
+    sequence<ros2_interface::msg::Point3D> _polygon_point_abs;
+    sequence<ros2_interface::msg::Point3D> _polygon_point_vehicle;
+    double   _tracking_time;
+    int32   _type;
+    double   _confidence;
+    int32   _confidence_type;
+    sequence<ros2_interface::msg::Point3D> _drops;
+    ros2_interface::msg::Point3D   _acceleration_vehicle;
+    ros2_interface::msg::Point3D   _acceleration_abs;
+    ros2_interface::msg::Point2D   _anchor_point_image;
+    ros2_interface::msg::Point3D   _anchor_point_vehicle;
+    ros2_interface::msg::Point3D   _anchor_point_abs;
+    ros2_interface::msg::BBox2D   _bbox2d;
+    ros2_interface::msg::BBox2D   _bbox2d_rear;
+    int32   _sub_type;
+    double   _height_above_ground;
+    sequence<double> _position_abs_covariance;
+    sequence<double> _velocity_abs_covariance;
+    sequence<double> _acceleration_abs_covariance;
+    double   _theta_abs_covariance;
+    sequence<double> _position_vehicle_covariance;
+    sequence<double> _velocity_vehicle_covariance;
+    sequence<double> _acceleration_vehicle_covariance;
+    double   _theta_vehicle_covariance;
+    ros2_interface::msg::SensorCalibrator   _sensor_calibrator;
+    uint8   _cipv_flag;
+    int32   _lane_position;
+    double   _pihp_percentage;
+    int32   _blinker_flag;
+    int32   _fusion_type;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/trajectory_point.proto";
+
+
+message Trajectory{
+    //轨迹名称
+    optional string name = 1;
+    //轨迹点
+    repeated TrajectoryPoint trajectory_points = 2;
+}

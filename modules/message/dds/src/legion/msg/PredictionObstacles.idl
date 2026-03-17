@@ -1,0 +1,18 @@
+ #ifndef __PredictionObstacles__idl__
+#define __PredictionObstacles__idl__
+#include "Header.idl"
+#include "PredictionObstacle.idl"
+module ros2_interface{
+ module msg{
+  struct PredictionObstacles{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::PredictionObstacle> _prediction_obstacles;
+    int32   _change_origin_flag;
+    double   _start_timestamp;
+    double   _end_timestamp;
+    int32   _self_intent;
+    int32   _scenario;
+  };
+ };
+}; 
+#endif

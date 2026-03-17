@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/quaternion.proto";
+
+
+message Imu{
+    //头部信息
+    optional Header header = 1;
+    //数据有效性标志位
+    optional bool is_valid = 2 [default = false];
+    //角度（四元素）
+    optional Quaternion orientation = 3;
+    //角度方差
+  repeated double orientation_covariance = 4;
+    //角速度信息angularVelocity.x：x方向角速度信息angularVelocity.y: y方向角速度信息angularVelocity.z：z方向角速度信息
+    optional Point3D angular_velocity = 5;
+    //速度方差
+  repeated double angular_velocity_covariance = 6;
+    //线加速度信息linearAcceleration.x：x方向线加速度信息linearAcceleration.y: y方向线加速度信息linearAcceleration.z：z方向线加速度信息
+    optional Point3D linear_acceleration = 7;
+    //线性加速度方差
+  repeated double linear_acceleration_covariance = 8;
+}

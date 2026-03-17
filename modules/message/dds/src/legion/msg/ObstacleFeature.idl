@@ -1,0 +1,45 @@
+ #ifndef __ObstacleFeature__idl__
+#define __ObstacleFeature__idl__
+#include "Point3D.idl"
+#include "TrajectoryInPrediction.idl"
+#include "TrajectoryPointInPrediction.idl"
+#include "ObstaclePriority.idl"
+#include "PredictionTrajectoryPoint.idl"
+module ros2_interface{
+ module msg{
+  struct ObstacleFeature{
+    int32   _obstacle_id;
+    ros2_interface::msg::Point3D   _polygon_point;
+    ros2_interface::msg::Point3D   _position;
+    ros2_interface::msg::Point3D   _front_position;
+    ros2_interface::msg::Point3D   _velocity;
+    ros2_interface::msg::Point3D   _raw_velocity;
+    ros2_interface::msg::Point3D   _acceleration;
+    double   _velocity_heading;
+    double   _speed;
+    double   _acc;
+    double   _theta;
+    double   _length;
+    double   _width;
+    double   _height;
+    double   _tracking_time;
+    double   _timestamp;
+    ros2_interface::msg::Point3D   _t_position;
+    ros2_interface::msg::Point3D   _t_velocity;
+    double   _t_velocity_heading;
+    double   _t_speed;
+    ros2_interface::msg::Point3D   _t_acceleration;
+    double   _t_acc;
+    boolean   _is_still;
+    int32   _type;
+    double   _label_update_time_delta;
+    ros2_interface::msg::ObstaclePriority   _priority;
+    boolean   _is_near_junction;
+    sequence<ros2_interface::msg::PredictionTrajectoryPoint> _future_trajectory_points;
+    sequence<ros2_interface::msg::TrajectoryPointInPrediction> _short_term_predicted_trajectory_points;
+    sequence<ros2_interface::msg::TrajectoryInPrediction> _predicted_trajectory;
+    sequence<ros2_interface::msg::TrajectoryPointInPrediction> _adc_trajectory_point;
+  };
+ };
+}; 
+#endif

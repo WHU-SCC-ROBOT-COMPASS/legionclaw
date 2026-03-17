@@ -1,0 +1,17 @@
+ #ifndef __ParkingOutInfo__idl__
+#define __ParkingOutInfo__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct ParkingOutInfo{
+    ros2_interface::msg::Header   _header;
+    int32   _parking_out_id;
+    int32   _parking_direction_type;
+    boolean   _is_parking_out_enable;
+    ros2_interface::msg::Point3D   _parking_out_point;
+    double   _theta;
+  };
+ };
+}; 
+#endif

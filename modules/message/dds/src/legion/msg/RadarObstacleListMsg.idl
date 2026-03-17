@@ -1,0 +1,17 @@
+ #ifndef __RadarObstacleListMsg__idl__
+#define __RadarObstacleListMsg__idl__
+#include "Header.idl"
+#include "RadarObstacle.idl"
+#include "RadarState.idl"
+module ros2_interface{
+ module msg{
+  struct RadarObstacleListMsg{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::RadarObstacle> _radar_obstacle;
+    uint8   _sensor_id;
+    ros2_interface::msg::RadarState   _radar_state;
+    boolean   _is_valid;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/location.proto";
+import "modules/common/proto/adc_trajectory.proto";
+import "modules/common/proto/prediction_obstacle.proto";
+
+
+message PredictionObstacles{
+    enum SelfIntent{
+        UNKNOWN = 0;
+        STOP = 1;
+        CRUISE = 2;
+        CHANGE_LANE = 3;
+    }
+
+    //timestamp is included in header
+    optional Header header = 1;
+    //make prediction for multiple obstacles
+    repeated PredictionObstacle prediction_obstacles = 2;
+    //0:坐标系切换成功 1:坐标系切换中 2:坐标系切换故障
+    optional Location.ChangeOriginFlag change_origin_flag = 3 [default = CHANGE_NULL];
+    //start timestamp
+    optional double start_timestamp = 4 [default = 0.0];
+    //end timestamp
+    optional double end_timestamp = 5 [default = 0.0];
+    //自动驾驶车辆意图  0-UNKNOWN, 1-STOP, 2-CRUISE, 3-CHANGE_LANE
+    optional PredictionObstacles.SelfIntent self_intent = 6 [default = UNKNOWN];
+    //场景              0-UNKNOWN, 1000-CRUISE, 1001-CRUISE_URBAN 1002-CRUISE_HIGHWAY, 2000-JUNCTION  2001-JUNCTION_TRAFFIC_LIGHT 2002-JUNCTION_STOP_SIGN
+    optional ADCTrajectory.Scenario scenario = 7 [default = SCENARIO_UNKNOWN];
+}

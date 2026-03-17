@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/lane_line_cubic_curve.proto";
+
+
+message HolisticPathPrediction{
+    enum PlanningSource{
+        INVALID = 0;
+        BOTH_LANE = 1;
+        LEFT_LANE = 2;
+        RIGHT_LANE = 3;
+        LEFT_ROAD_EDGE = 4;
+        RIGHT_ROAD_EDGE = 5;
+        FRONT_VEHICLE_TRAJECTORY = 6;
+        FREESPACE = 7;
+        EGO_TRAJECTORY_PREDICTION = 8;
+    }
+
+    //行驶路径预测： 1、针对没有车道线等特殊路段如：收费站附近、进出匝道附近、 维修区域附近，可以虚拟出可行驶路径预测； 2、针对车辆遮挡的区域，可以虚拟出可行驶路径预测；
+    optional LaneLineCubicCurve hpp = 1 ;
+    //规划路径来源:  0 - invalid,  1 - 双侧车道线,  2 - 左侧车道线,  3 - 右侧车道线, 4 - 左侧路沿，  5 - 右侧路沿， 6 - 前车轨迹，  7 - freespace, 8 - 本车轨迹预测
+    optional HolisticPathPrediction.PlanningSource planning_source = 2 [default = INVALID];
+    //自车道宽度
+    optional double ego_lane_width = 3 [default = 0.0];
+    //置信度[0 - 1]
+    optional double confidence = 4 [default = 0.0];
+}

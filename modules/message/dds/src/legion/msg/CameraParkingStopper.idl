@@ -1,0 +1,13 @@
+ #ifndef __CameraParkingStopper__idl__
+#define __CameraParkingStopper__idl__
+#include "Header.idl"
+#include "BBox2D.idl"
+module ros2_interface{
+ module msg{
+  struct CameraParkingStopper{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::BBox2D   _bbox2d;
+  };
+ };
+}; 
+#endif

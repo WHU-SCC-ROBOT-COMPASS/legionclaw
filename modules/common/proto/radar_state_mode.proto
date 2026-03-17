@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message RadarStateMode{
+    //can0工作模式
+    optional uint32 can0_work_mode = 1 [default = 0];
+    //can1工作模式
+    optional uint32 can1_work_mode = 2 [default = 0];
+    //双总线工作模式
+    optional uint32 dual_can_mode = 3 [default = 0];
+    //计时模式
+    optional uint32 timming_mode = 4 [default = 0];
+    //电源模式
+    optional uint32 power_mode = 5 [default = 0];
+    //效能模式
+    optional uint32 performance_mode = 6 [default = 0];
+}

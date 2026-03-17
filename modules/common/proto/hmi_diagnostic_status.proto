@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message HMIDiagnosticStatus{
+    optional int32 id = 1 [default = 0];
+    //// 诊断状态
+    optional int32 level = 2 [default = 0];
+    ////测试/组件报告的描述
+    optional string name = 3;
+    //// 状态描述
+    optional string message = 4;
+    //// 硬件的唯一描述
+    optional string hardware_id = 5;
+}

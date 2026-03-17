@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message ImageRect{
+    //coordinate x of left-top point of image rect
+    optional int32 x = 1 [default = 0];
+    //coordinate y of left-top point of image rect
+    optional int32 y = 2 [default = 0];
+    //width of image rect
+    optional int32 width = 3 [default = 0];
+    //height of image rect
+    optional int32 height = 4 [default = 0];
+}

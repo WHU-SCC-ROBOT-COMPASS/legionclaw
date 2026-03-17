@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/region.proto";
+import "modules/common/proto/sl_point.proto";
+
+
+message Grid{
+    //世界坐标系下的x
+    optional double x = 1 [default = 0.0];
+    //世界坐标系下的y
+    optional double y = 2 [default = 0.0];
+    //Frenet坐标系下的x
+    optional SLPoint sl_point = 3;
+    optional double yaw = 4 [default = 0.0];
+    //势场值
+    optional double potential = 5 [default = 0.0];
+    //区域编号
+    optional Region.RegionID region_id = 6 [default = REGION_ID_UNKNOWN];
+}

@@ -1,0 +1,48 @@
+{
+    "epb_state_machine": [
+        {
+            "StateName": "Start",
+            "Transition": [
+                {
+                    "Key": "started",
+                    "Target": "Init"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Init",
+            "Transition": [
+                {
+                    "Key": "applied",
+                    "Target": "Applied"
+                },
+                {
+                    "Key": "release",
+                    "Target": "Release"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Applied",
+            "Transition": [
+                {
+                    "Key": "release",
+                    "Target": "Release"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Release",
+            "Transition": [
+                {
+                    "Key": "applied",
+                    "Target": "Applied"
+                }
+            ],
+            "Parent": "null"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/common_enum.proto";
+
+
+message RouteFusionInfo{
+    //是否有效标志位
+    optional legion.common.IsValid fusion_flag = 1 [default = INVALID];
+    //融合原因
+    optional string fusion_reason = 2;
+}

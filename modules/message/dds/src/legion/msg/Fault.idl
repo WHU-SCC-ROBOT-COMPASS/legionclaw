@@ -1,0 +1,13 @@
+ #ifndef __Fault__idl__
+#define __Fault__idl__
+#include "Time.idl"
+module ros2_interface{
+ module msg{
+  struct Fault{
+    ros2_interface::msg::Time   _timestamp;
+    uint64   _code;
+    string   _reason;
+  };
+ };
+}; 
+#endif

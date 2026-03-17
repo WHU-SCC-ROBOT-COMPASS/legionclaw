@@ -1,0 +1,16 @@
+ #ifndef __RoutingResponse__idl__
+#define __RoutingResponse__idl__
+#include "Header.idl"
+#include "LaneInfo.idl"
+module ros2_interface{
+ module msg{
+  struct RoutingResponse{
+    ros2_interface::msg::Header   _header;
+    int32   _plan_status;
+    int32   _replan_flag;
+    int32   _route_reason;
+    sequence<ros2_interface::msg::LaneInfo> _lane_list;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,34 @@
+ #ifndef __LaneLine__idl__
+#define __LaneLine__idl__
+#include "Point3D.idl"
+#include "LaneLineCubicCurve.idl"
+#include "EndPoints.idl"
+#include "Point2D.idl"
+#include "Time.idl"
+module ros2_interface{
+ module msg{
+  struct LaneLine{
+    int32   _lane_type;
+    int32   _lane_color;
+    int32   _pos_type;
+    ros2_interface::msg::LaneLineCubicCurve   _curve_vehicle;
+    ros2_interface::msg::LaneLineCubicCurve   _curve_image;
+    ros2_interface::msg::LaneLineCubicCurve   _curve_abs;
+    sequence<ros2_interface::msg::Point3D> _pts_vehicle;
+    sequence<ros2_interface::msg::Point2D> _pts_image;
+    sequence<ros2_interface::msg::Point3D> _pts_abs;
+    ros2_interface::msg::EndPoints   _image_end_point;
+    sequence<ros2_interface::msg::Point2D> _pts_key;
+    uint8   _hd_lane_id;
+    double   _confidence;
+    int32   _lane_quality;
+    int32   _fused_lane_type;
+    sequence<double> _homography_mat;
+    sequence<double> _homography_mat_inv;
+    int32   _lane_coordinate_type;
+    int32   _use_type;
+    ros2_interface::msg::Time   _create_time;
+  };
+ };
+}; 
+#endif

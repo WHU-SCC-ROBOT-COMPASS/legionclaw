@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/hmi_trajectory_point.proto";
+
+
+message HMITrajectory{
+    //消息头
+    optional Header header = 1;
+    //抽稀用来显示的轨迹点数组
+    repeated HMITrajectoryPoint trajectory_points = 2;
+}

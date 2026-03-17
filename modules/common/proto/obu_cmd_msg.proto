@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/obu_cmd.proto";
+
+
+message ObuCmdMsg{
+    //timestamp is included in header
+    optional Header header = 1;
+    //obu的id身份
+    optional int32 id = 2 [default = 0];
+    //obu的名称
+    optional string name = 3;
+    //命令列表
+    repeated ObuCmd obu_cmd_list = 4;
+}

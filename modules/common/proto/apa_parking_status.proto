@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+
+
+message APAParkingStatus{
+    enum Status{
+        APA_IDLE = 0;
+        APA_SEARCHING = 1;
+        APA_ACTIVE = 2;
+        APA_PARKING = 3;
+        APA_PAUSE = 4;
+        APA_FAILURE = 5;
+        APA_FINISH = 6;
+    }
+
+    optional Header header = 1;
+    optional APAParkingStatus.Status state = 2 [default = APA_IDLE];
+}

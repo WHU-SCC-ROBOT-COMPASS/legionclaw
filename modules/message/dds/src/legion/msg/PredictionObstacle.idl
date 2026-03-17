@@ -1,0 +1,22 @@
+ #ifndef __PredictionObstacle__idl__
+#define __PredictionObstacle__idl__
+#include "ObstacleInteractiveTag.idl"
+#include "TrajectoryInPrediction.idl"
+#include "ObstaclePriority.idl"
+#include "PerceptionObstacle.idl"
+#include "ObstacleIntent.idl"
+module ros2_interface{
+ module msg{
+  struct PredictionObstacle{
+    ros2_interface::msg::PerceptionObstacle   _perception_obstacle;
+    double   _timestamp;
+    double   _predicted_period;
+    sequence<ros2_interface::msg::TrajectoryInPrediction> _trajectory;
+    ros2_interface::msg::ObstacleIntent   _intent;
+    ros2_interface::msg::ObstaclePriority   _priority;
+    ros2_interface::msg::ObstacleInteractiveTag   _interactive_tag;
+    boolean   _is_static;
+  };
+ };
+}; 
+#endif

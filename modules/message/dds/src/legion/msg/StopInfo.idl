@@ -1,0 +1,13 @@
+ #ifndef __StopInfo__idl__
+#define __StopInfo__idl__
+#include "Header.idl"
+#include "StopPoint.idl"
+module ros2_interface{
+ module msg{
+  struct StopInfo{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::StopPoint> _stop_points;
+  };
+ };
+}; 
+#endif

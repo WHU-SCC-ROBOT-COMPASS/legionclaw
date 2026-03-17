@@ -1,0 +1,15 @@
+ #ifndef __LaneLineCubicCurve__idl__
+#define __LaneLineCubicCurve__idl__
+module ros2_interface{
+ module msg{
+  struct LaneLineCubicCurve{
+    double   _start_x;
+    double   _end_x;
+    double   _a;
+    double   _b;
+    double   _c;
+    double   _d;
+  };
+ };
+}; 
+#endif

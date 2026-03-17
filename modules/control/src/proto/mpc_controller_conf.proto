@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+import "modules/control/src/proto/calibration_table.proto";
+import "modules/control/src/proto/gain_scheduler_conf.proto";
+
+// model predictive control param
+message MPCControllerConf {
+  optional bool enable_log_debug = 1;
+  optional double ts = 2;      // sample time (dt) 0.01 sec, configurable
+  optional double eps = 3;     // converge threshold
+  optional double preview_window = 4;
+
+  // output variable (control state) weight matrix
+  // (lateral_error, lateral_error_rate, heading_error, heading_error_rate,
+  //  station_error, speed_error)
+  repeated double matrix_q = 5;
+
+  repeated double reverse_matrix_q = 6;
+
+  // manipulated variable weight matrix
+  // (steer, acceleration)
+  repeated double matrix_r = 7;
+
+  optional int32 cutoff_freq = 11;              // cutoff frequency
+  optional int32 mean_filter_window_size = 12;  // window size of mean filter
+  // for a normal car, it should be in range[16, 18]
+  optional int32 max_iteration = 13;  // maximum iteration for lqr solve
+  optional double max_lateral_acceleration = 14;  // limit aggressive steering
+  optional double standstill_acceleration = 15;
+  optional bool enable_mpc_feedforward_compensation = 16;
+  optional bool enable_gain_scheduler = 17;
+  optional double unconstrained_control_diff_limit = 18;
+  optional bool reverse_heading_control = 19;
+  optional bool use_preview_speed_for_table = 20;
+  optional bool use_osqp_solver = 21;
+  optional double accel_minimum_action = 22;
+  optional double brake_minimum_action = 23;
+  repeated GainSchedulerInfo lat_err_gain_scheduler = 24;
+  repeated GainSchedulerInfo heading_err_gain_scheduler = 25;
+  repeated GainSchedulerInfo steer_weight_gain_scheduler = 26;
+  repeated GainSchedulerInfo feedforwardterm_gain_scheduler = 27;
+  repeated LonControlCalibrationInfo calibration_table = 28;
+}

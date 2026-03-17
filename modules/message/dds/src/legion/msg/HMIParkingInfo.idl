@@ -1,0 +1,23 @@
+ #ifndef __HMIParkingInfo__idl__
+#define __HMIParkingInfo__idl__
+#include "Polygon3D.idl"
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct HMIParkingInfo{
+    ros2_interface::msg::Header   _header;
+    int32   _parking_space_id;
+    int32   _parking_type;
+    int32   _parking_status;
+    ros2_interface::msg::Point3D   _center_point_of_parking;
+    double   _theta;
+    double   _width;
+    double   _length;
+    boolean   _is_custom_parking;
+    ros2_interface::msg::Polygon3D   _polygon;
+    int32   _parking_source_type;
+  };
+ };
+}; 
+#endif

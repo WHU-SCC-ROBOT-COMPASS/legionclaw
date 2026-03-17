@@ -1,0 +1,12 @@
+ #ifndef __Polygon2D__idl__
+#define __Polygon2D__idl__
+#include "Point2D.idl"
+module ros2_interface{
+ module msg{
+  struct Polygon2D{
+    int32   _coordinate_system;
+    sequence<ros2_interface::msg::Point2D> _points;
+  };
+ };
+}; 
+#endif

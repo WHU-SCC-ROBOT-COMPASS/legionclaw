@@ -1,0 +1,17 @@
+ #ifndef __Image__idl__
+#define __Image__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct Image{
+    ros2_interface::msg::Header   _header;
+    uint32   _height;
+    uint32   _width;
+    string   _encoding;
+    uint8   _is_bigendian;
+    uint32   _step;
+    sequence<uint8> _data;
+  };
+ };
+}; 
+#endif

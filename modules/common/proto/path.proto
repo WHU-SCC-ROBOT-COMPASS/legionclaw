@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/path_point.proto";
+
+
+message Path{
+    //名称
+    optional string name = 1;
+    //路径点集
+    repeated PathPoint path_points = 2;
+}

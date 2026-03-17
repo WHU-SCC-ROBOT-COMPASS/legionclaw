@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message ObstacleIntent{
+    enum Type{
+        INTENT_UNKNOWN_STATE = 0;
+        INTENT_FORWARD_STATE = 1;
+        INTENT_BRANCH_LEFT_STATE = 2;
+        INTENT_BRANCH_RIGHT_STATE = 3;
+        INTENT_YIELDING_STATE = 4;
+        INTENT_ACCELERATING_STATE = 5;
+        INTENT_SLOWDOWN_STATE = 6;
+        INTENT_TURN_LEFT_STATE = 7;
+        INTENT_TURN_RIGHT_STATE = 8;
+        INTENT_CHANGE_LANE_LEFT_STATE = 9;
+        INTENT_CHANGE_LANE_RIGHT_STATE = 10;
+        INTENT_CROSS_ROAD_STATE = 11;
+        INTENT_ALONG_ROAD_STATE = 12;
+        INTENT_STOPPING_STATE = 13;
+        INTENT_ONCOMMING_STATE = 14;
+        INTENT_KEEP_SPEED_STATE = 15;
+    }
+
+    //估计障碍物的意图        0-UNKNOWN, 1-STOP, 2-STATIONARY, 3-移动 MOVING, 4-HANGE_LANE, 5-LOW_ACCELERATION, 6-HIGH_ACCELERATION, 7-LOW_DECELERATION, 8-HIGH_DECELERATION, 
+    optional ObstacleIntent.Type type = 1 [default = INTENT_UNKNOWN_STATE];
+}

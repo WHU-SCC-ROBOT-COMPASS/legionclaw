@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_xyzirt.proto";
+
+
+message PointCloud{
+    //消息头
+    optional Header header = 1;
+    //帧id
+    optional string frame_id = 2;
+    //True if there are no invalid points
+    optional bool is_dense = 3 [default = false];
+    //激光点结构体
+    repeated PointXYZIRT point = 4;
+    //测量时间
+    optional double measurement_time = 5 [default = 0.0];
+    //激光点宽度
+    optional uint32 width = 6 [default = 0];
+    //激光点高度
+    optional uint32 height = 7 [default = 0];
+}

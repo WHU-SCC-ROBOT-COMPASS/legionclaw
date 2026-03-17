@@ -1,0 +1,13 @@
+ #ifndef __Ultrasonic__idl__
+#define __Ultrasonic__idl__
+#include "Header.idl"
+#include "UltrasonicObstacle.idl"
+module ros2_interface{
+ module msg{
+  struct Ultrasonic{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::UltrasonicObstacle> _ranges;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,12 @@
+ #ifndef __ImageKeyPoint__idl__
+#define __ImageKeyPoint__idl__
+module ros2_interface{
+ module msg{
+  struct ImageKeyPoint{
+    double   _x;
+    double   _y;
+    double   _confidence;
+  };
+ };
+}; 
+#endif

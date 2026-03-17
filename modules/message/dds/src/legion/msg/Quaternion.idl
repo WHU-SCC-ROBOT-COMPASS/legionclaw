@@ -1,0 +1,13 @@
+ #ifndef __Quaternion__idl__
+#define __Quaternion__idl__
+module ros2_interface{
+ module msg{
+  struct Quaternion{
+    double   _qx;
+    double   _qy;
+    double   _qz;
+    double   _qw;
+  };
+ };
+}; 
+#endif

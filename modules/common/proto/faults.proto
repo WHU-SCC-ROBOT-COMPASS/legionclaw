@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/fault.proto";
+import "modules/common/proto/header.proto";
+
+
+message Faults{
+    //消息头
+    optional Header header = 1;
+    //版本号
+    optional int32 version = 2 [default = 0];
+    //应用app所分配的id
+    optional int32 app_id = 3 [default = 0];
+    //应用是否激活，激活为true，未激活为false
+    optional bool is_active = 4 [default = false];
+    //故障集
+    repeated Fault faults = 5;
+}

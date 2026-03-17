@@ -1,0 +1,15 @@
+ #ifndef __KeyPoint__idl__
+#define __KeyPoint__idl__
+module ros2_interface{
+ module msg{
+  struct KeyPoint{
+    int16   _id;
+    double   _latitude;
+    double   _longitude;
+    double   _ele;
+    double   _heading;
+    string   _name;
+  };
+ };
+}; 
+#endif

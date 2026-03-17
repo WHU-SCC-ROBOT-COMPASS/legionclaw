@@ -1,0 +1,17 @@
+ #ifndef __TrafficEvents__idl__
+#define __TrafficEvents__idl__
+#include "RouteFusionInfo.idl"
+#include "LimitSpeedInfo.idl"
+#include "Header.idl"
+#include "JunctionInfo.idl"
+module ros2_interface{
+ module msg{
+  struct TrafficEvents{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::RouteFusionInfo   _route_fusion_info;
+    ros2_interface::msg::JunctionInfo   _junction_info;
+    ros2_interface::msg::LimitSpeedInfo   _limit_speed_info;
+  };
+ };
+}; 
+#endif

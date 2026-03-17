@@ -1,0 +1,71 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message WheelInfo{
+    optional Header header = 1;
+    //0=UNKNOWN_VEHICLE_STATE  1=STATIONARY  2=MOVING_FORWARD  3=MOVING_BACKWARD
+    optional legion.common.MovingStatus moving_status = 2 [default = UNKNOWN_VEHICLE_STATE];
+    //0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE  4=EMERGENCY_MODE
+    optional legion.common.DrivingMode steer_driving_mode = 3 [default = COMPLETE_MANUAL];
+    //Real steering location
+    optional double steering_value = 4 [default = 0.0];
+    //Applied steering torque in [Nm]
+    optional double steering_torque_nm = 5 [default = 0.0];
+    //degree/s
+    optional double steering_rate_dps = 6 [default = 0.0];
+    //Vehicle Speed in meters per second
+    optional double speed_mps = 7 [default = 0.0];
+    //车速有效性
+    optional bool veh_spd_vld = 8 [default = false];
+    //档位
+    optional legion.common.GearPosition gear = 9 [default = GEAR_NEUTRAL];
+    //档位有效性
+    optional bool gear_vld = 10 [default = false];
+    //0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    optional legion.common.WheelSpeedType wheel_direction_rr = 11 [default = FORWARD];
+    //Actual speed of the right rear wheel
+    optional double wheel_spd_rr = 12 [default = 0.0];
+    //0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    optional legion.common.WheelSpeedType wheel_direction_rl = 13 [default = FORWARD];
+    //Actual speed of the left rear wheel
+    optional double wheel_spd_rl = 14 [default = 0.0];
+    //0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    optional legion.common.WheelSpeedType wheel_direction_fr = 15 [default = FORWARD];
+    //Actual speed of the right front wheel
+    optional double wheel_spd_fr = 16 [default = 0.0];
+    //0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    optional legion.common.WheelSpeedType wheel_direction_fl = 17 [default = FORWARD];
+    //Actual speed of the left front wheel
+    optional double wheel_spd_fl = 18 [default = 0.0];
+    //Yaw rate[degree/s] [-163.84|163.835]
+    optional double yaw_rate = 19 [default = 0.0];
+    //左前轮边缘和
+    optional int32 wss_fl_edges_sum = 20 [default = 0];
+    //右前轮边缘和
+    optional int32 wss_fr_edges_sum = 21 [default = 0];
+    //左后轮边缘和
+    optional int32 wss_rl_edges_sum = 22 [default = 0];
+    //右后轮边缘和
+    optional int32 wss_rr_edges_sum = 23 [default = 0];
+    //左前轮边缘和有效位（0：无效 1：有效）
+    optional bool wss_fl_edges_sum_vld = 24 [default = false];
+    //右前轮边缘和有效位（0：无效 1：有效）
+    optional bool wss_fr_edges_sum_vld = 25 [default = false];
+    //左后轮边缘和有效位（0：无效 1：有效）
+    optional bool wss_rl_edges_sum_vld = 26 [default = false];
+    //右后轮边缘和有效位（0：无效 1：有效）
+    optional bool wss_rr_edges_sum_vld = 27 [default = false];
+    //车辆横向加速度
+    optional double veh_lat_accel = 28 [default = 0.0];
+    //车辆纵向加速度
+    optional double veh_lgt_accel = 29 [default = 0.0];
+    //车辆横向加速度有效性
+    optional bool veh_lat_accel_vld = 30 [default = false];
+    //车辆纵向加速度有效性
+    optional bool veh_lgt_accel_vld = 31 [default = false];
+}

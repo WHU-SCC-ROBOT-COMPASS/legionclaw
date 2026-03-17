@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/trajectory_point.proto";
+
+
+message VehicleMotionPoint{
+    //trajectory point
+    optional TrajectoryPoint trajectory_point = 1;
+    //The angle between vehicle front wheel and vehicle longitudinal axis
+    optional double steer = 2 [default = 0.0];
+}

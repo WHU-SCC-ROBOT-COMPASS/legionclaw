@@ -1,0 +1,18 @@
+ #ifndef __LaneInfoExtend__idl__
+#define __LaneInfoExtend__idl__
+#include "LanePoint.idl"
+module ros2_interface{
+ module msg{
+  struct LaneInfoExtend{
+    int8   _priority;
+    int64   _global_id;
+    sequence<int64> _predecessor_ids;
+    sequence<int64> _successor_ids;
+    int64   _left_neighbor_id;
+    int64   _right_neighbor_id;
+    int8   _type;
+    sequence<ros2_interface::msg::LanePoint> _lane_points;
+  };
+ };
+}; 
+#endif

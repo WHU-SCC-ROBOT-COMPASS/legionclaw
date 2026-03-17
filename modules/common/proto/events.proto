@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/event.proto";
+import "modules/common/proto/header.proto";
+
+
+message Events{
+    optional Header header = 1;
+    //软件模块版本号
+    optional int32 version = 2 [default = 0];
+    //时间集
+    repeated Event events = 3;
+}

@@ -1,0 +1,13 @@
+ #ifndef __RoadMarkList__idl__
+#define __RoadMarkList__idl__
+#include "RoadMark.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct RoadMarkList{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::RoadMark> _roadmarks;
+  };
+ };
+}; 
+#endif

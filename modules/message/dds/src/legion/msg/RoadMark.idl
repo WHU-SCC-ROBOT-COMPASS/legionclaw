@@ -1,0 +1,16 @@
+ #ifndef __RoadMark__idl__
+#define __RoadMark__idl__
+module ros2_interface{
+ module msg{
+  struct RoadMark{
+    double   _longitude_dist;
+    double   _lateral_dist;
+    double   _x;
+    double   _y;
+    double   _z;
+    double   _confidence;
+    int32   _type;
+  };
+ };
+}; 
+#endif

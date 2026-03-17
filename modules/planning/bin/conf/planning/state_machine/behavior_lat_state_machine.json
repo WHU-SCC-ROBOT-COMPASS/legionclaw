@@ -1,0 +1,260 @@
+{
+    "behavior_lat_state_machine": [
+        {
+            "StateName": "Start",
+            "Transition": [
+                {
+                    "Key": "Forward",
+                    "Target": "ForwardState"
+                },
+                {
+                    "Key": "NotActive",
+                    "Target": "LatNotActiveState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ForwardState",
+            "Transition": [
+                {
+                    "Key": "ChangeLane",
+                    "Target": "ChangeLaneState"
+                },
+                {
+                    "Key": "Station",
+                    "Target": "StationState"
+                },
+                {
+                    "Key": "Avoidance",
+                    "Target": "AvoidanceState"
+                }
+            ],
+            "Parent": "Init"
+        },
+        {
+            "StateName": "LatNotActiveState",
+            "Transition": [
+                {
+                    "Key": "Forward",
+                    "Target": "ForwardState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ChangeLaneState",
+            "Transition": [
+                {
+                    "Key": "Forward",
+                    "Target": "ForwardState"
+                },
+                {
+                    "Key": "ChangeLaneRightPre",
+                    "Target": "ChangeLaneRightPreState"
+                },
+                {
+                    "Key": "ChangeLaneLeftPre",
+                    "Target": "ChangeLaneLeftPreState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ChangeLaneLeftPreState",
+            "Transition": [
+                {
+                    "Key": "ChangeLaneLeftAct",
+                    "Target": "ChangeLaneLeftActState"
+                },
+                {
+                    "Key": "ChangeLane",
+                    "Target": "ChangeLaneState"
+                }
+            ],
+            "Parent": "ChangeLaneState"
+        },
+        {
+            "StateName": "ChangeLaneLeftActState",
+            "Transition": [
+                {
+                    "Key": "ChangeLane",
+                    "Target": "ChangeLaneState"
+                }
+            ],
+            "Parent": "ChangeLaneState"
+        },
+        {
+            "StateName": "ChangeLaneRightPreState",
+            "Transition": [
+                {
+                    "Key": "ChangeLaneRightAct",
+                    "Target": "ChangeLaneRightActState"
+                },
+                {
+                    "Key": "ChangeLane",
+                    "Target": "ChangeLaneState"
+                }
+            ],
+            "Parent": "ChangeLaneState"
+        },
+        {
+            "StateName": "ChangeLaneRightActState",
+            "Transition": [
+                {
+                    "Key": "ChangeLane",
+                    "Target": "ChangeLaneState"
+                }
+            ],
+            "Parent": "ChangeLaneState"
+        },
+        {
+            "StateName": "StationState",
+            "Transition": [
+                {
+                    "Key": "Forward",
+                    "Target": "ForwardState"
+                },
+                {
+                    "Key": "StationStop",
+                    "Target": "StationStopState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "StationStopState",
+            "Transition": [
+                {
+                    "Key": "StationWait",
+                    "Target": "StationWaitState"
+                },
+                {
+                    "Key": "StationArrive",
+                    "Target": "StationArrivedState"
+                },
+                {
+                    "Key": "Station",
+                    "Target": "StationState"
+                }
+            ],
+            "Parent": "StationState"
+        },
+        {
+            "StateName": "StationWaitState",
+            "Transition": [
+                {
+                    "Key": "StationStop",
+                    "Target": "StationStopState"
+                },
+                {
+                    "Key": "StationArrive",
+                    "Target": "StationArrivedState"
+                },
+                {
+                    "Key": "Station",
+                    "Target": "StationState"
+                }
+            ],
+            "Parent": "StationState"
+        },
+        {
+            "StateName": "StationArrivedState",
+            "Transition": [
+                {
+                    "Key": "Station",
+                    "Target": "StationState"
+                }
+            ],
+            "Parent": "StationState"
+        },
+        {
+            "StateName": "AvoidanceState",
+            "Transition": [
+                {
+                    "Key": "Forward",
+                    "Target": "ForwardState"
+                },
+                {
+                    "Key": "AvoidancePre",
+                    "Target": "AvoidancePreState"
+                },
+                {
+                    "Key": "AvoidanceAct",
+                    "Target": "AvoidanceActState"
+                },
+                {
+                    "Key": "AvoidanceBackPre",
+                    "Target": "AvoidanceBackPreState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "AvoidancePreState",
+            "Transition": [
+                {
+                    "Key": "AvoidanceAct",
+                    "Target": "AvoidanceActState"
+                },
+                {
+                    "Key": "Avoidance",
+                    "Target": "AvoidanceState"
+                }
+            ],
+            "Parent": "AvoidanceState"
+        },
+        {
+            "StateName": "AvoidanceActState",
+            "Transition": [
+                {
+                    "Key": "AvoidanceKeep",
+                    "Target": "AvoidanceKeepState"
+                },
+                {
+                    "Key": "Avoidance",
+                    "Target": "AvoidanceState"
+                }
+            ],
+            "Parent": "AvoidanceState"
+        },
+        {
+            "StateName": "AvoidanceKeepState",
+            "Transition": [
+                {
+                    "Key": "AvoidanceBackPre",
+                    "Target": "AvoidanceBackPreState"
+                },
+                {
+                    "Key": "Avoidance",
+                    "Target": "AvoidanceState"
+                }
+            ],
+            "Parent": "AvoidanceState"
+        },
+        {
+            "StateName": "AvoidanceBackPreState",
+            "Transition": [
+                {
+                    "Key": "AvoidanceBackAct",
+                    "Target": "AvoidanceBackActState"
+                },
+                {
+                    "Key": "Avoidance",
+                    "Target": "AvoidanceState"
+                }
+            ],
+            "Parent": "AvoidanceState"
+        },
+        {
+            "StateName": "AvoidanceBackActState",
+            "Transition": [
+                {
+                    "Key": "Avoidance",
+                    "Target": "AvoidanceState"
+                }
+            ],
+            "Parent": "AvoidanceState"
+        }
+    ]
+}

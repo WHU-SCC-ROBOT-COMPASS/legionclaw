@@ -1,0 +1,68 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+
+
+message Gnss{
+    //数据有效性标志位
+    optional bool is_valid = 1 [default = false];
+    //头部信息
+    optional Header header = 2;
+    //纬度信息
+    optional double latitude = 3 [default = 0.0];
+    //经度信息
+    optional double longitude = 4 [default = 0.0];
+    //海拔信息
+    optional double elevation = 5 [default = 0.0];
+    //UTM坐标位置
+    optional Point3D utm_position = 6;
+    //UTM区号
+    optional int32 utm_zone_num = 7 [default = 0];
+    //UTM区号
+    optional uint32 utm_zone_char = 8 [default = 0];
+    //三轴姿态
+    optional Point3D attitude = 9;
+    //位置标准差
+    optional Point3D sd_position = 10;
+    //速度标准差
+    optional Point3D sd_velocity = 11;
+    //姿态标准差
+    optional Point3D sd_attitude = 12;
+    //时间
+    optional double second = 13 [default = 0.0];
+    //使用卫星数
+    optional int32 sat_use_num = 14 [default = 0];
+    //可见卫星数
+    optional int32 sat_in_view_num = 15 [default = 0];
+    //求解状态
+    optional uint32 solution_status = 16 [default = 0];
+    //定位状态
+    optional uint32 position_type = 17 [default = 0];
+    //线速度信息
+    optional Point3D linear_velocity = 18;
+    //双天线姿态
+    optional Point3D attitude_dual = 19;
+    //双天线角度标准差
+    optional Point3D sd_angle_dual = 20;
+    //双天线距离
+    optional double base_line_length_dual = 21 [default = 0.0];
+    //双天线求解状态
+    optional int32 solution_status_dual = 22 [default = 0];
+    //双天线定位状态
+    optional int32 position_type_dual = 23 [default = 0];
+    //双天线求解源
+    optional int32 solution_source_dual = 24 [default = 0];
+    //cep68数据位
+    optional double cep68 = 25 [default = 0.0];
+    //cep95数据位
+    optional double cep95 = 26 [default = 0.0];
+    //pDop数据位
+    optional double p_dop = 27 [default = 0.0];
+    //hDop数据位
+    optional double h_dop = 28 [default = 0.0];
+    //vDop数据位
+    optional double v_dop = 29 [default = 0.0];
+}

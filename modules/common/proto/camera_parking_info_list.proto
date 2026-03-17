@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/camera_parking_info.proto";
+import "modules/common/proto/camera_parking_stopper.proto";
+
+
+message CameraParkingInfoList{
+    //消息头，时间戳使用接收的图像的时间戳
+    optional Header header = 1;
+    //安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    optional legion.common.SensorID sensor_id = 2 [default = CAMERA_FRONT_CENTER];
+    //检测出的障碍物数组
+    repeated CameraParkingInfo camera_parking = 3;
+    //检测出的限位器数组
+    repeated CameraParkingStopper camera_parking_stoppers = 4;
+    //错误码（default = OK）
+    optional legion.common.ErrorCode error_code = 5 [default = LOCALIZATION_ERROR];
+    //障碍物数据是否合法
+    optional bool is_valid = 6 [default = false];
+}

@@ -1,0 +1,11 @@
+ #ifndef __CurvatureInfo__idl__
+#define __CurvatureInfo__idl__
+module ros2_interface{
+ module msg{
+  struct CurvatureInfo{
+    double   _offset;
+    double   _value;
+  };
+ };
+}; 
+#endif

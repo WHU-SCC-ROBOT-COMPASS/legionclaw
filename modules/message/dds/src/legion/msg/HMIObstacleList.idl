@@ -1,0 +1,17 @@
+ #ifndef __HMIObstacleList__idl__
+#define __HMIObstacleList__idl__
+#include "Header.idl"
+#include "HMIObstacle.idl"
+module ros2_interface{
+ module msg{
+  struct HMIObstacleList{
+    ros2_interface::msg::Header   _header;
+    int32   _sensor_id;
+    sequence<ros2_interface::msg::HMIObstacle> _obstacle;
+    int32   _error_code;
+    boolean   _is_valid;
+    int32   _change_origin_flag;
+  };
+ };
+}; 
+#endif

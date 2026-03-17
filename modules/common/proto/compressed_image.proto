@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+
+
+message CompressedImage{
+    //消息头
+    optional Header header = 1;
+    //图像帧id
+    optional string frame_id = 2;
+    // Specifies the format of the data Acceptable values: jpeg, png
+    optional string format = 3;
+    //Compressed image buffer
+  repeated int32 data = 4;
+    //测量时间
+    optional double measurement_time = 5 [default = 0.0];
+    //图像帧类型
+    optional uint32 frame_type = 6 [default = 0];
+}

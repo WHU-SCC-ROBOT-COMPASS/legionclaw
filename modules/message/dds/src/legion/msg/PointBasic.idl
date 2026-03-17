@@ -1,0 +1,13 @@
+ #ifndef __PointBasic__idl__
+#define __PointBasic__idl__
+module ros2_interface{
+ module msg{
+  struct PointBasic{
+    double   _x;
+    double   _y;
+    double   _z;
+    double   _theta;
+  };
+ };
+}; 
+#endif

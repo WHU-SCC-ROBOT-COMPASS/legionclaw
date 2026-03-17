@@ -1,0 +1,56 @@
+/******************************************************************************
+ * Copyright 2017 The LegionClaw Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *****************************************************************************/
+
+/**
+ * @file  : cubic_spiral_curve.h
+ * @brief : path class includes the basic parameters for defining a path from
+ * initial point to end point
+ * @model description :
+ *            x_p (s) = int_0^s cos( theta_p (s)) ds
+ *            y_p (s) = int_0^s sin( theta_p (s)) ds
+ *            theta_p (s) = a s + b s^2 / 2 + c s^3 / 3 + d s^4 / 4
+ *            kappa_p (s) = a + b s + c s^2 + d s^3
+ * @solver: Solve boundary shooting problem with newton raphson method
+ *          (default) initialized step for newton: 8, tol = 10^-2, max_iter = 10
+ **/
+
+#pragma once
+
+#include <vector>
+
+// #include "modules/common/proto/pnc_point.pb.h"
+#include "modules/planning/src/common/math/include/spiral_curve/spiral_curve.h"
+
+namespace legionclaw {
+namespace planning {
+namespace spiral {
+
+using legionclaw::interface::PathPoint;
+
+class CubicSpiralCurve : public SpiralCurve {
+ public:
+  CubicSpiralCurve(const PathPoint &s, const PathPoint &e);
+  ~CubicSpiralCurve() = default;
+  bool CalculatePath();
+  bool GetPathVec(const std::uint32_t n,
+                  std::vector<PathPoint> *path_points) const override;
+  bool GetPathVecWithS(const std::vector<double> &vec_s,
+                       std::vector<PathPoint> *path_points) const override;
+};
+
+}  // namespace spiral
+}  // namespace planning
+}  // namespace legionclaw

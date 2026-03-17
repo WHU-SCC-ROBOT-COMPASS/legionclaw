@@ -1,0 +1,26 @@
+ #ifndef __PlanningCmd__idl__
+#define __PlanningCmd__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct PlanningCmd{
+    ros2_interface::msg::Header   _header;
+    int32   _turn_lamp_ctrl;
+    int32   _high_beam_ctrl;
+    int32   _low_beam_ctrl;
+    int32   _horn_ctrl;
+    int32   _front_wiper_ctrl;
+    int32   _rear_wiper_ctrl;
+    int32   _position_lamp_ctrl;
+    int32   _front_fog_lamp_ctrl;
+    int32   _rear_fog_lamp_ctrl;
+    int32   _brake_lamp_ctrl;
+    int32   _alarm_lamp_ctrl;
+    int32   _lf_door_ctrl;
+    int32   _rf_door_ctrl;
+    int32   _lr_door_ctrl;
+    int32   _rr_door_ctrl;
+  };
+ };
+}; 
+#endif

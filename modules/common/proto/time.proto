@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message Time{
+    //秒
+    optional uint32 sec = 1 [default = 0];
+    //纳秒
+    optional uint32 nsec = 2 [default = 0];
+}

@@ -1,0 +1,13 @@
+TrafficLightBox   cropbox     #  
+TrafficLightBox[] box #  
+int32   signal_num     #  
+int32   valid_pos     #  
+float64   ts_diff_pos     #  
+float64   ts_diff_sys     #  
+int32   project_error     #  
+float64   distance_to_stop_line     #  
+int32   camera_id     #  
+TrafficLightBox[] crop_roi #  
+TrafficLightBox[] projected_roi #  
+TrafficLightBox[] rectified_roi #  
+TrafficLightBox[] debug_roi #  

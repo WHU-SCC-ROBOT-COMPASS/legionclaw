@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message UltrasonicObstacle{
+    //障碍物id
+    optional int32 id = 1 [default = 0];
+    //障碍物距离
+    optional double range = 2 [default = 0.0];
+}

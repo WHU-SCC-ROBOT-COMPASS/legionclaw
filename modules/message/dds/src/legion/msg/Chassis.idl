@@ -1,0 +1,82 @@
+ #ifndef __Chassis__idl__
+#define __Chassis__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct Chassis{
+    ros2_interface::msg::Header   _header;
+    int32   _moving_status;
+    int32   _driving_mode;
+    int32   _steer_driving_mode;
+    int32   _steering_status;
+    double   _front_steering_value;
+    double   _rear_steering_value;
+    double   _steering_torque_nm;
+    double   _front_steering_rate_dps;
+    double   _rear_steering_rate_dps;
+    int32   _accel_driving_mode;
+    int32   _accel_status;
+    double   _accel_value;
+    int32   _brake_driving_mode;
+    int32   _brake_status;
+    double   _brake_value;
+    int32   _backup_brake_driving_mode;
+    int32   _backup_brake_status;
+    double   _backup_brake_value;
+    int32   _epb_driving_mode;
+    int32   _epb_status;
+    int32   _epb_level;
+    int32   _engine_status;
+    double   _engine_rpm;
+    double   _engine_torque;
+    double   _speed_mps;
+    double   _odometer_m;
+    int32   _fuel_range_m;
+    int32   _gear_driving_mode;
+    int32   _gear_status;
+    int32   _gear_location;
+    int32   _driver_seat_belt;
+    int32   _high_beam_status;
+    int32   _low_beam_status;
+    int32   _horn_status;
+    int32   _turn_lamp_status;
+    int32   _front_wiper_status;
+    int32   _rear_wiper_status;
+    int32   _position_lamp_status;
+    int32   _front_fog_lamp_status;
+    int32   _rear_fog_lamp_status;
+    int32   _brake_lamp_status;
+    int32   _alarm_lamp_status;
+    int32   _lf_door_status;
+    int32   _rf_door_status;
+    int32   _lr_door_status;
+    int32   _rr_door_status;
+    int32   _rearview_mirror_status;
+    int32   _trunk_status;
+    int32   _engine_bay_door_status;
+    int32   _wheel_direction_rr;
+    double   _wheel_spd_rr;
+    int32   _wheel_direction_rl;
+    double   _wheel_spd_rl;
+    int32   _wheel_direction_fr;
+    double   _wheel_spd_fr;
+    int32   _wheel_direction_fl;
+    double   _wheel_spd_fl;
+    int32   _is_tire_pressure_ok;
+    int32   _is_tire_pressure_lf_valid;
+    double   _tire_pressure_lf;
+    int32   _is_tire_pressure_rf_valid;
+    double   _tire_pressure_rf;
+    int32   _is_tire_pressure_lr_valid;
+    double   _tire_pressure_lr;
+    int32   _is_tire_pressure_rr_valid;
+    double   _tire_pressure_rr;
+    double   _battery_power_percentage;
+    int32   _air_bag_status;
+    int32   _charging_gun_status;
+    int32   _vehicle_power_status;
+    sequence<int32> _chassis_error_code;
+  };
+ };
+}; 
+#endif

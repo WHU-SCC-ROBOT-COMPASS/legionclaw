@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message HMIObuCmd{
+    //指令编码：10001、自动驾驶使能开关；
+    optional int32 code = 1 [default = 0];
+    //编码值：0、不响应；1、自定义状态；2、自定义状态...（更多参考：“ObuCmdMsg.md”）
+    optional int32 val = 2 [default = 0];
+}

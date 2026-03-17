@@ -1,0 +1,15 @@
+ #ifndef __WLConstraintInfoList__idl__
+#define __WLConstraintInfoList__idl__
+#include "Header.idl"
+#include "WLConstraintInfo.idl"
+module ros2_interface{
+ module msg{
+  struct WLConstraintInfoList{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::WLConstraintInfo> _wl_constraint_info;
+    int32   _error_code;
+    boolean   _is_valid;
+  };
+ };
+}; 
+#endif

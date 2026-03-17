@@ -1,0 +1,15 @@
+ #ifndef __Uncertainty__idl__
+#define __Uncertainty__idl__
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct Uncertainty{
+    ros2_interface::msg::Point3D   _position_std_dev;
+    ros2_interface::msg::Point3D   _orientation_std_dev;
+    ros2_interface::msg::Point3D   _linear_velocity_std_dev;
+    ros2_interface::msg::Point3D   _linear_acceleration_std_dev;
+    ros2_interface::msg::Point3D   _angular_velocity_std_dev;
+  };
+ };
+}; 
+#endif

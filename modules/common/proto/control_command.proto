@@ -1,0 +1,77 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message ControlCommand{
+    optional Header header = 1;
+    //0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    optional legion.common.DrivingMode steer_driving_mode = 2 [default = COMPLETE_MANUAL];
+    //target steering angle
+    optional double front_steering_target = 3 [default = 0.0];
+    //target steering angle
+    optional double rear_steering_target = 4 [default = 0.0];
+    //target non-directional steering rate
+    optional double front_steering_rate = 5 [default = 0.0];
+    //target non-directional steering rate
+    optional double rear_steering_rate = 6 [default = 0.0];
+    //0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    optional legion.common.DrivingMode accel_driving_mode = 7 [default = COMPLETE_MANUAL];
+    //target accel value
+    optional double accel_value = 8 [default = 0.0];
+    //0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    optional legion.common.DrivingMode brake_driving_mode = 9 [default = COMPLETE_MANUAL];
+    //target brake
+    optional double brake_value = 10 [default = 0.0];
+    //0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    optional legion.common.DrivingMode backup_brake_driving_mode = 11 [default = COMPLETE_MANUAL];
+    //target brake
+    optional double backup_brake_value = 12 [default = 0.0];
+    //0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    optional legion.common.DrivingMode epb_driving_mode = 13 [default = COMPLETE_MANUAL];
+    //0=RELEASE 1=APPLIY 2=INVALID
+    optional legion.common.EPBLevel epb_level = 14 [default = RELEASED];
+    //0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    optional legion.common.DrivingMode gear_driving_mode = 15 [default = COMPLETE_MANUAL];
+    //0=disenable  1=enable
+    optional int32 emergency_brake_enable = 16 [default = 0];
+    //0=GEAR_NEUTRAL 1=GEAR_DRIVE 2=GEAR_REVERSE 3=GEAR_PARKING 4=GEAR_LOW 5=GEAR_INVALID 6=GEAR_NONE
+    optional legion.common.GearPosition gear_location = 17 [default = GEAR_NEUTRAL];
+    //target speed, in m/s
+    optional double speed = 18 [default = 0.0];
+    //target acceleration in m`s^-2
+    optional double acceleration = 19 [default = 0.0];
+    //转向灯 0 关闭 1 开启 2 不响应
+    optional legion.common.TurnSignal turn_lamp_ctrl = 20 [default = TURN_INACTIVE_SIGNAL];
+    //0 关闭 1 开启 2 不响应
+    optional legion.common.SwitchStatus high_beam_ctrl = 21 [default = SWITCH_STATUS_OFF];
+    //0 关闭 1 开启 2 不响应
+    optional legion.common.SwitchStatus low_beam_ctrl = 22 [default = SWITCH_STATUS_OFF];
+    //0 关闭 1 开启 2 不响应
+    optional legion.common.SwitchStatus horn_ctrl = 23 [default = SWITCH_STATUS_OFF];
+    //前雨刮器 0 关闭 1 开启
+    optional legion.common.SwitchStatus front_wiper_ctrl = 24 [default = SWITCH_STATUS_OFF];
+    //后雨刮器 0 关闭 1 开启
+    optional legion.common.SwitchStatus rear_wiper_ctrl = 25 [default = SWITCH_STATUS_OFF];
+    //位置灯 0 关闭 1 开启
+    optional legion.common.SwitchStatus position_lamp_ctrl = 26 [default = SWITCH_STATUS_OFF];
+    //前雾灯 0 关闭 1 开启
+    optional legion.common.SwitchStatus front_fog_lamp_ctrl = 27 [default = SWITCH_STATUS_OFF];
+    //后雾灯 0 关闭 1 开启
+    optional legion.common.SwitchStatus rear_fog_lamp_ctrl = 28 [default = SWITCH_STATUS_OFF];
+    //刹车灯 一般情况自动控制 0 关闭 1 开启
+    optional legion.common.SwitchStatus brake_lamp_ctrl = 29 [default = SWITCH_STATUS_OFF];
+    //警报灯 双闪 0 关闭 1 开启
+    optional legion.common.SwitchStatus alarm_lamp_ctrl = 30 [default = SWITCH_STATUS_OFF];
+    //左前门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus lf_door_ctrl = 31 [default = CLOSEED];
+    //右前门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus rf_door_ctrl = 32 [default = CLOSEED];
+    //左后门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus lr_door_ctrl = 33 [default = CLOSEED];
+    //右后门控制 0 关闭 1 开启
+    optional legion.common.DoorStatus rr_door_ctrl = 34 [default = CLOSEED];
+}

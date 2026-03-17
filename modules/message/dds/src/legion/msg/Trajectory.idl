@@ -1,0 +1,12 @@
+ #ifndef __Trajectory__idl__
+#define __Trajectory__idl__
+#include "TrajectoryPoint.idl"
+module ros2_interface{
+ module msg{
+  struct Trajectory{
+    string   _name;
+    sequence<ros2_interface::msg::TrajectoryPoint> _trajectory_points;
+  };
+ };
+}; 
+#endif

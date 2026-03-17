@@ -1,0 +1,18 @@
+ #ifndef __Matrix3D__idl__
+#define __Matrix3D__idl__
+module ros2_interface{
+ module msg{
+  struct Matrix3D{
+    double   _a00;
+    double   _a01;
+    double   _a02;
+    double   _a10;
+    double   _a11;
+    double   _a12;
+    double   _a20;
+    double   _a21;
+    double   _a22;
+  };
+ };
+}; 
+#endif

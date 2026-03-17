@@ -1,0 +1,8 @@
+syntax = "proto2";
+message LqrCalibrationTableInfo{
+    optional double v = 1;
+    repeated double k = 2;
+}
+message LqrCalibrationTable{
+    repeated  LqrCalibrationTableInfo calibration_table = 1;
+}

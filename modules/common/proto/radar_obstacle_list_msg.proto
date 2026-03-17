@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/radar_state.proto";
+import "modules/common/proto/radar_obstacle.proto";
+
+
+message RadarObstacleListMsg{
+    //消息头
+    optional Header header = 1;
+    //毫米波雷达障碍物数组
+    repeated RadarObstacle radar_obstacle = 2;
+    //毫米波雷达 ID.
+    optional uint32 sensor_id = 3 [default = 0];
+    //radar state.
+    optional RadarState radar_state = 4 ;
+    //true: valid  false: invalid
+    optional bool is_valid = 5 [default = false];
+}

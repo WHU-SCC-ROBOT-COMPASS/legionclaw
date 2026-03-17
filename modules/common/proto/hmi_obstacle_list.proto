@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/location.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/hmi_obstacle.proto";
+
+
+message HMIObstacleList{
+    //消息头
+    optional Header header = 1;
+    //安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    optional legion.common.SensorID sensor_id = 2 [default = CAMERA_FRONT_CENTER];
+    //检测出的障碍物数组
+    repeated HMIObstacle obstacle = 3;
+    //错误码（default = OK）
+    optional legion.common.ErrorCode error_code = 4 [default = LOCALIZATION_ERROR];
+    //障碍物数据是否合法
+    optional bool is_valid = 5 [default = false];
+    //坐标切换状态（0-坐标系切换成功 1-坐标系切换中 2-坐标系切换故障）
+    optional Location.ChangeOriginFlag change_origin_flag = 6 [default = CHANGE_NULL];
+}

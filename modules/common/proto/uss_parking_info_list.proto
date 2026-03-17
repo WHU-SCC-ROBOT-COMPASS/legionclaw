@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/uss_parking_info.proto";
+
+
+message UssParkingInfoList{
+    //消息头
+    optional Header header = 1;
+    //超声波检测出的停车位数组
+    repeated UssParkingInfo uss_parking_info = 2;
+    //错误码（default = OK）
+    optional legion.common.ErrorCode error_code = 3 [default = LOCALIZATION_ERROR];
+    //超声波车位数据是否合法
+    optional bool is_valid = 4 [default = false];
+}

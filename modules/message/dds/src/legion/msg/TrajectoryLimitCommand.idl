@@ -1,0 +1,13 @@
+ #ifndef __TrajectoryLimitCommand__idl__
+#define __TrajectoryLimitCommand__idl__
+module ros2_interface{
+ module msg{
+  struct TrajectoryLimitCommand{
+    boolean   _speed_limit_enable;
+    double   _speed_limit;
+    boolean   _kappa_limit_enable;
+    double   _kappa_limit;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/path_point.proto";
+
+
+message TrajectoryPointInPrediction{
+    //path point
+    optional PathPoint path_point = 1;
+    //linear velocity
+    optional double v = 2 [default = 0.0];
+    //linear acceleration
+    optional double a = 3 [default = 0.0];
+    //relative time from beginning of the trajectory
+    optional double relative_time = 4 [default = 0.0];
+}

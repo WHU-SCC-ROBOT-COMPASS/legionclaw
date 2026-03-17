@@ -1,0 +1,16 @@
+ #ifndef __Odometry__idl__
+#define __Odometry__idl__
+#include "PointENU.idl"
+#include "Header.idl"
+#include "Quaternion.idl"
+module ros2_interface{
+ module msg{
+  struct Odometry{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::PointENU   _position;
+    ros2_interface::msg::Quaternion   _orientation;
+    sequence<double> _covariance;
+  };
+ };
+}; 
+#endif

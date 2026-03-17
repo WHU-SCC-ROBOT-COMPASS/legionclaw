@@ -1,0 +1,11 @@
+ #ifndef __KeyValues__idl__
+#define __KeyValues__idl__
+module ros2_interface{
+ module msg{
+  struct KeyValues{
+    string   _key;
+    string   _value;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/obstacle_intent.proto";
+import "modules/common/proto/obstacle_priority.proto";
+import "modules/common/proto/perception_obstacle.proto";
+import "modules/common/proto/obstacle_interactive_tag.proto";
+import "modules/common/proto/trajectory_in_prediction.proto";
+
+
+message PredictionObstacle{
+    //perception info of obstacle
+    optional PerceptionObstacle perception_obstacle = 1 ;
+    //GPS time in seconds
+    optional double timestamp = 2 [default = 0.0];
+    //the length of the time for this prediction (e.g. 10s)
+    optional double predicted_period = 3 [default = 0.0];
+    //can have multiple trajectories per obstacle
+    repeated TrajectoryInPrediction trajectory = 4;
+    //估计障碍物的意图        0-UNKNOWN, 1-STOP, 2-STATIONARY, 3-移动 MOVING, 4-HANGE_LANE, 5-LOW_ACCELERATION, 6-HIGH_ACCELERATION, 7-LOW_DECELERATION, 8-HIGH_DECELERATION, 
+    optional ObstacleIntent intent = 5 ;
+    //障碍物优先级               1-CAUTION, 2-NORMAL, 3-IGNORE
+    optional ObstaclePriority priority = 6 ;
+    optional ObstacleInteractiveTag interactive_tag = 7 ;
+    //is obstacle static (default = false)
+    optional bool is_static = 8 [default = false];
+}

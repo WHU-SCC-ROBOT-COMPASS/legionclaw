@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+
+
+message WLConstraintInfo{
+    //timestamp is included in header
+    optional Header header = 1;
+    //id
+    optional int32 id = 2 [default = 0];
+    //车辆坐标系下约束点1
+    optional Point3D vehicle_point1 = 3;
+    //车辆坐标系下约束点2
+    optional Point3D vehicle_point2 = 4;
+    //绝对坐标系下约束点1
+    optional Point3D abs_point1 = 5;
+    //绝对坐标系下约束点2
+    optional Point3D abs_point2 = 6;
+}

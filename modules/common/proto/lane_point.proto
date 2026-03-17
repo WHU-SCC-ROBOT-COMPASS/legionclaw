@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message LanePoint{
+    //点xyz
+    optional Point3D point = 1;
+    //方向（与东方向夹角，逆时针方向为正，单位为弧度）
+    optional double theta = 2 [default = 0.0];
+    //总体里程
+    optional double mileage = 3 [default = 0.0];
+    //地图限速（单位m/s）
+    optional double limit_speed = 4 [default = 0.0];
+    //左边车道宽
+    optional double left_road_width = 5 [default = 0.0];
+    //右边车道宽
+    optional double right_road_width = 6 [default = 0.0];
+    //左边车线线型
+    optional legion.common.LaneLineType left_line_type = 7 [default = LANE_LINE_TYPE_UNKNOWN];
+    //右边车线线型
+    optional legion.common.LaneLineType right_line_type = 8 [default = LANE_LINE_TYPE_UNKNOWN];
+}

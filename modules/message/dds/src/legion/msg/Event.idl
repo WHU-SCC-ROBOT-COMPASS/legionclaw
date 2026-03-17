@@ -1,0 +1,13 @@
+ #ifndef __Event__idl__
+#define __Event__idl__
+#include "Time.idl"
+module ros2_interface{
+ module msg{
+  struct Event{
+    ros2_interface::msg::Time   _timestamp;
+    uint64   _code;
+    string   _reason;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/sl_point.proto";
+
+
+message SLBoundary{
+    //起始点纵向位移
+    optional double start_s = 1 [default = 0.0];
+    //终止点纵向位移
+    optional double end_s = 2 [default = 0.0];
+    //起始点横向位移
+    optional double start_l = 3 [default = 0.0];
+    //终止点横向位移
+    optional double end_l = 4 [default = 0.0];
+    //sl点集
+    repeated SLPoint boundary_point = 5;
+}

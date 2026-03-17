@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message Quaternion{
+    //四维空间x
+    optional double qx = 1 [default = 0.0];
+    //四维空间y
+    optional double qy = 2 [default = 0.0];
+    //四维空间z
+    optional double qz = 3 [default = 0.0];
+    //四维空间w
+    optional double qw = 4 [default = 0.0];
+}

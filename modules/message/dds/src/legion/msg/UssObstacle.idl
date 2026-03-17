@@ -1,0 +1,14 @@
+ #ifndef __UssObstacle__idl__
+#define __UssObstacle__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct UssObstacle{
+    ros2_interface::msg::Header   _header;
+    int32   _uss_obstacle_region;
+    double   _mx;
+    double   _my;
+  };
+ };
+}; 
+#endif

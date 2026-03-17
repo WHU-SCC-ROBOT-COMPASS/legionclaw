@@ -1,0 +1,35 @@
+ #ifndef __HMIVehicleMsg__idl__
+#define __HMIVehicleMsg__idl__
+#include "PointENU.idl"
+#include "Header.idl"
+#include "PointLLH.idl"
+module ros2_interface{
+ module msg{
+  struct HMIVehicleMsg{
+    ros2_interface::msg::Header   _header;
+    int32   _driving_mode;
+    int32   _gear_location;
+    double   _steering_value;
+    double   _accel_value;
+    double   _brake_value;
+    double   _speed_mps;
+    ros2_interface::msg::PointLLH   _position;
+    ros2_interface::msg::PointENU   _utm_position;
+    double   _pitch;
+    double   _roll;
+    double   _heading;
+    int32   _rtk_flag;
+    double   _origin_lat;
+    double   _origin_lon;
+    double   _current_ins_yaw;
+    int32   _auto_safe;
+    double   _battery_power_percentage;
+    int32   _charging_gun_status;
+    sequence<int32> _chassis_error_code;
+    int32   _brake_lamp_status;
+    int32   _turn_lamp_status;
+    ros2_interface::msg::PointENU   _mercator_position;
+  };
+ };
+}; 
+#endif

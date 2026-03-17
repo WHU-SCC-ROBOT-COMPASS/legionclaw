@@ -1,0 +1,174 @@
+{
+    "calibration_table": [
+        {
+            "stop_distance": 0,
+            "direction":true,
+            "speed": 0
+        },
+        {
+            "stop_distance": 0,
+            "direction":false,
+            "speed": 0
+        },
+        {
+            "stop_distance": 1.0,
+            "direction":true,
+            "speed": 0.0625
+        },
+        {
+            "stop_distance": 1.0,
+            "direction":false,
+            "speed": 0.0625
+        },
+        {
+            "stop_distance": 75.0,
+            "direction": true,
+            "speed": 0.2383
+        },
+        {
+            "stop_distance": 75.0,
+            "direction": false,
+            "speed": 0.2188
+        },
+        {
+            "stop_distance": 100.0,
+            "direction": true,
+            "speed": 0.3019
+        },
+        {
+            "stop_distance": 100.0,
+            "direction": false,
+            "speed": 0.2966
+        },
+        {
+            "stop_distance": 150.0,
+            "direction": true,
+            "speed": 0.3662
+        },
+        {
+            "stop_distance": 150.0,
+            "direction": false,
+            "speed": 0.3656
+        },
+        {
+            "stop_distance": 200.0,
+            "direction": true,
+            "speed": 0.3878
+        },
+        {
+            "stop_distance": 200.0,
+            "direction": false,
+            "speed": 0.3778
+        },
+        {
+            "stop_distance": 250.0,
+            "direction": true,
+            "speed": 0.3961
+        },
+        {
+            "stop_distance": 250.0,
+            "direction": false,
+            "speed": 0.3992
+        },
+        {
+            "stop_distance": 300.0,
+            "direction": true,
+            "speed": 0.4196
+        },
+        {
+            "stop_distance": 300.0,
+            "direction": false,
+            "speed": 0.4131
+        },
+        {
+            "stop_distance": 350.0,
+            "direction": true,
+            "speed": 0.4816
+        },
+        {
+            "stop_distance": 350.0,
+            "direction": false,
+            "speed": 0.4628
+        },
+        {
+            "stop_distance": 400.0,
+            "direction": true,
+            "speed": 0.782
+        },
+        {
+            "stop_distance": 400.0,
+            "direction": false,
+            "speed": 0.7916
+        },
+        {
+            "stop_distance": 450.0,
+            "direction": true,
+            "speed": 0.7966
+        },
+        {
+            "stop_distance": 450.0,
+            "direction": false,
+            "speed": 0.7924
+        },
+        {
+            "stop_distance": 500.0,
+            "direction": true,
+            "speed": 0.7979
+        },
+        {
+            "stop_distance": 500.0,
+            "direction": false,
+            "speed": 0.7956
+        },
+        {
+            "stop_distance": 600.0,
+            "direction": true,
+            "speed": 0.8033
+        },
+        {
+            "stop_distance": 600.0,
+            "direction": false,
+            "speed": 0.7945
+        },
+        {
+            "stop_distance": 700.0,
+            "direction": true,
+            "speed": 0.7988
+        },
+        {
+            "stop_distance": 700.0,
+            "direction": false,
+            "speed": 0.7938
+        },
+        {
+            "stop_distance": 800.0,
+            "direction": true,
+            "speed": 0.803
+        },
+        {
+            "stop_distance": 800.0,
+            "direction": false,
+            "speed": 0.8051
+        },
+        {
+            "stop_distance": 900.0,
+            "direction": true,
+            "speed": 0.8062
+        },
+        {
+            "stop_distance": 900.0,
+            "direction": false,
+            "speed": 0.8044
+        },
+        {
+            "stop_distance": 1000.0,
+            "direction": true,
+            "speed": 0.8061
+        },
+        {
+            "stop_distance": 1000.0,
+            "direction": false,
+            "speed": 0.7994
+        }
+    ]
+}

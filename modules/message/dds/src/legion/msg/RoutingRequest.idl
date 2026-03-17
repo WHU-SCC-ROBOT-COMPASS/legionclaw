@@ -1,0 +1,16 @@
+ #ifndef __RoutingRequest__idl__
+#define __RoutingRequest__idl__
+#include "Header.idl"
+#include "KeyPoint.idl"
+module ros2_interface{
+ module msg{
+  struct RoutingRequest{
+    ros2_interface::msg::Header   _header;
+    string   _request_source;
+    int8   _request_type;
+    int16   _num_of_kp;
+    sequence<ros2_interface::msg::KeyPoint> _key_point_list;
+  };
+ };
+}; 
+#endif

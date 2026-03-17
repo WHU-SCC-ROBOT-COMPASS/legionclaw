@@ -1,0 +1,18 @@
+ #ifndef __CameraParkingInfoList__idl__
+#define __CameraParkingInfoList__idl__
+#include "CameraParkingStopper.idl"
+#include "Header.idl"
+#include "CameraParkingInfo.idl"
+module ros2_interface{
+ module msg{
+  struct CameraParkingInfoList{
+    ros2_interface::msg::Header   _header;
+    int32   _sensor_id;
+    sequence<ros2_interface::msg::CameraParkingInfo> _camera_parking;
+    sequence<ros2_interface::msg::CameraParkingStopper> _camera_parking_stoppers;
+    int32   _error_code;
+    boolean   _is_valid;
+  };
+ };
+}; 
+#endif

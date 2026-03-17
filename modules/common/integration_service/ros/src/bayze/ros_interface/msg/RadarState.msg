@@ -1,0 +1,17 @@
+uint8   sensor_id     #  
+uint8   nvm_read_status     #  
+uint8   nvm_write_status     #  
+RadarStateError   radar_state_error     #  
+RadarStateMode   radar_state_mode     #  
+uint16   max_distance     #  
+uint8   sort_index     #  
+uint8   radar_power     #  
+uint8   ctl_relay     #  
+uint8   output_type     #  
+uint8   send_quality     #  
+uint8   send_extinfo     #  
+uint8   motion_rx_state     #  
+uint8   rcs_threshold     #  
+uint8   connector_direction     #  
+uint8   radar_position     #  
+uint8   hw_error     #  

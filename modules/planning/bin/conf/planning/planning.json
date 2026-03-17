@@ -1,0 +1,86 @@
+{
+    "app_name": "planning",
+    "description": "planning module",
+    "log_file_path": "./log",
+    "log_level": 1,
+    "logging_data_enable": false,
+    "enable_log_debug": false,
+    "produce_planning_command_duration": 100,
+    "publish_planning_command_duration": 100,
+    "use_system_timestamp": true,
+    "enable_local_map_topic": false,
+    "enable_elevation": false,
+    "messages": {
+        "active_message": [
+            4
+        ],
+        "message_info": [
+            {
+                "type": 0,
+                "name": "LCM",
+                "url": "udpm://239.255.76.21:7621?ttl=3"
+            },
+            {
+                "type": 1,
+                "name": "DDS",
+                "url": "null"
+            },
+            {
+                "type": 2,
+                "name": "ROS",
+                "url": "null"
+            },
+            {
+                "type": 3,
+                "name": "ADSFI",
+                "url": "null"
+            },
+            {
+                "type": 4,
+                "name": "ROS2",
+                "url": "null"
+            }
+        ]
+    },
+    "status": {
+        "status_detect_duration": 0.01
+    },
+    "min_speed": 0,
+    "threshold_static_speed": 0.5,
+    "threshold_static_speed_self": 0.1,
+    "path_density": 0.1,
+    "look_forward_time_sec":10.0,
+    "look_forward_long_distance": 150,
+    "look_forward_short_distance":80,
+    "look_backward_distance": 40,
+    "look_forward_extend_distance": 50,
+    "reference_line_stitch_overlap_distance": 20,
+    "enable_lane_change": true,
+    "enable_swerving": true,
+    "enable_following": true,
+    "enable_cutin": true,
+    "enable_traffic_light_behavior": true,
+    "enable_stop_sign_behavior": false,
+    "enable_inward_outward_behavior": true,
+    "baselen_collison_check": 10.0,
+    "speedcoeff_collision_check": 10.0,
+    "map_spline_order": 5,
+    "map_match_error": 8.0,
+    "lane_match_tolerance": 5.0,
+    "norm_acceleration": 0.6,
+    "norm_deceleration": -0.4,
+    "anchor_sampling_step": 5.0,
+    "knots_sampling_step": 25.0,
+    "lateral_bound_limit": 0.2,
+    "safe_width": 0.3,
+    "safe_length": 0.3,
+    "safe_width_lower_limit": 0.2,
+    "safe_length_lower_limit": 0.2,
+    "safe_dis_speed_lower_limit": 0.1,
+    "safe_dis_speed_upper_limit": 2.7,
+    "emergency_time_interval": 1.2,
+    "emergency_lower_limit_length": 3.0,
+    "decision_yield_distance":20.0,
+    "yield_offset":0.25,
+    "virtual_length_max":20.0
+}

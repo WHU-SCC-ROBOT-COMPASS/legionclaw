@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/vehicle_param.proto";
+
+
+message VehicleConfig{
+    optional Header header = 1;
+    //车辆参数表
+    optional VehicleParam vehicle_param = 2 ;
+}

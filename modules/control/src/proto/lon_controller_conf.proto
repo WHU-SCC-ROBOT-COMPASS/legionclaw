@@ -1,0 +1,64 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+import "modules/control/src/proto/pid_conf.proto";
+import "modules/control/src/proto/leadlag_conf.proto";
+import "modules/control/src/proto/calibration_table.proto";
+
+message LonControllerConf{
+    optional double ts =1;
+    optional double brake_delay_time_d =2;
+    optional double brake_delay_time_r =3;
+    optional double  vehicle_speed_in_idle =4;
+    optional double deceleration_in_idle_speed =5;
+    optional double starting_acceleration_in_d =6;
+    optional double starting_acceleration_in_r =7;
+    optional double brake_switch_throttle_delay =8;
+    optional double brake_sign =9;
+    optional double kp_brake =10;
+    optional double starting_speed =11;
+    optional double pitch_offset =12;
+    optional double brake_minimum_action =13;
+    optional double throttle_minimum_action =14;
+    optional double speed_controller_input_limit =15;
+    optional double station_error_limit =16;
+    optional double preview_window =17;
+    optional bool enable_reverse_leadlag_compensation =18;
+    optional bool lon_print_enable = 19;
+    optional bool enable_log_debug =20;
+    optional bool enable_slope_offset =21;
+    optional bool enable_aero_offset =22;
+    optional bool enable_turning_offset =23;
+    optional bool enable_rolling_offset =24;
+    optional bool use_calibration_table =25;
+    optional double accel_value_kp =26;
+    optional double max_accel_value =27;
+    optional DownhillSceneConf downhill_scene_conf =28;
+    optional PitchAngleFilterConf pitch_angle_filter_conf  =29;
+    optional PIDConf station_pid_conf = 30;
+    optional PIDConf low_speed_pid_conf = 31;
+    optional PIDConf high_speed_pid_conf = 32;
+    optional double switch_speed = 33;
+    optional PIDConf reverse_station_pid_conf = 34;
+    optional PIDConf reverse_speed_pid_conf = 35;
+    optional LeadlagConf reverse_station_leadlag_conf = 36;
+    optional LeadlagConf reverse_speed_leadlag_conf = 37;
+    optional double max_acceleration_jerk_in_large_resistance = 38;
+    optional PIDConf large_resistance_speed_pid_conf = 39;
+    optional PIDConf large_resistance_reverse_speed_pid_conf = 40;
+    optional LonCalibrationTable calibration_table = 41;
+}
+
+message DownhillSceneConf{
+    optional bool enable_brake_impulse =1;
+    optional double  downhill_scene_pitch=2;
+    optional double  brake_amplitude=3;
+    optional double  min_brake_amplitude=4;
+    optional double  braking_duration=5;
+    optional double  driving_duration=6;
+}
+
+message PitchAngleFilterConf{
+    optional int32 cutoff_freq =1;
+}

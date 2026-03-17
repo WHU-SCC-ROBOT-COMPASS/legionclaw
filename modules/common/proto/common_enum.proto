@@ -1,0 +1,399 @@
+syntax = "proto2";
+
+package legionclaw.common;
+
+    enum ErrorCode
+    {
+        LOCALIZATION_ERROR = 3000;
+        LOCALIZATION_ERROR_MSG = 3100;
+        LOCALIZATION_ERROR_LIDAR = 3200;
+        LOCALIZATION_ERROR_INTEG = 3300;
+        LOCALIZATION_ERROR_GNSS = 3400;
+        PERCEPTION_ERROR = 4000;
+        PERCEPTION_ERROR_TF = 4001;
+        PERCEPTION_ERROR_PROCESS = 4002;
+        PERCEPTION_FATAL = 4003;
+        PERCEPTION_ERROR_NONE = 4004;
+        PERCEPTION_ERROR_UNKNOWN = 4005;
+        PREDICTION_ERROR = 5000;
+        PLANNING_ERROR = 6000;
+        PLANNING_ERROR_NOT_READY = 6001;
+        HDMAP_DATA_ERROR = 7000;
+        ROUTING_ERROR = 8000;
+        ROUTING_ERROR_REQUEST = 8001;
+        ROUTING_ERROR_RESPONSE = 8002;
+        ROUTING_ERROR_NOT_READY = 8003;
+        END_OF_INPUT = 9000;
+        HTTP_LOGIC_ERROR = 10000;
+        HTTP_RUNTIME_ERROR = 10001;
+        DRIVER_ERROR_GNSS = 12000;
+        DRIVER_ERROR_VELODYNE = 13000;
+        STORYTELLING_ERROR = 14000;
+    };
+    enum IsValid
+    {
+        INVALID = 0;
+        VALID = 1;
+    };
+    enum Judgment
+    {
+        FALSE = 0;
+        TRUE = 1;
+    };
+    enum MovingStatus
+    {
+        UNKNOWN_VEHICLE_STATE = 0;
+        STATIONARY = 1;
+        MOVING_FORWARD = 2;
+        MOVING_BACKWARD = 3;
+    };
+    enum DrivingMode
+    {
+        COMPLETE_MANUAL = 0;
+        COMPLETE_AUTO_DRIVE = 1;
+        AUTO_STEER_ONLY = 2;
+        AUTO_SPEED_ONLY = 3;
+        EMERGENCY_MODE = 4;
+        RE_COMPLETE_AUTO_DRIVE = 5;
+        MANUAL_TAKEOVER = 6;
+        REMOTE_DRIVE = 7;
+    };
+    enum GearPosition
+    {
+        GEAR_NEUTRAL = 0;
+        GEAR_DRIVE = 1;
+        GEAR_REVERSE = 2;
+        GEAR_PARKING = 3;
+        GEAR_LOW = 4;
+        GEAR_INVALID = 5;
+        GEAR_NONE = 6;
+    };
+    enum WheelSpeedType
+    {
+        FORWARD = 0;
+        BACKWARD = 1;
+        STANDSTIL = 2;
+        WHEEL_INVALID = 3;
+    };
+    enum ControlStatus
+    {
+        CONTROLLABLE = 0;
+        UNCONTRLLABLE = 1;
+        CONTROL_MANUAL_INTERVENTION = 2;
+    };
+    enum EPBLevel
+    {
+        RELEASED = 0;
+        APPLIED = 1;
+        APPLYING_RELEASING = 2;
+        UNKNOWN = 3;
+    };
+    enum TurnSignal
+    {
+        TURN_INACTIVE_SIGNAL = 0;
+        TURN_LEFT_SIGNAL = 1;
+        TURN_RIGHT_SIGNAL = 2;
+        TURN_INVALID_SIGNAL = 3;
+    };
+    enum DoorStatus
+    {
+        CLOSEED = 0;
+        OPENING = 1;
+        DOOR_INVALID = 2;
+    };
+    enum EngineStauts
+    {
+        STOPPED = 0;
+        CRANKING = 1;
+        RUNNING = 2;
+        ENGINE_STATUS_ERROR = 3;
+    };
+    enum SwitchStatus
+    {
+        SWITCH_STATUS_OFF = 0;
+        SWITCH_STATUS_ON = 1;
+        SWITCH_INVALID = 2;
+    };
+    enum FailureStatus
+    {
+        FAILURE_STATUS_UNKNOWN = 0;
+        NO_FAULT = 1;
+        ERROR_DETECTED = 2;
+    };
+    enum PlugStatus
+    {
+        PLUG_STATUS_UNKNOWN = 0;
+        PULL_OUT = 1;
+        PLUG_IN = 2;
+    };
+    enum FoldUnfoldStatus
+    {
+        FOLD_UNFOLD_STATUS_UNKNOWN = 0;
+        UNFOLD = 1;
+        FOLD = 2;
+        FOLDING_UNFOLDING = 3;
+    };
+    enum TrafficLightColor
+    {
+        COLOR_UNKNOWN = 0;
+        RED = 1;
+        YELLOW = 2;
+        GREEN = 3;
+        BLACK = 4;
+    };
+    enum RoadMarkType
+    {
+        STOP_LINE = 1;
+        ZEBRA_CROSSING = 2;
+        NO_PARKING_ZONE = 3;
+        GO_STRAIGHT_ARROW = 4;
+        TURN_LEFT_ARROW = 5;
+        TURN_RIGHT_ARROW = 6;
+        GO_STRAIGHT_TURN_LEFT = 7;
+        GO_STRAIGHT_TURN_RIGHT = 8;
+        GO_STRAIGHT_TURN_LEFT_RIGHT = 9;
+        TURN_AROUND = 10;
+        TURN_LEFT_AROUND = 11;
+        RHOMBUS = 12;
+        INVERTED_TRIANGLE = 13;
+        GROUND_WORDS = 14;
+    };
+    enum TrafficLightType
+    {
+        STRAIGHT = 0;
+        TURN_LEFT = 1;
+        TURN_RIGHT = 2;
+        STRAIGHT_TURN_LEFT = 3;
+        STRAIGHT_TURN_RIGHT = 4;
+        CIRCULAR = 5;
+        PEDESTRIAN = 6;
+        CYCLIST = 7;
+        TYPE_UNKNOWN = 8;
+    };
+    enum SensorID
+    {
+        CAMERA_FRONT_CENTER = 0;
+        CAMERA_FRONT_LEFT = 1;
+        CAMERA_FRONT_RIGHT = 2;
+        CAMERA_LEFT_FRONT = 3;
+        CAMERA_LEFT_BACK = 4;
+        CAMERA_RIGHT_FRONT = 5;
+        CAMERA_RIGHT_BACK = 6;
+        CAMERA_BACK = 7;
+        CAMERA_FISH_EYE_FRONT = 8;
+        CAMERA_FISH_EYE_LEFT = 9;
+        CAMERA_FISH_EYE_RIGHT = 10;
+        CAMERA_FISH_EYE_BACK = 11;
+        CAMERA_FUSION = 12;
+    };
+    enum ObstacleType
+    {
+        OBSTACLE_UNKNOWN = 0;
+        OBSTACLE_UNKNOWN_MOVABLE = 1;
+        OBSTACLE_UNKNOWN_UNMOVABLE = 2;
+        OBSTACLE_PEDESTRIAN = 3;
+        OBSTACLE_BICYCLE = 4;
+        OBSTACLE_VEHICLE = 5;
+    };
+    enum ObstacleSubType
+    {
+        ST_UNKNOWN = 0;
+        ST_UNKNOWN_MOVABLE = 1;
+        ST_UNKNOWN_UNMOVABLE = 2;
+        ST_CAR = 3;
+        ST_VAN = 4;
+        ST_TRUCK = 5;
+        ST_BUS = 6;
+        ST_CYCLIST = 7;
+        ST_MOTORCYCLIST = 8;
+        ST_TRICYCLIST = 9;
+        ST_PEDESTRIAN = 10;
+        ST_TRAFFICCONE = 11;
+        ST_PILLAR = 12;
+        ST_SPEED_BUMP = 13;
+        ST_WATER_HORSE = 14;
+        ST_PARKING_LOCK = 15;
+        ST_ISOLATION_PILE = 16;
+        ST_NO_PARKING_SIGN = 17;
+        ST_CONSTRUCTION_SIGN = 18;
+        ST_FIRE_HYDRANT = 19;
+        ST_VEHICLE_WHEEL = 20;
+    };
+    enum BlinkerFlag
+    {
+        BLINKER_FLAG_OFF = 0;
+        LEFT_TURN_VISIBLE = 1;
+        LEFT_TURN_ON = 2;
+        RIGHT_TURN_VISIBLE = 3;
+        RIGHT_TURN_ON = 4;
+        BRAKE_VISIBLE = 5;
+        BRAKE_ON = 6;
+        BLINKER_FLAG_UNKNOWN = 7;
+    };
+    enum LanePosition
+    {
+        NEXT_LEFT_LANE = -2;
+        LEFT_LANE = -1;
+        EGO_LANE = 0;
+        RIGHT_LANE = 1;
+        NEXT_RIGHT_LANE = 2;
+        OTHERS = 3;
+        LANE_POSITION_UNKNOWN = 4;
+    };
+    enum ParkingStatus
+    {
+        PARKING_ENABLE = 0;
+        PARKING_DISENABLE = 1;
+        PARKING_NONOPTIONAL = 2;
+    };
+    enum ParkingType
+    {
+        INVALID_PARKING = 0;
+        PARALLEL_PARKING = 1;
+        VERTICAL_PARKING = 2;
+        OBLIQUE_PARKING = 3;
+        UNKNOWN_PARKING = 4;
+    };
+    enum ParkingSourceType
+    {
+        LINE_PARKING = 0;
+        SPACE_PARKING = 1;
+        FUSED_PARKING = 2;
+    };
+    enum UssParkingType
+    {
+        RIGHT_PARALLEL_PARKING = 0;
+        LEFT_PARALLEL_PARKING = 1;
+        RIGHT_VERTICAL_PARKING = 2;
+        LEFT_VERTICAL_PARKING = 3;
+    };
+    enum CoordinateSystem
+    {
+        INVALID_COORDINATE_SYSTEM = 0;
+        IMAGE_COORDINATE_SYSTEM = 1;
+        VEHICLE_COORDINATE_SYSTEM = 2;
+        WORLD_COORDINATE_SYSTEM = 3;
+    };
+    enum LaneLineType
+    {
+        LANE_LINE_TYPE_UNKNOWN = 0;
+        CURB = 1;
+        WHITE_DASHED = 2;
+        WHITE_SOLID = 3;
+        YELLOW_DASHED = 4;
+        YELLOW_SOLID = 5;
+    };
+    enum GnssPositionType
+    {
+        NONE = 0;
+        FIXEDPOS = 1;
+        FIXEDHEIGHT = 2;
+        FLOATCONV = 4;
+        WIDELANE = 5;
+        NARROWLANE = 6;
+        DOPPLER_VELOCITY = 8;
+        SINGLE = 16;
+        PSRDIFF = 17;
+        WAAS = 18;
+        PROPOGATED = 19;
+        OMNISTAR = 20;
+        L1_FLOAT = 32;
+        IONOFREE_FLOAT = 33;
+        NARROW_FLOAT = 34;
+        L1_INT = 48;
+        WIDE_INT = 49;
+        NARROW_INT = 50;
+        RTK_DIRECT_INS = 51;
+        INS_SBAS = 52;
+        INS_PSRSP = 53;
+        INS_PSRDIFF = 54;
+        INS_RTKFLOAT = 55;
+        INS_RTKFIXED = 56;
+        INS_OMNISTAR = 57;
+        INS_OMNISTAR_HP = 58;
+        INS_OMNISTAR_XP = 59;
+        OMNISTAR_HP = 64;
+        OMNISTAR_XP = 65;
+        PPP_CONVERGING = 68;
+        PPP = 69;
+        INS_PPP_CONVERGING = 73;
+        INS_PPP = 74;
+        MSG_LOSS = 91;
+    };
+    enum Direction
+    {
+        DIR_INVALID = 0;
+        LEFT = 1;
+        UP = 2;
+        RIGHT = 3;
+        DOWN = 4;
+    };
+    enum ParkingMotionType
+    {
+        PARKING_MOTION_INVALID = 0;
+        PARKING_IN = 1;
+        PARKING_OUT = 2;
+    };
+    enum SteerMode
+    {
+        STEER_MODE_2WS = 0;
+        STEER_MODE_4WS = 1;
+    };
+    enum UssObstacleRegion
+    {
+        USS_BACK = 0;
+        USS_FRONT = 1;
+        USS_RIGHT = 2;
+        USS_LEFT = 3;
+    };
+    enum OutDirection
+    {
+        OUT_INVALID = 0;
+        OUT_UNKNOWN = 1;
+        OUT_LEFT = 2;
+        OUT_RIGHT = 3;
+        OUT_HEAD = 4;
+        OUT_REAR_LEFT = 5;
+        OUT_REAR_RIGHT = 6;
+        OUT_REAR = 7;
+        OUT_HEAD_LEFT = 8;
+        OUT_HEAD_RIGHT = 9;
+    };
+    enum AlarmLevel
+    {
+        ALARM_INFO = 0;
+        ALARM_WARING = 1;
+        ALARM_ERROR = 2;
+    };
+    enum AlarmType
+    {
+        ALARM_TYPE_REPORT = 0;
+        ALARM_TYPE_RECOVER = 1;
+        ALARM_TYPE_EVENT = 2;
+    };
+    enum AlarmDisplay
+    {
+        ALARM_DISPLAY_TEXT = 0;
+        ALARM_DISPLAY_SOUND = 1;
+        ALARM_DISPLAY_TEXT_AND_SOUND = 2;
+    };
+    enum OccupiedStatus
+    {
+        UNKNOWN_OCCUPIED_STATUS = 0;
+        EMPTY = 1;
+        OCCUPIED = 2;
+    };
+    enum FunctionMode
+    {
+        DEACTIVATE_BOTH = 0;
+        ACTIVATE_DRIVING = 1;
+        DEACTIVATE_DRIVING = 2;
+        ACTIVATE_PARKING = 3;
+        DEACTIVATE_PARKING = 4;
+    };
+    enum MessageActionMode
+    {
+        DO_NOTHING = 0;
+        TO_ACTIVATE = 1;
+        TO_DEACTIVATE = 2;
+    };

@@ -1,0 +1,14 @@
+ #ifndef __SpeedPoint__idl__
+#define __SpeedPoint__idl__
+module ros2_interface{
+ module msg{
+  struct SpeedPoint{
+    double   _s;
+    double   _t;
+    double   _v;
+    double   _a;
+    double   _da;
+  };
+ };
+}; 
+#endif

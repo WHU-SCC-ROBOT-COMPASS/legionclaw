@@ -1,0 +1,17 @@
+ #ifndef __Log__idl__
+#define __Log__idl__
+#include "Time.idl"
+module ros2_interface{
+ module msg{
+  struct Log{
+    ros2_interface::msg::Time   _stamp;
+    uint8   _level;
+    string   _name;
+    string   _msg;
+    string   _file;
+    string   _function;
+    uint32   _line;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message EStop{
+    //is_estop == true when emergency stop is required
+    optional bool is_estop = 1 [default = false];
+    //原因
+    optional string reason = 2;
+}

@@ -1,0 +1,12 @@
+ #ifndef __VehicleMotion__idl__
+#define __VehicleMotion__idl__
+#include "VehicleMotionPoint.idl"
+module ros2_interface{
+ module msg{
+  struct VehicleMotion{
+    string   _name;
+    sequence<ros2_interface::msg::VehicleMotionPoint> _vehicle_motion_point;
+  };
+ };
+}; 
+#endif

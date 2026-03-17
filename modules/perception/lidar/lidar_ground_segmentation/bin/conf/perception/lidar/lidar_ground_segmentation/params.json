@@ -1,0 +1,36 @@
+{
+  "save_flag": true,
+  "patchworkpp": {
+    "sensor_height": 1.8,
+    "mode": "czm",
+    "verbose": false,
+    "visualize": false,
+    "num_iter": 3,
+    "num_lpr": 20,
+    "num_min_pts": 10,
+    "th_seeds": 0.3,
+    "th_dist": 0.125,
+    "th_seeds_v": 0.25,
+    "th_dist_v": 0.1,
+    "max_range": 80.0,
+    "min_range": 1.5,
+    "uprightness_thr": 0.707,
+    "adaptive_seed_selection_margin": -1.2,
+    "czm": {
+      "num_zones": 4,
+      "num_rings_of_interest": 4,
+      "num_sectors_each_zone": [16, 32, 54, 32],
+      "mum_rings_each_zone": [2, 4, 4, 4],
+      "elevation_thr": [0.0, 0.0, 0.0, 0.0],
+      "flatness_thr": [0.0, 0.0, 0.0, 0.0]
+    },
+    "enable_RNR": true,
+    "enable_RVPF": true,
+    "enable_TGR": true,
+    "RNR_ver_angle_thr": -15.0,
+    "RNR_intensity_thr": 0.2,
+    "max_flatness_storage": 1000,
+    "max_elevation_storage": 1000
+  }
+}
+

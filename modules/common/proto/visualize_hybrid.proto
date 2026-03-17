@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/path_point.proto";
+import "modules/common/proto/trajectory_point.proto";
+
+
+message VisualizeHybrid{
+    //反向搜索点pose
+    repeated Point3D points = 1;
+    //二次搜索点pose
+    repeated PathPoint s_pathpoints = 2;
+    //初次点数目
+    optional int32 f_num = 3 [default = 0];
+    //初次点搜索次数
+    optional int32 s_num = 4 [default = 0];
+    //轨迹点列
+    repeated TrajectoryPoint trajectory_points = 5;
+}

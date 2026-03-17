@@ -1,0 +1,167 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(prediction)
+
+#设置环境变量编译器类型，编译用到的源文件全部都要放到这里
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+
+# 修改 tools 的路径为刚解压的路径
+set(tools /usr/local/gcc-linaro-6.5.0-2018.12-x86_64_aarch64-linux-gnu)
+
+set(CMAKE_C_COMPILER ${tools}/bin/aarch64-linux-gnu-gcc)
+set(CMAKE_CXX_COMPILER ${tools}/bin/aarch64-linux-gnu-g++)
+set(CMAKE_FIND_ROOT_PATH ${tools}/aarch64-linux-gnu)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+set(CMAKE_CXX_STANDARD 14)
+
+set(CMAKE_CROSSCOMPILING TRUE)
+
+set(APP_NAME prediction)
+set(THIRD_PATH_HOME_PATH /usr/local/legionclaw/third_party)
+set(legion_ALGORITHM_PATH_HOME_PATH /usr/local/legionclaw/legionclaw_algorithm)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+include(import_deps)
+find_package(OpenCV REQUIRED)
+find_package(Boost REQUIRED)
+INSTALL_DEPENDENCY("zlib")
+INSTALL_DEPENDENCY("boost")
+INSTALL_DEPENDENCY("glib")
+INSTALL_DEPENDENCY("lcm")
+INSTALL_DEPENDENCY("glog")
+INSTALL_DEPENDENCY("gflags")
+INSTALL_DEPENDENCY("protobuf")
+INSTALL_DEPENDENCY("gthread")
+INSTALL_DEPENDENCY("eigen3")
+INSTALL_DEPENDENCY("pugixml")
+INSTALL_DEPENDENCY("opencv3")
+INSTALL_DEPENDENCY("GeographicJ3")
+
+set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/../lib")
+
+option(ROS2_ENABLE "option for ros2 enable" OFF)
+if(ROS2_ENABLE)
+    set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
+	add_definitions(-DROS2_ENABLE)
+	find_package(rclcpp REQUIRED)
+	find_package(ros2_interface REQUIRED)
+	include_directories(
+	${rclcpp_INCLUDE_DIRS}
+	${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/include
+	)
+endif()
+
+option(ROS_ENABLE "option for ros enable" OFF)
+if(ROS_ENABLE)
+	add_definitions(-DROS_ENABLE)
+	find_package(roscpp REQUIRED)
+	include_directories(
+	${roscpp_INCLUDE_DIRS}
+	${PROJECT_SOURCE_DIR}/../message/ros/devel/include
+	)
+endif()
+
+option(LCM_ENABLE "option for lcm enable" OFF)
+if(LCM_ENABLE)
+	add_definitions(-DLCM_ENABLE)
+	include_directories(
+	${PROJECT_SOURCE_DIR}/../message/lcm/src/legion
+	)
+endif()
+
+option(DDS_ENABLE "option for dds enable" OFF)
+if(DDS_ENABLE)
+	add_definitions(-DDDS_ENABLE)
+		include_directories(
+	${PROJECT_SOURCE_DIR}/../message/dds/src/legion)
+endif()
+
+option(MDCLOG_ENABLE "option for dds enable" OFF)
+option(GLOG_ENABLE "option for dds enable" OFF)
+if(MDCLOG_ENABLE)
+	add_definitions(-DMDCLOG_ENABLE)
+elseif(GLOG_ENABLE)
+	add_definitions(-DGLOG_ENABLE)
+endif()
+
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+elseif (CMAKE_BUILD_TYPE MATCHES Release)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+endif()
+
+add_compile_options(${DEFAULT_COMPILE})
+
+macro(LISTSUBDIR result currentdir)
+file(GLOB_RECURSE children LIST_DIRECTORIES true  ${currentdir}/*)
+set(dirlist ${currentdir})
+foreach(child ${children})
+	if(IS_DIRECTORY ${child})
+		list(APPEND dirlist ${child})
+	endif()
+endforeach()
+set(${result} ${dirlist})
+endmacro()
+
+LISTSUBDIR(SOURCE_DIRS src)
+
+include_directories(${SOURCE_DIRS})
+
+include_directories(
+	${PROJECT_SOURCE_DIR}/../..
+	${PROJECT_SOURCE_DIR}/..
+)
+
+include_directories(
+	${THIRD_PATH_HOME_PATH}/pallas/include
+	${THIRD_PATH_HOME_PATH}/pallas/include/eigen3
+	${THIRD_PATH_HOME_PATH}/pallas/include/pugixml
+	${THIRD_PATH_HOME_PATH}/pallas/include/lcm
+	${THIRD_PATH_HOME_PATH}/pallas/include/boost
+	${THIRD_PATH_HOME_PATH}/pallas/include/GeographicLib3J
+	${THIRD_PATH_HOME_PATH}/pallas/include/glib/glib-2.0
+	)
+
+link_directories(
+)
+
+set(BOOST_LINK_LIBS "-lboost_system  -lboost_signals")
+
+file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc  ../common/*.c ../common/*.cxx ../common/*.cpp ../common/*.cc)
+
+if(DDS_ENABLE)
+#find_package(fastcdr HINTS ${THIRD_PATH_HOME_PATH}/pallas/lib/cmake/fastcdr)
+#find_package(fastrtps REQUIRED HINTS ${THIRD_PATH_HOME_PATH}/pallas/lib/cmake/fastrtps)
+file(GLOB_RECURSE DDS_SOURCE_FILES  ${PROJECT_SOURCE_DIR}/../message/dds/src/legion/dds_interface/*.cxx)
+find_package(Openssl REQUIRED)
+INSTALL_DEPENDENCY("zlib")
+INSTALL_DEPENDENCY("fastcdr")
+INSTALL_DEPENDENCY("fastrtpsJ3")
+INSTALL_DEPENDENCY("foonathan_memory")
+INSTALL_DEPENDENCY("openssl")
+#file(GLOB_RECURSE DDS_SOURCE_FILES  ../message/dds/*.cxx)
+endif()
+add_executable(${APP_NAME}  ${SOURCE_FILES} ${DDS_SOURCE_FILES})
+if(ROS_ENABLE)
+	target_link_libraries(${APP_NAME}  ${roscpp_LIBRARIES})
+endif()
+if(ROS2_ENABLE)
+	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface)
+endif()
+if(LCM_ENABLE)
+	target_link_libraries(${APP_NAME}  lcm glib-2.0)
+endif()
+if(DDS_ENABLE)
+target_link_libraries(${APP_NAME}  fastrtps fastcdr)
+endif()
+target_link_libraries(${APP_NAME}  pthread gflags glog dl z protobuf pugixml Geographic boost_iostreams
+    boost_serialization
+    boost_filesystem
+    boost_filesystem
+    boost_atomic ${BOOST_LINK_LIBS} )
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+# install(TARGETS ${APP_NAME})

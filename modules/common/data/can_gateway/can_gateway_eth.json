@@ -1,0 +1,51 @@
+{
+    "canport":[
+        {
+            "info":"WireCAN;default cpu",
+            "channel_id":4,
+            "server_ip":"192.168.55.110",
+            "server_port":9444,
+            "server_port_udp":9544,
+            "recv_len":10,
+            "default_forward_list":32768,
+            "send_priority":99,
+            "timer_high_performance_enable": false,
+            "canframe":[
+            ]
+        },
+        {
+            "info":"AdasCAN can;no receid",
+            "channel_id":3,
+            "server_ip":"192.168.55.110",
+            "server_port":9527,
+            "server_port_udp":13137,
+            "recv_len":1,
+            "default_forward_list":32768,
+            "send_priority":96,
+            "timer_high_performance_enable": false,
+            "canframe":[
+            ]
+        },
+        {
+            "info":"CPU;svb2(0x7e/0x7f)forward to can0; default forward to can0 can1",
+            "channel_id":15,
+            "default_forward_list":24,
+            "canframe":[
+                {
+                    "info":"svb2_1",
+                    "frame_id":126,
+                    "specified_forward_list":16,
+                    "preprocessor":"None",
+                    "preprocess_list":0
+                },
+                {
+                    "info":"svb2_2",
+                    "frame_id":127,
+                    "specified_forward_list":16,
+                    "preprocessor":"None",
+                    "preprocess_list":0
+                } 
+            ]
+        }
+    ]
+}

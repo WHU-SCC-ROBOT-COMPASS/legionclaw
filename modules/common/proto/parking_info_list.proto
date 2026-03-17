@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/parking_info.proto";
+
+
+message ParkingInfoList{
+    //消息头
+    optional Header header = 1;
+    //检测出的停车位数组
+    repeated ParkingInfo parking_info = 2;
+    //错误码（default = OK）
+    optional legion.common.ErrorCode error_code = 3 [default = LOCALIZATION_ERROR];
+    //车位数据是否合法
+    optional bool is_valid = 4 [default = false];
+    //是否能泊出
+    optional bool parking_out_enable = 5 [default = false];
+    //泊出方向
+    optional legion.common.OutDirection parking_out_direction = 6 [default = OUT_INVALID];
+    //当前自车所在车位ID
+    optional int32 parking_out_id = 7 [default = 0];
+}

@@ -1,0 +1,15 @@
+ #ifndef __PointXYZIRT__idl__
+#define __PointXYZIRT__idl__
+module ros2_interface{
+ module msg{
+  struct PointXYZIRT{
+    double   _x;
+    double   _y;
+    double   _z;
+    uint32   _intensity;
+    uint8   _ring_id;
+    uint64   _timestamp;
+  };
+ };
+}; 
+#endif

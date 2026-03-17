@@ -1,0 +1,16 @@
+ #ifndef __Faults__idl__
+#define __Faults__idl__
+#include "Header.idl"
+#include "Fault.idl"
+module ros2_interface{
+ module msg{
+  struct Faults{
+    ros2_interface::msg::Header   _header;
+    int32   _version;
+    int32   _app_id;
+    boolean   _is_active;
+    sequence<ros2_interface::msg::Fault> _faults;
+  };
+ };
+}; 
+#endif

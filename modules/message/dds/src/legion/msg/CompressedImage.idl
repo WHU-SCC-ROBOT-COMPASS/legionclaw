@@ -1,0 +1,16 @@
+ #ifndef __CompressedImage__idl__
+#define __CompressedImage__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct CompressedImage{
+    ros2_interface::msg::Header   _header;
+    string   _frame_id;
+    string   _format;
+    sequence<int8> _data;
+    double   _measurement_time;
+    uint32   _frame_type;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message SLPoint{
+    //纵向位移
+    optional double s = 1 [default = 0.0];
+    //横向位移
+    optional double l = 2 [default = 0.0];
+}

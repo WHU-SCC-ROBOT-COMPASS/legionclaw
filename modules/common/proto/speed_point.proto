@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message SpeedPoint{
+    //里程
+    optional double s = 1 [default = 0.0];
+    //时间
+    optional double t = 2 [default = 0.0];
+    //speed (m/s)
+    optional double v = 3 [default = 0.0];
+    //acceleration (m/s^2)
+    optional double a = 4 [default = 0.0];
+    //jerk (m/s^3)
+    optional double da = 5 [default = 0.0];
+}

@@ -1,0 +1,17 @@
+ #ifndef __UssParkingInfo__idl__
+#define __UssParkingInfo__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct UssParkingInfo{
+    ros2_interface::msg::Header   _header;
+    int32   _uss_parking_type;
+    ros2_interface::msg::Point3D   _parking_point0;
+    ros2_interface::msg::Point3D   _parking_point1;
+    ros2_interface::msg::Point3D   _parking_point2;
+    ros2_interface::msg::Point3D   _parking_point3;
+  };
+ };
+}; 
+#endif

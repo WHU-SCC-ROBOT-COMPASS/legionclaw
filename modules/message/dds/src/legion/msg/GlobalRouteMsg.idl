@@ -1,0 +1,17 @@
+ #ifndef __GlobalRouteMsg__idl__
+#define __GlobalRouteMsg__idl__
+#include "Header.idl"
+#include "LaneletInfo.idl"
+module ros2_interface{
+ module msg{
+  struct GlobalRouteMsg{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::LaneletInfo> _route;
+    ros2_interface::msg::LaneletInfo   _current_lanelet;
+    double   _total_mileage;
+    double   _cur_mileage;
+    sequence<ros2_interface::msg::LaneletInfo> _cur_slice;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,25 @@
+ #ifndef __HMIObstacle__idl__
+#define __HMIObstacle__idl__
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct HMIObstacle{
+    int32   _id;
+    ros2_interface::msg::Point3D   _center_pos_vehicle;
+    ros2_interface::msg::Point3D   _center_pos_abs;
+    double   _theta_vehicle;
+    double   _theta_abs;
+    double   _length;
+    double   _width;
+    double   _height;
+    int32   _type;
+    double   _confidence;
+    int32   _confidence_type;
+    int32   _sub_type;
+    sequence<ros2_interface::msg::Point3D> _points;
+    uint8   _cipv_flag;
+    int32   _fusion_type;
+  };
+ };
+}; 
+#endif

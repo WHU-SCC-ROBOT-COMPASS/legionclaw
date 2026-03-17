@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/bbox_2d.proto";
+
+
+message CameraParkingStopper{
+    //timestamp is  included in header
+    optional Header header = 1;
+    //限位器图像框
+    optional BBox2D bbox2d = 2 ;
+}

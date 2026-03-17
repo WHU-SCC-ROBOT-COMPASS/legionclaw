@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+
+
+message Pavementype{
+    //消息头
+    optional Header header = 1;
+    //0-沥青 1-水泥 2-雪地 3-草地 4-泥地 5-沙地
+    optional int32 type = 2 [default = 0];
+    //置信度
+    optional double confidence = 3 [default = 0.0];
+}

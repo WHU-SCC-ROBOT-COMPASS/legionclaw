@@ -1,0 +1,274 @@
+{
+    "parking_state_machine": [
+        {
+            "StateName": "Start",
+            "Transition": [
+                {
+                    "Key": "ParkingInitial",
+                    "Target": "ParkingInitialState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParkingInitialState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingBegin",
+                    "Target": "ParallelParkingBeginState"
+                },
+                {
+                    "Key": "VerticalParkingBegin",
+                    "Target": "VerticalParkingBeginState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingBeginState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingForwardBegin",
+                    "Target": "ParallelParkingForwardBeginState"
+                },
+                {
+                    "Key": "ParallelParkingFinish",
+                    "Target": "ParallelParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingForwardBeginState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingForward",
+                    "Target": "ParallelParkingForwardState"
+                },
+                {
+                    "Key": "ParallelParkingFinish",
+                    "Target": "ParallelParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingForwardState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingForwardFinish",
+                    "Target": "ParallelParkingForwardFinishState"
+                },
+                {
+                    "Key": "ParallelParkingFinish",
+                    "Target": "ParallelParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingForwardFinishState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingBackwardBegin",
+                    "Target": "ParallelParkingBackwardBeginState"
+                },
+                {
+                    "Key": "ParallelParkingFinish",
+                    "Target": "ParallelParkingFinishState"
+                },
+                {
+                    "Key": "ParallelParkingForwardBegin",
+                    "Target": "ParallelParkingForwardBeginState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingBackwardBeginState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingBackward",
+                    "Target": "ParallelParkingBackwardState"
+                },
+                {
+                    "Key": "ParallelParkingFinish",
+                    "Target": "ParallelParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingBackwardState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingBackwardFinish",
+                    "Target": "ParallelParkingBackwardFinishState"
+                },
+                {
+                    "Key": "ParallelParkingFinish",
+                    "Target": "ParallelParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingBackwardFinishState",
+            "Transition": [
+                {
+                    "Key": "ParallelParkingFinish",
+                    "Target": "ParallelParkingFinishState"
+                },
+                {
+                    "Key": "ParallelParkingForwardBegin",
+                    "Target": "ParallelParkingForwardBeginState"
+                },
+                {
+                    "Key": "ParallelParkingBackwardBegin",
+                    "Target": "ParallelParkingBackwardBeginState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParallelParkingFinishState",
+            "Transition": [
+                {
+                    "Key": "ParkingFinish",
+                    "Target": "ParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingBeginState",
+            "Transition": [
+                {
+                    "Key": "VerticalParkingForwardBegin",
+                    "Target": "VerticalParkingForwardBeginState"
+                },
+                {
+                    "Key": "VerticalParkingBackwardBegin",
+                    "Target": "VerticalParkingBackwardBeginState"
+                },
+                {
+                    "Key": "VerticalParkingFinish",
+                    "Target": "VerticalParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingForwardBeginState",
+            "Transition": [
+                {
+                    "Key": "VerticalParkingForward",
+                    "Target": "VerticalParkingForwardState"
+                },
+                {
+                    "Key": "VerticalParkingFinish",
+                    "Target": "VerticalParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingForwardState",
+            "Transition": [
+                {
+                    "Key": "VerticalParkingForwardFinish",
+                    "Target": "VerticalParkingForwardFinishState"
+                },
+                {
+                    "Key": "VerticalParkingFinish",
+                    "Target": "VerticalParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingForwardFinishState",
+            "Transition": [
+                {
+                    "Key": "VerticalParkingBackwardBegin",
+                    "Target": "VerticalParkingBackwardBeginState"
+                },
+                {
+                    "Key": "VerticalParkingFinish",
+                    "Target": "VerticalParkingFinishState"
+                },
+                {
+                    "Key": "VerticalParkingForwardBegin",
+                    "Target": "VerticalParkingForwardBeginState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingBackwardBeginState",
+            "Transition": [
+                {
+                    "Key": "VerticalParkingBackward",
+                    "Target": "VerticalParkingBackwardState"
+                },
+                {
+                    "Key": "VerticalParkingFinish",
+                    "Target": "VerticalParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingBackwardState",
+            "Transition": [
+                {
+                    "Key": "VerticalParkingBackwardFinish",
+                    "Target": "VerticalParkingBackwardFinishState"
+                },
+                {
+                    "Key": "VerticalParkingFinish",
+                    "Target": "VerticalParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingBackwardFinishState",
+            "Transition": [
+                {
+                    "Key": "VerticalParkingFinish",
+                    "Target": "VerticalParkingFinishState"
+                },
+                {
+                    "Key": "VerticalParkingForwardBegin",
+                    "Target": "VerticalParkingForwardBeginState"
+                },
+                {
+                    "Key": "VerticalParkingBackwardBegin",
+                    "Target": "VerticalParkingBackwardBeginState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "VerticalParkingFinishState",
+            "Transition": [
+                {
+                    "Key": "ParkingFinish",
+                    "Target": "ParkingFinishState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ParkingFinishState",
+            "Transition": [
+                {
+                    "Key": "ParkingInitial",
+                    "Target": "ParkingInitialState"
+                }
+            ],
+            "Parent": "null"
+        }
+    ]
+}

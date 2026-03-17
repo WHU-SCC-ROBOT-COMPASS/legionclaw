@@ -1,0 +1,14 @@
+ #ifndef __HolisticPathPrediction__idl__
+#define __HolisticPathPrediction__idl__
+#include "LaneLineCubicCurve.idl"
+module ros2_interface{
+ module msg{
+  struct HolisticPathPrediction{
+    ros2_interface::msg::LaneLineCubicCurve   _hpp;
+    int32   _planning_source;
+    double   _ego_lane_width;
+    double   _confidence;
+  };
+ };
+}; 
+#endif

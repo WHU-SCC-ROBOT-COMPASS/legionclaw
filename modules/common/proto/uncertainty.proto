@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+
+
+message Uncertainty{
+    //Standard deviation of position, east/north/up in meters.
+    optional Point3D position_std_dev = 1;
+    //Standard deviation of quaternion qx/qy/qz, unitless.
+    optional Point3D orientation_std_dev = 2;
+    //Standard deviation of linear velocity, east/north/up in meters per second.
+    optional Point3D linear_velocity_std_dev = 3;
+    //Standard deviation of linear acceleration, right/forward/up in meters per square second.
+    optional Point3D linear_acceleration_std_dev = 4;
+    //Standard deviation of angular velocity, right/forward/up in radians per second.
+    optional Point3D angular_velocity_std_dev = 5;
+}

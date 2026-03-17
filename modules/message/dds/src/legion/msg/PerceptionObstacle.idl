@@ -1,0 +1,34 @@
+ #ifndef __PerceptionObstacle__idl__
+#define __PerceptionObstacle__idl__
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct PerceptionObstacle{
+    int32   _id;
+    ros2_interface::msg::Point3D   _position;
+    double   _theta;
+    ros2_interface::msg::Point3D   _velocity;
+    double   _length;
+    double   _width;
+    double   _height;
+    sequence<ros2_interface::msg::Point3D> _polygon_point;
+    double   _tracking_time;
+    int32   _type;
+    int32   _lane_position;
+    double   _confidence;
+    double   _timestamp;
+    uint8   _confidence_type;
+    ros2_interface::msg::Point3D   _drops;
+    ros2_interface::msg::Point3D   _acceleration;
+    ros2_interface::msg::Point3D   _anchor_point;
+    sequence<ros2_interface::msg::Point3D> _bounding_box;
+    int32   _sub_type;
+    double   _height_above_ground;
+    sequence<double> _position_covariance;
+    sequence<double> _velocity_covariance;
+    sequence<double> _acceleration_covariance;
+    uint8   _light_status;
+  };
+ };
+}; 
+#endif

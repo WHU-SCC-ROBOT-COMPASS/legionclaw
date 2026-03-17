@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message Point2D{
+    //位置坐标x
+    optional double x = 1 [default = 0.0];
+    //位置坐标y
+    optional double y = 2 [default = 0.0];
+}

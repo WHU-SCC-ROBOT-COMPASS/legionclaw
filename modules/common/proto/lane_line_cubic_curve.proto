@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message LaneLineCubicCurve{
+    //车道线起始位置
+    optional double start_x = 1 [default = 0.0];
+    //车道线结束位置
+    optional double end_x = 2 [default = 0.0];
+    //三次曲线系数
+    optional double a = 3 [default = 0.0];
+    optional double b = 4 [default = 0.0];
+    optional double c = 5 [default = 0.0];
+    optional double d = 6 [default = 0.0];
+}

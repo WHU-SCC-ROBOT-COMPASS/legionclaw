@@ -1,0 +1,24 @@
+ #ifndef __LaneList__idl__
+#define __LaneList__idl__
+#include "LaneLine.idl"
+#include "Header.idl"
+#include "RoadMark.idl"
+#include "SensorCalibrator.idl"
+#include "HolisticPathPrediction.idl"
+module ros2_interface{
+ module msg{
+  struct LaneList{
+    ros2_interface::msg::Header   _header;
+    int32   _sensor_id;
+    int8   _error_code;
+    uint8   _sensor_status;
+    int32   _change_origin_flag;
+    boolean   _is_valid;
+    ros2_interface::msg::SensorCalibrator   _sensor_calibrator;
+    sequence<ros2_interface::msg::LaneLine> _camera_laneline;
+    ros2_interface::msg::HolisticPathPrediction   _hpp;
+    sequence<ros2_interface::msg::RoadMark> _road_marks;
+  };
+ };
+}; 
+#endif

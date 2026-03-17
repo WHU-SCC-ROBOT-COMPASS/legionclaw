@@ -1,0 +1,77 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
+build/
+build_private/
+cmake-build-*/
+*.cmake*
+
+# Third-party libraries (external dependencies)
+# If you need to include third-party libs, consider using git submodule instead
+third-party/
+third_party/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+CMakeLists.txt.user
+
+# Package files
+*.tar.gz
+*.zip
+*.rar
+
+# Log files
+*.log
+
+# Protobuf generated files
+*.pb.cc
+*.pb.h
+*.pb.py
+
+# Binary files
+bin/
+*.bin
+

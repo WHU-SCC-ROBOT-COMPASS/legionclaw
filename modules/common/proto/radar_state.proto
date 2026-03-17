@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/radar_state_mode.proto";
+import "modules/common/proto/radar_state_error.proto";
+
+
+message RadarState{
+    optional uint32 sensor_id = 1 [default = 0];
+    optional uint32 nvm_read_status = 2 [default = 0];
+    optional uint32 nvm_write_status = 3 [default = 0];
+    optional RadarStateError radar_state_error = 4 ;
+    optional RadarStateMode radar_state_mode = 5 ;
+    optional uint32 max_distance = 6 [default = 0];
+    optional uint32 sort_index = 7 [default = 0];
+    optional uint32 radar_power = 8 [default = 0];
+    optional uint32 ctl_relay = 9 [default = 0];
+    optional uint32 output_type = 10 [default = 0];
+    optional uint32 send_quality = 11 [default = 0];
+    optional uint32 send_extinfo = 12 [default = 0];
+    optional uint32 motion_rx_state = 13 [default = 0];
+    optional uint32 rcs_threshold = 14 [default = 0];
+    optional uint32 connector_direction = 15 [default = 0];
+    optional uint32 radar_position = 16 [default = 0];
+    optional uint32 hw_error = 17 [default = 0];
+}

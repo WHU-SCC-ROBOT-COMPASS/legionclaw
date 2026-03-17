@@ -1,0 +1,16 @@
+ #ifndef __ParkingStopper__idl__
+#define __ParkingStopper__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct ParkingStopper{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::Point3D   _center_point_vehicle;
+    ros2_interface::msg::Point3D   _center_point_abs;
+    sequence<ros2_interface::msg::Point3D> _stopper_points_vehicle;
+    sequence<ros2_interface::msg::Point3D> _stopper_points_abs;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/hmi_diagnostic_status.proto";
+
+
+message HMIDiagnosticArray{
+    //timestamp is  included in header
+    optional Header header = 1;
+    repeated HMIDiagnosticStatus status = 2;
+}

@@ -1,0 +1,76 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+
+
+message Fins{
+    //头部信息
+    optional Header header = 1;
+    //数据有效性标志位
+    optional bool is_valid = 2 [default = false];
+    //纬度信息
+    optional double latitude = 3 [default = 0.0];
+    //经度信息
+    optional double longitude = 4 [default = 0.0];
+    //海拔信息
+    optional double elevation = 5 [default = 0.0];
+    //UTM坐标位置
+    optional Point3D utm_position = 6;
+    //UTM区号
+    optional int32 utm_zone_mumber = 7 [default = 0];
+    //UTM区号
+    optional uint32 utm_zone_char = 8 [default = 0];
+    //三轴姿态
+    optional Point3D attitude = 9;
+    //线速度信息
+    optional Point3D linear_velocity = 10;
+    //位置标准差
+    optional Point3D sd_position = 11;
+    //姿态标准差
+    optional Point3D sd_attitude = 12;
+    //速度标准差
+    optional Point3D sd_velocity = 13;
+    //cep68数据位
+    optional double cep68 = 14 [default = 0.0];
+    //cep95数据位
+    optional double cep95 = 15 [default = 0.0];
+    //时间
+    optional double second = 16 [default = 0.0];
+    //使用卫星数
+    optional int32 sat_use_num = 17 [default = 0];
+    //可见卫星数
+    optional int32 sat_in_view_num = 18 [default = 0];
+    //求解状态
+    optional uint32 solution_status = 19 [default = 0];
+    //定位状态
+    optional uint32 position_type = 20 [default = 0];
+    //pDop数据位
+    optional double p_dop = 21 [default = 0.0];
+    //hDop数据位
+    optional double h_dop = 22 [default = 0.0];
+    //vDop数据位
+    optional double v_dop = 23 [default = 0.0];
+    //双天线姿态
+    optional Point3D attitude_dual = 24;
+    //双天线角度标准差
+    optional Point3D sd_angle_dual = 25;
+    //双天线距离
+    optional double base_line_length_dual = 26 [default = 0.0];
+    //双天线求解状态
+    optional int32 solution_status_dual = 27 [default = 0];
+    //双天线定位状态
+    optional int32 position_type_dual = 28 [default = 0];
+    //双天线求解源
+    optional int32 solution_source_dual = 29 [default = 0];
+    //Aoc数据位
+    optional uint32 aoc = 30 [default = 0];
+    //RTK基线信息
+    optional uint32 rtk_baseline = 31 [default = 0];
+    //角速度信息
+    optional Point3D angular_velocity = 32;
+    //加速度信息
+    optional Point3D acceleration = 33;
+}

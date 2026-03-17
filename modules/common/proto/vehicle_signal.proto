@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/common_enum.proto";
+
+
+message VehicleSignal{
+    //转向信号
+    optional legion.common.TurnSignal turn_signal = 1 [default = TURN_INACTIVE_SIGNAL];
+    //high beam
+    optional bool high_beam = 2 [default = false];
+    //low beam
+    optional bool low_beam = 3 [default = false];
+    //horn
+    optional bool horn = 4 [default = false];
+    //emergency light
+    optional bool emergency_light = 5 [default = false];
+}

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/wl_constraint_info.proto";
+
+
+message WLConstraintInfoList{
+    //消息头
+    optional Header header = 1;
+    //检测出的wheel_location所需约束信息队列
+    repeated WLConstraintInfo wl_constraint_info = 2;
+    //错误码（default = OK）
+    optional legion.common.ErrorCode error_code = 3 [default = LOCALIZATION_ERROR];
+    //障碍物数据是否合法
+    optional bool is_valid = 4 [default = false];
+}

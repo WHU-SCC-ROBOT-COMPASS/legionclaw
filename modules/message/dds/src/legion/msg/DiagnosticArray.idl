@@ -1,0 +1,13 @@
+ #ifndef __DiagnosticArray__idl__
+#define __DiagnosticArray__idl__
+#include "Header.idl"
+#include "DiagnosticStatus.idl"
+module ros2_interface{
+ module msg{
+  struct DiagnosticArray{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::DiagnosticStatus> _status;
+  };
+ };
+}; 
+#endif

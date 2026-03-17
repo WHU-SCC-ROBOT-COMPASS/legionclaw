@@ -1,0 +1,111 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/time.proto";
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/point_2d.proto";
+import "modules/common/proto/end_points.proto";
+import "modules/common/proto/lane_line_cubic_curve.proto";
+
+
+message LaneLine{
+    enum LaneType{
+        SOLID = 0;
+        DASHED = 1;
+        ROAD_DELIMITER = 2;
+        NONE = 3;
+        LANE_TYPE_UNKNOWN = 4;
+        CURB = 5;
+    }
+
+    enum LaneColor{
+        WHITE = 0;
+        YELLOW = 1;
+        OTHERS = 2;
+        LANE_COLOR_UNKNOWN = 3;
+    }
+
+    enum PosType{
+        BOLLARD_LEFT = -5;
+        FOURTH_LEFT = -4;
+        THIRD_LEFT = -3;
+        ADJACENT_LEFT = -2;
+        EGO_LEFT = -1;
+        EGO_RIGHT = 1;
+        ADJACENT_RIGHT = 2;
+        THIRD_RIGHT = 3;
+        FOURTH_RIGHT = 4;
+        BOLLARD_RIGHT = 5;
+        OTHER = 6;
+        POS_TYPE_UNKNOWN = 7;
+    }
+
+    enum LaneQuality{
+        VERY_LOW = 0;
+        LOW = 1;
+        HIGH = 2;
+        VERY_HIGH = 3;
+    }
+
+    enum FusedLaneType{
+        FUSED_LANE_TYPE_CAMERA = 0;
+        HD = 1;
+        FUSED = 2;
+        FUSED_LANE_TYPE_UNKNOWN = 3;
+    }
+
+    enum LaneCoordinateType{
+        FRAME = 0;
+        IMAGE = 1;
+        LANE_COORDINATE_TYPE_CAMERA = 2;
+        VEHICLE = 3;
+        ABSOLUTE = 4;
+    }
+
+    enum UseType{
+        REAL = 0;
+        VIRTUAL = 1;
+    }
+
+    // 车道线类型：   SOLID = 0;   DASHED = 1;   ROAD_DELIMITER = 2;   NONE = 3;   UNKNOWN = 4;
+    optional LaneLine.LaneType lane_type = 1 [default = SOLID];
+    // 车道线颜色：   WHITE = 0;   YELLOW = 1;   OTHERS = 2;   UNKNOWN = 3;
+    optional LaneLine.LaneColor lane_color = 2 [default = WHITE];
+    //车道线位置类别：    BOLLARD_LEFT = -5;   FOURTH_LEFT = -4;   THIRD_LEFT = -3;   ADJACENT_LEFT = -2;  //!< lane marking on the left side next to ego lane   EGO_LEFT = -1;       //!< left lane marking of the ego lane   EGO_RIGHT = 1;       //!< right lane marking of the ego lane   ADJACENT_RIGHT = 2;  //!< lane marking on the right side next to ego lane   THIRD_RIGHT = 3;   FOURTH_RIGHT = 4;   BOLLARD_RIGHT = 5;   OTHER = 6;    //!< other types of lane   UNKNOWN = 7;  //!< background
+    optional LaneLine.PosType pos_type = 3 [default = BOLLARD_LEFT];
+    //车辆坐标系车道线三次曲线系数
+    optional LaneLineCubicCurve curve_vehicle = 4 ;
+    //图像坐标系车道线三次曲线系数
+    optional LaneLineCubicCurve curve_image = 5 ;
+    //世界坐标系车道线三次曲线系数
+    optional LaneLineCubicCurve curve_abs = 6 ;
+    //车辆坐标系车道线点集
+    repeated Point3D pts_vehicle = 7;
+    //图像坐标系车道线点集
+    repeated Point2D pts_image = 8;
+    //世界坐标系车道线点集
+    repeated Point3D pts_abs = 9;
+    //车道线上顶点与下顶点
+    optional EndPoints image_end_point = 10 ;
+    //车道线关键点数组
+    repeated Point2D pts_key = 11;
+    //高精车道线id
+    optional uint32 hd_lane_id = 12 [default = 0];
+    //车道线置信度
+    optional double confidence = 13 [default = 0.0];
+    //  车道线质量：   VERY_LOW = 0;   LOW = 1;   HIGH = 2;   VERY_HIGH = 3;
+    optional LaneLine.LaneQuality lane_quality = 14 [default = VERY_LOW];
+    //  融合车道线类别：   CAMERA = 0;   HD = 1;   FUSED = 2;   UNKNOWN = 3;   if value is 1, lane_quality = 3
+    optional LaneLine.FusedLaneType fused_lane_type = 15 [default = FUSED_LANE_TYPE_CAMERA];
+    //透视变换矩阵
+  repeated double homography_mat = 16;
+    //透视变换逆矩阵
+  repeated double homography_mat_inv = 17;
+    //  坐标系类别：   FRAME = 0;   IMAGE = 1;   CAMERA = 2;   VEHICLE = 3;   ABSOLUTE = 4;
+    optional LaneLine.LaneCoordinateType lane_coordinate_type = 18 [default = FRAME];
+    //  使用类别：   REAL = 0;   VIRTUAL = 1;
+    optional LaneLine.UseType use_type = 19 [default = REAL];
+    //车道线被识别的时间戳
+    optional Time create_time = 20;
+}

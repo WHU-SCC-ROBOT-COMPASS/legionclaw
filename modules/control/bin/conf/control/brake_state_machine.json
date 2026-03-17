@@ -1,0 +1,48 @@
+{
+    "brake_state_machine": [
+        {
+            "StateName": "Start",
+            "Transition": [
+                {
+                    "Key": "started",
+                    "Target": "Init"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Init",
+            "Transition": [
+                {
+                    "Key": "on",
+                    "Target": "ON"
+                },
+                {
+                    "Key": "off",
+                    "Target": "OFF"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ON",
+            "Transition": [
+                {
+                    "Key": "off",
+                    "Target": "OFF"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "OFF",
+            "Transition": [
+                {
+                    "Key": "on",
+                    "Target": "ON"
+                }
+            ],
+            "Parent": "null"
+        }
+    ]
+}

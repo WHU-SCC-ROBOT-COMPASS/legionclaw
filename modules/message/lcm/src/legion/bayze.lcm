@@ -1,0 +1,2198 @@
+package lcm_interface;
+
+// LaneInfoExtend::LaneInfoExtend
+struct LaneInfoExtend
+{
+    int8_t priority; // 道路优先级
+    int64_t global_id; // 道路全局id（从左至右，从0开始）
+    int32_t predecessor_ids_size;
+    int64_t predecessor_ids[predecessor_ids_size]; // 所有的前继车道id数组
+    int32_t successor_ids_size;
+    int64_t successor_ids[successor_ids_size]; // 所有的后续车道id数组
+    int64_t left_neighbor_id; // 左边相邻车道id
+    int64_t right_neighbor_id; // 右边相邻车道id
+    int8_t type; // 类型（预留）
+    int32_t lane_points_size;
+    LanePoint lane_points[lane_points_size]; // 道路参考线（z）
+}
+
+// LocalMap::LocalMap
+struct LocalMap
+{
+    Header header; // timestamp is included in header
+    int32_t seq; // Sequence number，lane_list数据有更新则加1，否则保持不变
+    Point3D ego_point; // 生成该LocalMap局部地图消息时的自车位置
+    double range; // 生成该LocalMap局部地图消息的范围，以ego_point为中心，range为边长的正方形，单位：m
+    int32_t lane_list_size;
+    LaneInfoExtend lane_list[lane_list_size]; // 自车周边LocalMap范围内的车道信息列表
+}
+
+// Common::Header
+struct Header
+{
+    int32_t seq; // Sequence number for each message. Each module maintains its own counter for sequence_num, always starting from 1 on boot.
+    Time stamp; // 时间戳
+    string frame_id; // 帧id
+}
+
+// Common::Time
+struct Time
+{
+    int32_t sec; // 秒
+    int32_t nsec; // 纳秒
+}
+
+// Common::Status
+struct Status
+{
+    int32_t error_code; // 错误码
+    string msg; // 错误码描述
+}
+
+// Common::PointENU
+struct PointENU
+{
+    double x; // East from the origin, in meters.
+    double y; // North from the origin, in meters.
+    double z; // Up from the WGS-84 ellipsoid, in meters.
+}
+
+// Common::PointBasic
+struct PointBasic
+{
+    double x; // 位置坐标x
+    double y; // 位置坐标y
+    double z; // 位置坐标z
+    double theta; // heading(rad)
+}
+
+// Common::PointLLH
+struct PointLLH
+{
+    double lon; // Longitude in degrees, ranging from -180 to 180.
+    double lat; // Latitude in degrees, ranging from -90 to 90.
+    double height; // WGS-84 ellipsoid height in meters.
+}
+
+// Common::Point2D
+struct Point2D
+{
+    double x; // 位置坐标x
+    double y; // 位置坐标y
+}
+
+// Common::Point3D
+struct Point3D
+{
+    double x; // 位置坐标x
+    double y; // 位置坐标y
+    double z; // 位置坐标z
+}
+
+// Common::Quaternion
+struct Quaternion
+{
+    double qx; // 四维空间x
+    double qy; // 四维空间y
+    double qz; // 四维空间z
+    double qw; // 四维空间w
+}
+
+// Common::Polygon3D
+struct Polygon3D
+{
+    int32_t coordinate_system; // 坐标系
+    int32_t points_size;
+    Point3D points[points_size]; // 三维点集
+}
+
+// Common::Polygon2D
+struct Polygon2D
+{
+    int32_t coordinate_system; // 坐标系
+    int32_t points_size;
+    Point2D points[points_size]; // 二维点集
+}
+
+// Common::ImageKeyPoint
+struct ImageKeyPoint
+{
+    double x; // 车位图像关键点x坐标
+    double y; // 车位图像关键点y坐标
+    double confidence; // 置信度
+}
+
+// Common::SLPoint
+struct SLPoint
+{
+    double s; // 纵向位移
+    double l; // 横向位移
+}
+
+// Common::SLBoundary
+struct SLBoundary
+{
+    double start_s; // 起始点纵向位移
+    double end_s; // 终止点纵向位移
+    double start_l; // 起始点横向位移
+    double end_l; // 终止点横向位移
+    int32_t boundary_point_size;
+    SLPoint boundary_point[boundary_point_size]; // sl点集
+}
+
+// Common::FrenetFramePoint
+struct FrenetFramePoint
+{
+    double s; // 纵向位移
+    double l; // 横向位移
+    double dl; // 横向位移变化率
+    double ddl; // 横向位移变化率的变化率
+}
+
+// Common::SpeedPoint
+struct SpeedPoint
+{
+    double s; // 里程
+    double t; // 时间
+    double v; // speed (m/s)
+    double a; // acceleration (m/s^2)
+    double da; // jerk (m/s^3)
+}
+
+// Common::PathPoint
+struct PathPoint
+{
+    double x; // coordinates x
+    double y; // coordinates y
+    double z; // coordinates z
+    double theta; // direction on the x-y plane
+    double kappa; // curvature on the x-y planning
+    double s; // accumulated distance from beginning of the path
+    double dkappa; // derivative of kappa w.r.t s.
+    double ddkappa; // derivative of derivative of kappa w.r.t s.
+    double lane_id; // The lane ID where the path point is on
+    double x_derivative; // derivative of x w.r.t parametric parameter t in CosThetareferenceline
+    double y_derivative; // derivative of y w.r.t parametric parameter t in CosThetareferenceline
+}
+
+// Common::Path
+struct Path
+{
+    string name; // 名称
+    int32_t path_points_size;
+    PathPoint path_points[path_points_size]; // 路径点集
+}
+
+// Common::TrajectoryPoint
+struct TrajectoryPoint
+{
+    PathPoint path_point; // path point
+    double v; // linear velocity
+    double a; // linear acceleration
+    double relative_time; // relative time from beginning of the trajectory
+    double da; // longitudinal jerk
+    boolean is_steer_valid; // 转向是否有效
+    double front_steer; // The angle between vehicle front wheel and vehicle longitudinal axis
+    double rear_steer; // 后轮转角
+    int32_t gear; // 档位
+}
+
+// Common::Trajectory
+struct Trajectory
+{
+    string name; // 轨迹名称
+    int32_t trajectory_points_size;
+    TrajectoryPoint trajectory_points[trajectory_points_size]; // 轨迹点
+}
+
+// Common::VehicleMotionPoint
+struct VehicleMotionPoint
+{
+    TrajectoryPoint trajectory_point; // trajectory point
+    double steer; // The angle between vehicle front wheel and vehicle longitudinal axis
+}
+
+// Common::VehicleMotion
+struct VehicleMotion
+{
+    string name; // 名称
+    int32_t vehicle_motion_point_size;
+    VehicleMotionPoint vehicle_motion_point[vehicle_motion_point_size]; //  
+}
+
+// Common::GaussianInfo
+struct GaussianInfo
+{
+    double sigma_x; // 标准差x
+    double sigma_y; // 标准差y
+    double correlation; // 相关性
+    double area_probability; // Information of representative uncertainty area
+    double ellipse_a; // 椭圆长轴
+    double ellipse_b; // 椭圆短轴
+    double theta_a; // 椭圆朝向
+}
+
+// Common::VehicleSignal
+struct VehicleSignal
+{
+    int32_t turn_signal; // 转向信号
+    boolean high_beam; // high beam
+    boolean low_beam; // low beam
+    boolean horn; // horn
+    boolean emergency_light; // emergency light
+}
+
+// Common::PadMessage
+struct PadMessage
+{
+    string cmd; // 命令
+}
+
+// Common::Stories
+struct Stories
+{
+    string note; //  
+}
+
+// Common::Fault
+struct Fault
+{
+    Time timestamp; // 时间戳
+    int64_t code; // 故障码
+    string reason; // 原因
+}
+
+// Common::Faults
+struct Faults
+{
+    Header header; // 消息头
+    int32_t version; // 版本号
+    int32_t app_id; // 应用app所分配的id
+    boolean is_active; // 应用是否激活，激活为true，未激活为false
+    int32_t faults_size;
+    Fault faults[faults_size]; // 故障集
+}
+
+// Common::Event
+struct Event
+{
+    Time timestamp; // 时间戳
+    int64_t code; // 0：invalid； 1：不可泊车；2：可以泊车；3：泊车完成； 4：不可泊出；5：可以泊出；6：泊出完成;   7 :  不可行车；8：可以行车；9：行车完成； 1X：退出自动驾驶（视退出场景可细分） 10：轨迹太短，请求退出自动驾驶; 20：拨杆换道驳回；21：执行向左拨杆换道;22：执行向右拨杆换道；23：拨杆换道完成 30：准备主动向左换道；31：执行主动向左换道；32：准备主动向右换道；33：执行主动向右换道；34：主动换道完成; 147: localmap的车道线效果不好，请求人工接管或者退出自动驾驶
+    string reason; // 原因
+}
+
+// Common::Events
+struct Events
+{
+    Header header; //  
+    int32_t version; // 软件模块版本号
+    int32_t events_size;
+    Event events[events_size]; // 时间集
+}
+
+// Common::EStop
+struct EStop
+{
+    boolean is_estop; // is_estop == true when emergency stop is required
+    string reason; // 原因
+}
+
+// Common::Matrix3D
+struct Matrix3D
+{
+    double a00; // 第一行第一列元素
+    double a01; // 第一行第二列元素
+    double a02; // 第一行第三列元素
+    double a10; // 第二行第一列元素
+    double a11; // 第二行第二列元素
+    double a12; // 第二行第三列元素
+    double a20; // 第三行第一列元素
+    double a21; // 第三行第二列元素
+    double a22; // 第三行第三列元素
+}
+
+// Common::Pose
+struct Pose
+{
+    PointENU position; // Position of the vehicle reference point (VRP) in the map reference frame.   The VRP is the center of rear axle.
+    Quaternion orientation; // A quaternion that represents the rotation from the IMU coordinate (Right/Forward/Up) to the world coordinate (East/North/Up).
+    Point3D linear_velocity; // Linear velocity of the VRP in the map reference frame.East/north/up in meters per second.
+    Point3D linear_acceleration; // Linear acceleration of the VRP in the map reference frame. East/north/up in meters per square second.
+    Point3D angular_velocity; // Angular velocity of the vehicle in the map reference frame.Around east/north/up axes in radians per second.
+    double heading; // The heading is zero when the car is facing East and positive when facing North
+    Point3D linear_acceleration_vrf; // Linear acceleration of the VRP in the vehicle reference frame.Right/forward/up in meters per square second.
+    Point3D angular_velocity_vrf; // Angular velocity of the VRP in the vehicle reference frame. Around right/forward/up axes in radians per second.
+    Point3D euler_angles; // // Roll/pitch/yaw that represents a rotation with intrinsic sequence z-x-y.   // in world coordinate (East/North/Up)   // The roll, in (-pi/2, pi/2), corresponds to a rotation around the y-axis.   // The pitch, in [-pi, pi), corresponds to a rotation around the x-axis.   // The yaw, in [-pi, pi), corresponds to a rotation around the z-axis.   // The direction of rotation follows the right-hand rule.
+}
+
+// Common::Uncertainty
+struct Uncertainty
+{
+    Point3D position_std_dev; // Standard deviation of position, east/north/up in meters.
+    Point3D orientation_std_dev; // Standard deviation of quaternion qx/qy/qz, unitless.
+    Point3D linear_velocity_std_dev; // Standard deviation of linear velocity, east/north/up in meters per second.
+    Point3D linear_acceleration_std_dev; // Standard deviation of linear acceleration, right/forward/up in meters per square second.
+    Point3D angular_velocity_std_dev; // Standard deviation of angular velocity, right/forward/up in radians per second.
+}
+
+// Chassis::Chassis
+struct Chassis
+{
+    Header header; //  
+    int32_t moving_status; // 移动状态
+    int32_t driving_mode; // 驾驶状态
+    int32_t steer_driving_mode; // 线控转向驾驶模式
+    int32_t steering_status; // 线控转向执行器状态
+    double front_steering_value; // 方向盘转角
+    double rear_steering_value; // 后轮转角
+    double steering_torque_nm; // 方向盘扭矩
+    double front_steering_rate_dps; // 方向盘转速
+    double rear_steering_rate_dps; // 方向盘转速
+    int32_t accel_driving_mode; // 线控驱动驾驶模式
+    int32_t accel_status; // 线控驱动状态
+    double accel_value; // 线控驱动值（油门值）
+    int32_t brake_driving_mode; // 线控制动驾驶模式
+    int32_t brake_status; // 线控制动状态
+    double brake_value; // 线控制动值（刹车值）
+    int32_t backup_brake_driving_mode; // 备用线控制动驾驶模式
+    int32_t backup_brake_status; // 备用线控制动状态
+    double backup_brake_value; // 备用线控制动值
+    int32_t epb_driving_mode; // EPB驾驶模式
+    int32_t epb_status; // EPB状态
+    int32_t epb_level; // EPB档位
+    int32_t engine_status; // 发动机状态
+    double engine_rpm; // 发动机转速
+    double engine_torque; // 发动机扭矩
+    double speed_mps; // 车速（m/s）
+    double odometer_m; // 里程(m)
+    int32_t fuel_range_m; // 油表值
+    int32_t gear_driving_mode; // 档位驾驶模式
+    int32_t gear_status; // 档位状态
+    int32_t gear_location; // 档位值
+    int32_t driver_seat_belt; // 主驾驶位安全带状态
+    int32_t high_beam_status; // 远光灯状态
+    int32_t low_beam_status; // 近光灯状态
+    int32_t horn_status; // 喇叭状态
+    int32_t turn_lamp_status; // 转向灯状态
+    int32_t front_wiper_status; // 前雨刮器状态
+    int32_t rear_wiper_status; // 后雨刮器状态
+    int32_t position_lamp_status; // 位置灯状态
+    int32_t front_fog_lamp_status; // 前雾灯状态
+    int32_t rear_fog_lamp_status; // 后雾灯状态
+    int32_t brake_lamp_status; // 刹车灯状态
+    int32_t alarm_lamp_status; // 报警灯状态
+    int32_t lf_door_status; // 左前门状态
+    int32_t rf_door_status; // 右前门状态
+    int32_t lr_door_status; // 左后门状态
+    int32_t rr_door_status; // 右后门状态
+    int32_t rearview_mirror_status; // 后视镜状态
+    int32_t trunk_status; // 后备箱盖状态
+    int32_t engine_bay_door_status; // 发送机舱盖状态
+    int32_t wheel_direction_rr; // 右后轮方向
+    double wheel_spd_rr; // 右后轮速
+    int32_t wheel_direction_rl; // 左后轮方向
+    double wheel_spd_rl; // 左后轮值
+    int32_t wheel_direction_fr; // 右前轮方向
+    double wheel_spd_fr; // 右前轮速
+    int32_t wheel_direction_fl; // 左前轮方向
+    double wheel_spd_fl; // 左前轮速
+    int32_t is_tire_pressure_ok; // 胎压是否正常
+    int32_t is_tire_pressure_lf_valid; // 左前轮胎压是否有效
+    double tire_pressure_lf; // 左前轮胎压
+    int32_t is_tire_pressure_rf_valid; // 右前轮胎压是否有效
+    double tire_pressure_rf; // 右前轮胎压
+    int32_t is_tire_pressure_lr_valid; // 左后轮胎压是否有效
+    double tire_pressure_lr; // 左后轮胎压
+    int32_t is_tire_pressure_rr_valid; // 右后轮胎压是否有效
+    double tire_pressure_rr; // 右后轮胎压
+    double battery_power_percentage; // 电池电量值
+    int32_t air_bag_status; // 气囊状态
+    int32_t charging_gun_status; // 充电枪状态
+    int32_t vehicle_power_status; // 电量表状态
+    int32_t chassis_error_code_size;
+    int32_t chassis_error_code[chassis_error_code_size]; // 底盘错误码
+}
+
+// ControlCommand::ControlCommand
+struct ControlCommand
+{
+    Header header; //  
+    int32_t steer_driving_mode; // 0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    double front_steering_target; // target steering angle
+    double rear_steering_target; // target steering angle
+    double front_steering_rate; // target non-directional steering rate
+    double rear_steering_rate; // target non-directional steering rate
+    int32_t accel_driving_mode; // 0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    double accel_value; // target accel value
+    int32_t brake_driving_mode; // 0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    double brake_value; // target brake
+    int32_t backup_brake_driving_mode; // 0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    double backup_brake_value; // target brake
+    int32_t epb_driving_mode; // 0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    int32_t epb_level; // 0=RELEASE 1=APPLIY 2=INVALID
+    int32_t gear_driving_mode; // 0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE 4=EMERGENCY_MODE
+    int8_t emergency_brake_enable; // 0=disenable  1=enable
+    int32_t gear_location; // 0=GEAR_NEUTRAL 1=GEAR_DRIVE 2=GEAR_REVERSE 3=GEAR_PARKING 4=GEAR_LOW 5=GEAR_INVALID 6=GEAR_NONE
+    double speed; // target speed, in m/s
+    double acceleration; // target acceleration in m`s^-2
+    int32_t turn_lamp_ctrl; // 转向灯 0 关闭 1 开启 2 不响应
+    int32_t high_beam_ctrl; // 0 关闭 1 开启 2 不响应
+    int32_t low_beam_ctrl; // 0 关闭 1 开启 2 不响应
+    int32_t horn_ctrl; // 0 关闭 1 开启 2 不响应
+    int32_t front_wiper_ctrl; // 前雨刮器 0 关闭 1 开启
+    int32_t rear_wiper_ctrl; // 后雨刮器 0 关闭 1 开启
+    int32_t position_lamp_ctrl; // 位置灯 0 关闭 1 开启
+    int32_t front_fog_lamp_ctrl; // 前雾灯 0 关闭 1 开启
+    int32_t rear_fog_lamp_ctrl; // 后雾灯 0 关闭 1 开启
+    int32_t brake_lamp_ctrl; // 刹车灯 一般情况自动控制 0 关闭 1 开启
+    int32_t alarm_lamp_ctrl; // 警报灯 双闪 0 关闭 1 开启
+    int32_t lf_door_ctrl; // 左前门控制 0 关闭 1 开启
+    int32_t rf_door_ctrl; // 右前门控制 0 关闭 1 开启
+    int32_t lr_door_ctrl; // 左后门控制 0 关闭 1 开启
+    int32_t rr_door_ctrl; // 右后门控制 0 关闭 1 开启
+}
+
+// WheelInfo::WheelInfo
+struct WheelInfo
+{
+    Header header; //  
+    int32_t moving_status; // 0=UNKNOWN_VEHICLE_STATE  1=STATIONARY  2=MOVING_FORWARD  3=MOVING_BACKWARD
+    int32_t steer_driving_mode; // 0=COMPLETE_MANUAL  1=COMPLETE_AUTO_DRIVE  4=EMERGENCY_MODE
+    double steering_value; // Real steering location
+    double steering_torque_nm; // Applied steering torque in [Nm]
+    double steering_rate_dps; // degree/s
+    double speed_mps; // Vehicle Speed in meters per second
+    boolean veh_spd_vld; // 车速有效性
+    int32_t gear; // 档位
+    boolean gear_vld; // 档位有效性
+    int32_t wheel_direction_rr; // 0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    double wheel_spd_rr; // Actual speed of the right rear wheel
+    int32_t wheel_direction_rl; // 0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    double wheel_spd_rl; // Actual speed of the left rear wheel
+    int32_t wheel_direction_fr; // 0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    double wheel_spd_fr; // Actual speed of the right front wheel
+    int32_t wheel_direction_fl; // 0=FORWARD 1=BACKWARD 2=STANDSTILL 3=INVALID
+    double wheel_spd_fl; // Actual speed of the left front wheel
+    double yaw_rate; // Yaw rate[degree/s] [-163.84|163.835]
+    int32_t wss_fl_edges_sum; // 左前轮边缘和
+    int32_t wss_fr_edges_sum; // 右前轮边缘和
+    int32_t wss_rl_edges_sum; // 左后轮边缘和
+    int32_t wss_rr_edges_sum; // 右后轮边缘和
+    boolean wss_fl_edges_sum_vld; // 左前轮边缘和有效位（0：无效 1：有效）
+    boolean wss_fr_edges_sum_vld; // 右前轮边缘和有效位（0：无效 1：有效）
+    boolean wss_rl_edges_sum_vld; // 左后轮边缘和有效位（0：无效 1：有效）
+    boolean wss_rr_edges_sum_vld; // 右后轮边缘和有效位（0：无效 1：有效）
+    double veh_lat_accel; // 车辆横向加速度
+    double veh_lgt_accel; // 车辆纵向加速度
+    boolean veh_lat_accel_vld; // 车辆横向加速度有效性
+    boolean veh_lgt_accel_vld; // 车辆纵向加速度有效性
+}
+
+// ControlAnalysis::ControlAnalysis
+struct ControlAnalysis
+{
+    Header header; //  
+    int32_t driving_mode; // 驾驶模式
+    int32_t driving_mode_fd; // 驾驶模式反馈
+    int32_t gear_location_fd; // 档位反馈
+    int32_t gear_location_cmd; // 档位命令
+    int32_t epb_level_fd; // EPB状态反馈
+    int32_t epb_level_cmd; // EPB命令
+    double speed_mps; // 车辆速度
+    double speed_reference; // 参考速度
+    double accel_value_fd; // 油门反馈
+    double accel_value_cmd; // 油门命令
+    double brake_value_fd; // 刹车反馈
+    double brake_value_cmd; // 刹车命令
+    double path_remain; // 剩余轨迹里程
+    boolean has_stop_point; // 是否有停车点
+    boolean is_full_stop; // 是否有停车轨迹
+    boolean is_stopped; // 是否停车
+    double lon_acc_jerk; // 纵向加加速度
+    double acceleration_cmd; // 加速度命令
+    double acceleration_cmd_closeloop; // 闭环加速度命令
+    double preview_acceleration_reference; // 预描参考加速度
+    double slope_offset_compensation; // 坡道补偿
+    double turning_offset_compensation; // 转向补偿
+    double speed_error_limited; // 速度差限值
+    double speed_error; // 速度差
+    double speed_offset; //  
+    double station_error_limited; // 位置误差限值
+    double station_error; // 位置误差
+    double lon_target_point_s; // 纵向控制目标点里程
+    int64_t lon_calculate_time; // 纵向计算时间
+    int64_t lon_calculate_time_max; // 纵向时间限值
+    double ref_curvature; // 参考曲率
+    double ref_heading; // 参考航向角
+    double current_heading; // 当前航向角
+    double heading_error; // 航向角误差
+    double heading_error_rate; // 航向角误差率
+    double lateral_error; // 横向误差
+    double lateral_error_rate; // 横向误差率
+    double lon_error; // 纵向误差
+    double front_steering_value_fd; // 前轮转向反馈
+    double front_steering_target; // 前轮目标转向
+    double front_steering_rate; // 前轮转向角速率
+    double front_steer_angle_feedforward; // 前轮前馈计算
+    double front_steer_angle_feedback; // 前轮反馈计算
+    double front_steer_angle_lateral_contribution; // 前轮横向误差贡献
+    double front_steer_angle_lateral_rate_contribution; // 前轮横向误差率贡献
+    double front_steer_angle_heading_contribution; // 前轮航向角误差贡献
+    double front_steer_angle_heading_rate_contribution; // 前轮航向角误差率贡献
+    double rear_steering_value_fd; // 后轮转向反馈
+    double rear_steering_target; // 后轮目标转向
+    double rear_steering_rate; // 后轮转向角速率
+    double rear_steer_angle_feedforward; // 后轮前馈计算
+    double rear_steer_angle_feedback; // 后轮反馈计算
+    double rear_steer_angle_lateral_contribution; // 后轮横向误差贡献
+    double rear_steer_angle_lateral_rate_contribution; // 后轮横向误差率贡献
+    double rear_steer_angle_heading_contribution; // 后轮航向角误差贡献
+    double rear_steer_angle_heading_rate_contribution; // 后轮航向角误差率贡献
+    double matrix_k_00; // k矩阵
+    double matrix_k_01; // k矩阵
+    double matrix_k_02; // k矩阵
+    double matrix_k_03; // k矩阵
+    double matrix_k_10; // k矩阵
+    double matrix_k_11; // k矩阵
+    double matrix_k_12; // k矩阵
+    double matrix_k_13; // k矩阵
+    double matrix_state_0; // 状态矩阵
+    double matrix_state_1; // 状态矩阵
+    double matrix_state_2; // 状态矩阵
+    double matrix_state_3; // 状态矩阵
+    double matrix_q_updated_0; // 权重矩阵
+    double matrix_q_updated_1; // 权重矩阵
+    double matrix_q_updated_2; // 权重矩阵
+    double matrix_q_updated_3; // 权重矩阵
+    double current_x; // 当前位置x
+    double current_y; // 当前位置y
+    double target_point_x; // 目标点x
+    double target_point_y; // 目标点y
+    double lat_target_point_s; // 横向目标点里程
+    int64_t lqr_calculate_time; // LQR计算时间
+    int64_t lqr_calculate_time_max; // LQR计算时间限值
+}
+
+// VehicleParam::VehicleParam
+struct VehicleParam
+{
+    string brand; //  
+    int32_t steer_mode; //  
+    double length; //  
+    double width; //  
+    double height; //  
+    double mass_fl; //  
+    double mass_fr; //  
+    double mass_rl; //  
+    double mass_rr; //  
+    double wheel_radius; //  
+    double wheelbase; //  
+    double front_edge_to_center; //  
+    double back_edge_to_center; //  
+    double lf; //  
+    double lr; //  
+    double cf; //  
+    double cr; //  
+    double steer_ratio; //  
+    double rolling_coefficient; //  
+    double air_density; //  
+    double air_damping_coefficient; //  
+    double max_front_steer_angle; //  
+    double min_front_steer_angle; //  
+    double max_rear_steer_angle; //  
+    double min_rear_steer_angle; //  
+    double speed_limit; //  
+    double max_brake_value; //  
+    double min_brake_value; //  
+    double max_accel_value; //  
+    double min_accel_value; //  
+    double speed_deadzone; //  
+    double standstill_acceleration; //  
+    double max_front_steer_angle_rate; //  
+    double max_rear_steer_angle_rate; //  
+    double max_abs_speed_when_stopped; //  
+    double max_abs_speed_when_stopped_duration; //  
+    double brake_value_when_gear_transitioning; //  
+    double accel_deadzone; //  
+    double brake_deadzone; //  
+    double acceleration_in_idle; //  
+    double deceleration_in_idle; //  
+    double max_acceleration_jerk; //  
+    double max_acceleration; //  
+    double max_deceleration; //  
+    double min_turning_radius; //  
+}
+
+// VehicleConfig::VehicleConfig
+struct VehicleConfig
+{
+    Header header; //  
+    VehicleParam vehicle_param; // 车辆参数表
+}
+
+// PredictionObstacles::PredictionObstacles
+struct PredictionObstacles
+{
+    Header header; // timestamp is included in header
+    int32_t prediction_obstacles_size;
+    PredictionObstacle prediction_obstacles[prediction_obstacles_size]; // make prediction for multiple obstacles
+    int32_t change_origin_flag; // 0:坐标系切换成功 1:坐标系切换中 2:坐标系切换故障
+    double start_timestamp; // start timestamp
+    double end_timestamp; // end timestamp
+    int32_t self_intent; // 自动驾驶车辆意图  0-UNKNOWN, 1-STOP, 2-CRUISE, 3-CHANGE_LANE
+    int32_t scenario; // 场景              0-UNKNOWN, 1000-CRUISE, 1001-CRUISE_URBAN 1002-CRUISE_HIGHWAY, 2000-JUNCTION  2001-JUNCTION_TRAFFIC_LIGHT 2002-JUNCTION_STOP_SIGN
+}
+
+// Location::Location
+struct Location
+{
+    Header header; // 消息头
+    PointLLH position; // 经纬度高程
+    double pitch; // 方向(单位弧度，-π～π,正东:0, 逆时针。都满足右手定则)
+    double roll; //  
+    double heading; //  
+    Point3D linear_velocity; // 线速度（m/s，北东地坐标系）
+    Point3D linear_acceleration; // 线加速度（m/s2，前右下坐标系）
+    Point3D angular_velocity; // 角速度（度/s，前右下，满足右手定则）
+    int32_t rtk_flag; // RTK标志值
+    int32_t odom_type; // 融合标志:0-(纯ins) 1-(纯轮速) 2-(泊车递推) 3-(无) 4-(orb匹配定位)
+    int32_t auxiliary_type; // 辅助方式:0-NULL(无辅助方式) 1-laneliine_map(车道线/标识牌)2-feature_map(lidar)3-feature_map(lidar_camera)
+    int32_t location_valid_flag; // Location有效性标志位0: invalid； 1: valid
+    double origin_lat; // 参考点纬度 GCJ-02格式
+    double origin_lon; // 参考点经度 GCJ-02格式
+    PointENU utm_position; // 相对参考点xyz坐标
+    int32_t change_origin_flag; // 0::无坐标系切换 1:坐标系切换成功2:坐标系切换中3:坐标系切换故障
+    PointENU utm_position_next; // 相对参考点坐标(切换状态下，为新的原点坐标系下)
+    Point3D position_std_dev; // 位置标准差
+    Point3D orientation_std_dev; // 方向标准差
+    Point3D linear_velocity_std_dev; // 速度标准差
+    Point3D linear_acceleration_std_dev; // 加速度标准差
+    Point3D angular_velocity_std_dev; // 角速度标准差
+}
+
+// Odometry::Odometry
+struct Odometry
+{
+    Header header; // 含有时间戳信息的结构体
+    PointENU position; // 位置
+    Quaternion orientation; // 角度
+    int32_t covariance_size;
+    double covariance[covariance_size]; // 方差
+}
+
+// ObstacleList::ObstacleList
+struct ObstacleList
+{
+    Header header; // 消息头
+    int32_t sensor_id; // 安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    int32_t obstacle_size;
+    Obstacle obstacle[obstacle_size]; // 检测出的障碍物数组
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 障碍物数据是否合法
+    int32_t change_origin_flag; // 坐标切换状态（0-坐标系切换成功 1-坐标系切换中 2-坐标系切换故障）
+}
+
+// LaneList::LaneList
+struct LaneList
+{
+    Header header; // 消息头
+    int32_t sensor_id; // 安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    int8_t error_code; // 错误码： ERROR_NONE = 0; ERROR_UNKNOWN = 1;
+    int8_t sensor_status; // 传感器状态： NORMAL=0； ABNORMAL=1；
+    int32_t change_origin_flag; // 坐标切换状态（0-坐标系切换成功 1-坐标系切换中 2-坐标系切换故障）
+    boolean is_valid; // 车道线数据是否合法
+    SensorCalibrator sensor_calibrator; // 传感器标定参数
+    int32_t camera_laneline_size;
+    LaneLine camera_laneline[camera_laneline_size]; // 车道线检测结果数组
+    HolisticPathPrediction hpp; // 行驶预测线
+    int32_t road_marks_size;
+    RoadMark road_marks[road_marks_size]; // 路面标识
+}
+
+// TrafficLightMsg::TrafficLightMsg
+struct TrafficLightMsg
+{
+    Header header; // 消息头
+    int32_t traffic_light_size;
+    TrafficLight traffic_light[traffic_light_size]; // 检出的交通灯数组
+    TrafficLightDebug traffic_light_debug; // 交通灯数组调试
+    boolean contain_lights; // 是否包含交通灯
+    int32_t camera_id; // CAMERA_FRONT_LONG = 0; CAMERA_FRONT_NARROW = 1; CAMERA_FRONT_SHORT = 2; CAMERA_FRONT_WIDE = 3;
+    boolean is_valid; // true: valid  false: invalid
+}
+
+// Ultrasonic::Ultrasonic
+struct Ultrasonic
+{
+    Header header; // 消息头
+    int32_t ranges_size;
+    UltrasonicObstacle ranges[ranges_size]; // 超声波障碍物数组
+}
+
+// RadarObstacleListMsg::RadarObstacleListMsg
+struct RadarObstacleListMsg
+{
+    Header header; // 消息头
+    int32_t radar_obstacle_size;
+    RadarObstacle radar_obstacle[radar_obstacle_size]; // 毫米波雷达障碍物数组
+    int8_t sensor_id; // 毫米波雷达 ID.
+    RadarState radar_state; // radar state.
+    boolean is_valid; // true: valid  false: invalid
+}
+
+// PointCloud::PointCloud
+struct PointCloud
+{
+    Header header; // 消息头
+    string frame_id; // 帧id
+    boolean is_dense; // True if there are no invalid points
+    int32_t point_size;
+    PointXYZIRT point[point_size]; // 激光点结构体
+    double measurement_time; // 测量时间
+    int32_t width; // 激光点宽度
+    int32_t height; // 激光点高度
+}
+
+// RadarObstacle::RadarObstacle
+struct RadarObstacle
+{
+    int32_t id; // obstacle ID.
+    int8_t life_time; // 障碍物存在时间
+    Point2D relative_position; // 雷达坐标系障碍物位置
+    Point2D relative_position_rms; // 雷达坐标系障碍物位置标准差
+    Point2D relative_velocity; // 雷达坐标系障碍物速度
+    Point2D relative_velocity_rms; // 雷达坐标系障碍物速度标准差
+    Point2D relative_acceleration; // 雷达坐标系障碍物加速度
+    Point2D relative_acceleration_rms; // 雷达坐标系障碍物加速度标准差
+    double rcs; // 雷达散射面积
+    double snr; //  
+    int32_t moving_status; // STATIONARY = 0; NEARING = 1; AWAYING = 2; NONE = 3;
+    double width; // 雷达障碍物宽度
+    double length; // 雷达障碍物长度
+    double height; // 雷达障碍物高度
+    double theta; //  
+    Point2D absolute_position; // obstacle position in map coordinate system
+    Point2D absolute_position_rms; //  
+    Point2D absolute_velocity; // obstacle position in map coordinate system
+    Point2D absolute_velocity_rms; //  
+    Point2D absolute_acceleration; //  
+    Point2D absolute_acceleration_rms; //  
+    double orientation; // 雷达障碍物方位角
+    double orient_rms; // 雷达障碍物方位角标准差
+    double yaw; //  
+    double yaw_rms; //  
+    int32_t count; //  
+    int32_t moving_frames_count; //  
+    Status status; // 状态码
+    double underpass_probability; //  
+    double overpass_probability; //  
+    int8_t exist_probability; // 障碍物存在的概率
+    int8_t mov_property; // 障碍物移动属性：MOVING_PROPERTY_MOVING=0，MOVING_PROPERTY_STATIONARY=1，MOVING_PROPERTY_ONCOMING=2，MOVING_PROPERTY_STATIONARY_CANDIDATE=3，MOVING_PROPERTY_UNKOWN=4，MOVING_PROPERTY_CROSSING_STATIONARY=5，MOVING_PROPERTY_CROSSING_MOVING=6，MOVING_PROPERTY_STOPPED=7
+    int8_t track_state; // 跟踪状态：TRACK_STATE_DELETED=0；TRACK_STATE_INITED=1；TRACK_STATE_MEASURED=2；TRACK_STATE_PREDICTED=3；TRACK_STATE_DELETED_FOR_MERGE=4；TRACK_STATE_NEW_FOR_MERGE=5；
+    int8_t track_type; // 追踪的障碍物类型：TRACK_TYPE_POINT=0；TRACK_TYPE_CAR=1；TRACK_TYPE_TRUCK=2；TRACK_TYPE_PEDESTRIAN=3；TRACK_TYPE_MOTORCYCLE=4；TRACK_TYPE_BICYCLE=5；TRACK_TYPE_WIDE=6；TRACK_TYPE_RESERVED=7；TRACK_TYPE_BRIDGE=8；
+}
+
+// UltrasonicObstacle::UltrasonicObstacle
+struct UltrasonicObstacle
+{
+    int32_t id; // 障碍物id
+    double range; // 障碍物距离
+}
+
+// PointXYZIRT::PointXYZIRT
+struct PointXYZIRT
+{
+    double x; // x//坐标x
+    double y; // y//坐标y
+    double z; // z//坐标z
+    int32_t intensity; // 反射强度
+    int8_t ring_id; // 线束ID
+    int64_t timestamp; // 时间戳
+}
+
+// CompressedImage::CompressedImage
+struct CompressedImage
+{
+    Header header; // 消息头
+    string frame_id; // 图像帧id
+    string format; //  Specifies the format of the data Acceptable values: jpeg, png
+    int32_t data_size;
+    int8_t data[data_size]; // Compressed image buffer
+    double measurement_time; // 测量时间
+    int32_t frame_type; // 图像帧类型
+}
+
+// Image::Image
+struct Image
+{
+    Header header; // 消息头
+    int32_t height; // image height, that is, number of rows
+    int32_t width; // image width, that is, number of columns
+    string encoding; // 图像编码方式
+    int8_t is_bigendian; // is this data bigendian?
+    int32_t step; // Full row length in bytes
+    int32_t data_size;
+    int8_t data[data_size]; // actual matrix data, size is (step * rows)
+}
+
+// Gnss::Gnss
+struct Gnss
+{
+    boolean is_valid; // 数据有效性标志位
+    Header header; // 头部信息
+    double latitude; // 纬度信息
+    double longitude; // 经度信息
+    double elevation; // 海拔信息
+    Point3D utm_position; // UTM坐标位置
+    int32_t utm_zone_num; // UTM区号
+    int8_t utm_zone_char; // UTM区号
+    Point3D attitude; // 三轴姿态
+    Point3D sd_position; // 位置标准差
+    Point3D sd_velocity; // 速度标准差
+    Point3D sd_attitude; // 姿态标准差
+    double second; // 时间
+    int32_t sat_use_num; // 使用卫星数
+    int32_t sat_in_view_num; // 可见卫星数
+    int16_t solution_status; // 求解状态
+    int16_t position_type; // 定位状态
+    Point3D linear_velocity; // 线速度信息
+    Point3D attitude_dual; // 双天线姿态
+    Point3D sd_angle_dual; // 双天线角度标准差
+    double base_line_length_dual; // 双天线距离
+    int32_t solution_status_dual; // 双天线求解状态
+    int32_t position_type_dual; // 双天线定位状态
+    int32_t solution_source_dual; // 双天线求解源
+    double cep68; // cep68数据位
+    double cep95; // cep95数据位
+    double p_dop; // pDop数据位
+    double h_dop; // hDop数据位
+    double v_dop; // vDop数据位
+}
+
+// Imu::Imu
+struct Imu
+{
+    Header header; // 头部信息
+    boolean is_valid; // 数据有效性标志位
+    Quaternion orientation; // 角度（四元素）
+    int32_t orientation_covariance_size;
+    double orientation_covariance[orientation_covariance_size]; // 角度方差
+    Point3D angular_velocity; // 角速度信息angularVelocity.x：x方向角速度信息angularVelocity.y: y方向角速度信息angularVelocity.z：z方向角速度信息
+    int32_t angular_velocity_covariance_size;
+    double angular_velocity_covariance[angular_velocity_covariance_size]; // 速度方差
+    Point3D linear_acceleration; // 线加速度信息linearAcceleration.x：x方向线加速度信息linearAcceleration.y: y方向线加速度信息linearAcceleration.z：z方向线加速度信息
+    int32_t linear_acceleration_covariance_size;
+    double linear_acceleration_covariance[linear_acceleration_covariance_size]; // 线性加速度方差
+}
+
+// Ins::Ins
+struct Ins
+{
+    Header header; // 头部信息
+    boolean is_valid; // 数据有效性标志位
+    double latitude; // 纬度信息
+    double longitude; // 经度信息
+    double elevation; // 海拔信息
+    Point3D utm_position; // UTM坐标位置
+    int32_t utm_zone_mumber; // UTM区号
+    int8_t utm_zone_char; // UTM区号
+    Point3D attitude; // 三轴姿态
+    Point3D linear_velocity; // 线速度信息
+    Point3D sd_position; // 位置标准差
+    Point3D sd_attitude; // 姿态标准差
+    Point3D sd_velocity; // 速度标准差
+    double cep68; // cep68数据位
+    double cep95; // cep95数据位
+    double second; // 时间
+    int32_t sat_use_num; // 使用卫星数
+    int32_t sat_in_view_num; // 可见卫星数
+    int16_t solution_status; // 求解状态
+    int16_t position_type; // 定位状态
+    double p_dop; // pDop数据位
+    double h_dop; // hDop数据位
+    double v_dop; // vDop数据位
+    Point3D attitude_dual; // 双天线姿态
+    Point3D sd_angle_dual; // 双天线角度标准差
+    double base_line_length_dual; // 双天线距离
+    int32_t solution_status_dual; // 双天线求解状态
+    int32_t position_type_dual; // 双天线定位状态
+    int32_t solution_source_dual; // 双天线求解源
+    int32_t aoc; // Aoc数据位
+    int32_t rtk_baseline; // RTK基线信息
+    Point3D angular_velocity; // 角速度信息
+    Point3D acceleration; // 加速度信息
+}
+
+// ObuCmdMsg::ObuCmdMsg
+struct ObuCmdMsg
+{
+    Header header; // timestamp is included in header
+    int32_t id; // obu的id身份
+    string name; // obu的名称
+    int32_t obu_cmd_list_size;
+    ObuCmd obu_cmd_list[obu_cmd_list_size]; // 命令列表
+}
+
+// RoutingRequest::RoutingRequest
+struct RoutingRequest
+{
+    Header header; // timestamp is included in header
+    string request_source; // 发起请求的来源名称
+    int8_t request_type; // REQUEST_TYPE=0//无效 REQUEST_TYPE=1//正常路由 REQUEST_TYPE=2//泊车路由
+    int16_t num_of_kp; // 关键点数量
+    int32_t key_point_list_size;
+    KeyPoint key_point_list[key_point_list_size]; // 关键点列表，第一个为起点，最后一个为终点，中间为途经点
+}
+
+// ObuCmd::ObuCmd
+struct ObuCmd
+{
+    int32_t code; // 指令编码：10001、自动驾驶使能开关；
+    int32_t val; // 编码值：0、不响应；1、自定义状态；2、自定义状态...（更多参考：“ObuCmdMsg.md”）
+}
+
+// ParkingInfo::ParkingInfo
+struct ParkingInfo
+{
+    Header header; // timestamp is included in header
+    int32_t parking_space_id; // 停车位id
+    int32_t parking_type; // PARKING_TYPE=0//无效泊车 PARKING_TYPE=1//水平泊车 PARKING_TYPE=2//垂直泊车 PARKING_TYPE=3//倾斜泊车
+    int32_t parking_status; // PARKING_ENABLE=0//可泊 PARKING_DISENABLE=1//不可泊 PARKING_NONOPTIONAL=2//不可选
+    double confidence; // 车位置信度
+    Point3D center_point_of_parking; // 世界坐标系下停车位中心点
+    double theta; // 世界坐标系下的夹角（单位rad），车位出口与正东方向夹角
+    double width; // 停车位宽（单位m）
+    double length; // 停车位长单位m）
+    double yaw_offset; // 停车位角度偏移量（倾斜车位），倾斜车位与道路边线夹角,(单位m）
+    Polygon3D polygon; // 世界坐标系下的车位多边形
+    int32_t sensor_id; // 车位数据来自相机id 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机 8-相机融合
+    boolean is_lane_width_valid; // 车道宽度是否有效
+    double lane_width; // 泊车可用(双)车道宽度
+    int32_t parking_stoppers_size;
+    ParkingStopper parking_stoppers[parking_stoppers_size]; // 车位内部的限位器数组
+    int32_t parking_direction_type; //   DIR_INVALID = 0,   LEFT = 1,   UP = 2,   RIGHT = 3,   DOWN = 4,
+    int32_t left_occupied_status; // 0-unknown 未知，1-empty 空闲，2-occupied 被占用
+    int32_t right_occupied_status; // 0-unknown 未知，1-empty 空闲，2-occupied 被占用
+    int32_t parking_source_type; // 0-线车位， 1-空间车位， 2-融合车位
+}
+
+// KeyPoint::KeyPoint
+struct KeyPoint
+{
+    int16_t id; // 关键点id
+    double latitude; // 关键点纬度
+    double longitude; // 关键点经度
+    double ele; // 关键点海拔
+    double heading; // 关键点航向角（与北方向夹角，顺时针方向为正，单位为°）
+    string name; // 关键点名称
+}
+
+// SensorCalibrator::SensorCalibrator
+struct SensorCalibrator
+{
+    Point3D pose; // 传感器安装位置(相对于后轴中心点)
+    Point3D angle; // 传感器安装角度(车体坐标系)
+}
+
+// TrafficLight::TrafficLight
+struct TrafficLight
+{
+    int32_t color; // UNKNOWN = 0; RED = 1; YELLOW = 2; GREEN = 3; BLACK = 4;
+    int32_t id; // light id
+    int32_t type; // STRAIGHT = 0; TURN_LEFT = 1; TURN_RIGHT = 2; STRAIGHT_TURN_LEFT = 3; STRAIGHT_TURN_RIGHT =4; CIRCULAR = 5; PEDESTRIAN = 6; CYCLIST = 7; UNKNOWN = 8;
+    double confidence; // 置信度confdence: [0-1]
+    ImageRect light_rect; // 交通灯矩形框light rect
+    Point3D position; // 交通灯位置position of light
+    double distance; // 距离distance between light and stop line
+    int32_t light_lanes_size;
+    int32_t light_lanes[light_lanes_size]; // corresponding lanes of light
+    double tracking_time; // duration of a light since track
+    boolean blink; // true:
+    double blinking_time; // duration of a light blinking
+    double remaining_time; // V2X time of light
+    Time create_time; // time of light detected
+}
+
+// StopPoint::StopPoint
+struct StopPoint
+{
+    Point3D point; // 点xyz
+    double theta; // 方向（与东方向夹角，逆时针方向为正，单位为弧度）
+    int8_t type; // STOP_TYPE_TERMINAL=0 //目的地终点 STOP_TYPE_JUNCTION=1 //路口停止线
+    double stop_distance; // 距停止点多少米停车
+}
+
+// LanePoint::LanePoint
+struct LanePoint
+{
+    Point3D point; // 点xyz
+    double theta; // 方向（与东方向夹角，逆时针方向为正，单位为弧度）
+    double mileage; // 总体里程
+    double limit_speed; // 地图限速（单位m/s）
+    double left_road_width; // 左边车道宽
+    double right_road_width; // 右边车道宽
+    int32_t left_line_type; // 左边车线线型
+    int32_t right_line_type; // 右边车线线型
+}
+
+// LaneInfo::LaneInfo
+struct LaneInfo
+{
+    int8_t priority; // 道路优先级：0（非推荐车道）1（推荐车道）
+    int8_t global_id; // 道路全局id（从左至右，从0开始）
+    int8_t predecessor_id; // 上一车道id
+    int8_t successor_id; // 下一车道id
+    int8_t left_neighbor_id; // 左边相邻车道id
+    int8_t right_neighbor_id; // 右边相邻车道id
+    int8_t type; // 0：未知 1：左转道不可掉头 2：直行道 3：右转道 4：直行且可左转道 5：直行且可右转道 6：左转道且可掉头 7：不可左转仅可掉头
+    int32_t lane_points_size;
+    LanePoint lane_points[lane_points_size]; // 道路参考线（z）
+}
+
+// ObstacleIntent::ObstacleIntent
+struct ObstacleIntent
+{
+    int32_t type; // 估计障碍物的意图        0-UNKNOWN, 1-STOP, 2-STATIONARY, 3-移动 MOVING, 4-HANGE_LANE, 5-LOW_ACCELERATION, 6-HIGH_ACCELERATION, 7-LOW_DECELERATION, 8-HIGH_DECELERATION, 
+}
+
+// RoutingResponse::RoutingResponse
+struct RoutingResponse
+{
+    Header header; // timestamp is included in header
+    int32_t plan_status; // 规划结果状态
+    int32_t replan_flag; // REPLAN_FLAG_NONE=0  //不需要重规划 REPLAN_FLAG_NAVI=1 //网络层重规划 REPLAN_FLAG_HUMAN=2 //人为重规划
+    int32_t route_reason; // 规划原因 ROUTE_REASON_HMI = 0 //hmi上触发规划 ROUTE_REASON_PLATOON_HEADER = 1 //车队头车下发规划 ROUTE_REASON_PLATOON_OTHER = 2 //车队其他车辆下发规划
+    int32_t lane_list_size;
+    LaneInfo lane_list[lane_list_size]; // 分段路径规划结果
+}
+
+// StopInfo::StopInfo
+struct StopInfo
+{
+    Header header; // timestamp is included in header
+    int32_t stop_points_size;
+    StopPoint stop_points[stop_points_size]; // 停车点列表
+}
+
+// ADCTrajectory::ADCTrajectory
+struct ADCTrajectory
+{
+    Header header; // timestamp is included in header
+    double total_path_length; // unit meters(m)
+    double total_path_time; // unit seconds(s)
+    int32_t trajectory_points_size;
+    TrajectoryPoint trajectory_points[trajectory_points_size]; // 规划轨迹点列
+    int32_t car_action; // 车辆行为： CAR_ACTION_NONE=0  //无效值 CAR_ACTION_SINGLE=1 //单车 CAR_ACTION_PLATOON_HEAD=2 //车队头车 CAR_ACTION_PLATOON_OTHER=3 //车队其他车辆
+    int32_t behaviour_lat_state; // 自动驾驶状态（主要指横向状态）
+    int32_t behaviour_lon_state; // 自动驾驶状态（主要指纵向状态）
+    int32_t scenario; // 驾驶场景 0-UNKNOWN, 1-CRUISE, 2-CRUISE_URBAN 3-CRUISE_HIGHWAY, 2000-JUNCTION  2001-JUNCTION_TRAFFIC_LIGHT 2002-JUNCTION_STOP_SIGN
+    int32_t driving_mode; // 驾驶模式： 1：人工驾驶， 2：辅助驾驶， 3：自动驾驶
+    int32_t adc_trajectory_type; // 轨迹类型： TRAJECTORY_TYPE_ABSOLUTE=0 //绝对规划轨迹 TRAJECTORY_TYPE_RELATIVE=1 //相对规划轨迹 TRAJECTORY_TYPE_INVALID=2 //无效规划轨迹
+    EStop estop; // emergency stop
+    boolean is_replan; // is_replan == truemean replan triggered(default = false)
+    string replan_reason; //  
+    int32_t right_of_way_status; // UNPROTECTED = 0;PROTECTED = 1;
+    RSSInfo rss_info; // output related to RSS
+}
+
+// BBox2D::BBox2D
+struct BBox2D
+{
+    int16_t xmin; // 图像框左上角的x坐标
+    int16_t ymin; // 图像框左上角的y坐标
+    int16_t xmax; // 图像框右下角的x坐标
+    int16_t ymax; // 图像框右下角的y坐标
+}
+
+// Obstacle::Obstacle
+struct Obstacle
+{
+    Time timestamp; // 时间戳
+    int32_t id; // 障碍物id
+    double existence_prob; // 障碍物存在的概率
+    Time create_time; // 障碍物被识别的时间戳
+    Time last_updated_time; // 障碍物上一次更新的时间
+    Point3D center_pos_vehicle; // 车辆坐标系下障碍物的中心位置
+    Point3D center_pos_abs; // 世界坐标系下障碍物的中心位置
+    double theta_vehicle; // 车辆坐标系下障碍物的朝向
+    double theta_abs; // 世界坐标系下障碍物的朝向
+    Point3D velocity_vehicle; // 车辆坐标系下障碍物的速度
+    Point3D velocity_abs; // 世界坐标系下障碍物的速度
+    double length; // 障碍物长度
+    double width; // 障碍物宽度
+    double height; // 障碍物高度
+    int32_t image_key_points_size;
+    ImageKeyPoint image_key_points[image_key_points_size]; // 图像坐标系下障碍物多边形
+    int32_t polygon_point_abs_size;
+    Point3D polygon_point_abs[polygon_point_abs_size]; // 世界坐标系下障碍物多边形
+    int32_t polygon_point_vehicle_size;
+    Point3D polygon_point_vehicle[polygon_point_vehicle_size]; // 车辆坐标系下障碍物多边形
+    double tracking_time; // 障碍物被追踪的时间
+    int32_t type; // 障碍物类别： UNKNOWN = 0; UNKNOWN_MOVABLE = 1; UNKNOWN_UNMOVABLE = 2; PEDESTRIAN = 3; BICYCLE = 4; VEHICLE = 5;
+    double confidence; // 障碍物类别置信度
+    int32_t confidence_type; // 障碍物置信度类别： CONFIDENCE_UNKNOWN = 0; CONFIDENCE_CNN = 1; CONFIDENCE_RADAR = 2;
+    int32_t drops_size;
+    Point3D drops[drops_size]; // 障碍物轨迹点
+    Point3D acceleration_vehicle; // 车辆坐标系下障碍物的加速度
+    Point3D acceleration_abs; // 世界坐标系下障碍物的加速度
+    Point2D anchor_point_image; // 障碍物尾框中心点(图像坐标系)
+    Point3D anchor_point_vehicle; // 障碍物尾框中心点(车辆坐标系)
+    Point3D anchor_point_abs; // 障碍物尾框中心点(世界坐标系)
+    BBox2D bbox2d; // 障碍物图像框
+    BBox2D bbox2d_rear; // 障碍物图像尾框
+    int32_t sub_type; // 障碍物类别： ST_UNKNOWN = 0; ST_UNKNOWN_MOVABLE = 1; ST_UNKNOWN_UNMOVABLE = 2; ST_CAR = 3; ST_VAN = 4; ST_TRUCK = 5; ST_BUS = 6; ST_CYCLIST = 7; ST_MOTORCYCLIST = 8; ST_TRICYCLIST = 9; ST_PEDESTRIAN = 10; ST_TRAFFICCONE = 11; ST_PILLAR = 12; ST_SPEED_BUMP = 13;
+    double height_above_ground; // 障碍物近地点到地面的高度
+    int32_t position_abs_covariance_size;
+    double position_abs_covariance[position_abs_covariance_size]; // 世界坐标系下障碍物中心位置的协方差矩阵
+    int32_t velocity_abs_covariance_size;
+    double velocity_abs_covariance[velocity_abs_covariance_size]; // 世界坐标系下障碍物速度的协方差矩阵
+    int32_t acceleration_abs_covariance_size;
+    double acceleration_abs_covariance[acceleration_abs_covariance_size]; // 世界坐标系下障碍物加速度的协方差矩阵
+    double theta_abs_covariance; // 世界坐标系下障碍物朝向的协方差矩阵
+    int32_t position_vehicle_covariance_size;
+    double position_vehicle_covariance[position_vehicle_covariance_size]; // 车辆坐标系下障碍物中心位置的协方差矩阵
+    int32_t velocity_vehicle_covariance_size;
+    double velocity_vehicle_covariance[velocity_vehicle_covariance_size]; // 车辆坐标系下障碍物速度的协方差矩阵
+    int32_t acceleration_vehicle_covariance_size;
+    double acceleration_vehicle_covariance[acceleration_vehicle_covariance_size]; // 车辆坐标系下障碍物加速度的协方差矩阵
+    double theta_vehicle_covariance; // 车辆坐标系下障碍物朝向的协方差矩阵
+    SensorCalibrator sensor_calibrator; // 传感器标定参数
+    int8_t cipv_flag; // 障碍物状态标志（0-CIPV 1-CIPS 2-LPIHP 3-RPIHP 4-NONE）
+    int32_t lane_position; // 车道线位置 -2-NEXT_LEFT_LANE -1-LEFT_LANE 0-EGO_LANE 1-RIGHT_LANE 2-NEXT_RIGHT_LANE 3-OTHERS 4-UNKNOWN
+    double pihp_percentage; // 临车道车辆压线比例
+    int32_t blinker_flag; // 障碍物车辆信号灯状态： 0-OFF 1-LEFT_TURN_VISIBLE 2-LEFT_TURN_ON 3-RIGHT_TURN_VISIBLE 4-RIGHT_TURN_ON 5-BRAKE_VISIBLE 6-BRAKE_ON 7-UNKNOWN
+    int32_t fusion_type; // 融合障碍物类型 0-CAMERA 1-RADAR 2-LIDAR 3-ULTRASONIC 4-FUSED 5-UNKNOWN
+}
+
+// RSSInfo::RSSInfo
+struct RSSInfo
+{
+    boolean is_rss_safe; //  
+    double cur_dist_lon; // current longitudinal distance
+    double rss_safe_dist_lon; // longitudinal safe distance of rss
+    double acc_lon_range_minimum; // Minimum range of longitudinal acceleration
+    double acc_lon_range_maximum; // Maximum range of longitudinal acceleration
+    double acc_lat_left_range_minimum; // Minimum left range of lateral acceleration
+    double acc_lat_left_range_maximum; // Maximum left range of lateral acceleration
+    double acc_lat_right_range_minimum; // Minimum right range of lateral acceleration
+    double acc_lat_right_range_maximum; // Maximum right range of lateral acceleration
+}
+
+// ObstaclePriority::ObstaclePriority
+struct ObstaclePriority
+{
+    int32_t priority; // CAUTION = 1; NORMAL = 2; IGNORE = 3;
+}
+
+// PlanningCmd::PlanningCmd
+struct PlanningCmd
+{
+    Header header; //  
+    int32_t turn_lamp_ctrl; // 转向灯 TURN_INACTIVE_SIGNAL:0 TURN_LEFT_SIGNAL:1 TURN_RIGHT_SIGNAL:2 TURN_INVALID_SIGNAL:3
+    int32_t high_beam_ctrl; // 0 关闭 1 开启 2 不响应
+    int32_t low_beam_ctrl; // 0 关闭 1 开启 2 不响应
+    int32_t horn_ctrl; // 0 关闭 1 开启 2 不响应
+    int32_t front_wiper_ctrl; // 前雨刮器 0 关闭 1 开启
+    int32_t rear_wiper_ctrl; // 后雨刮器 0 关闭 1 开启
+    int32_t position_lamp_ctrl; // 位置灯 0 关闭 1 开启
+    int32_t front_fog_lamp_ctrl; // 前雾灯 0 关闭 1 开启
+    int32_t rear_fog_lamp_ctrl; // 后雾灯 0 关闭 1 开启
+    int32_t brake_lamp_ctrl; // 刹车灯 一般情况自动控制 0 关闭 1 开启
+    int32_t alarm_lamp_ctrl; // 警报灯 双闪 0 关闭 1 开启
+    int32_t lf_door_ctrl; // 左前门控制 0 关闭 1 开启
+    int32_t rf_door_ctrl; // 右前门控制 0 关闭 1 开启
+    int32_t lr_door_ctrl; // 左后门控制 0 关闭 1 开启
+    int32_t rr_door_ctrl; // 右后门控制 0 关闭 1 开启
+}
+
+// PredictionObstacle::PredictionObstacle
+struct PredictionObstacle
+{
+    PerceptionObstacle perception_obstacle; // perception info of obstacle
+    double timestamp; // GPS time in seconds
+    double predicted_period; // the length of the time for this prediction (e.g. 10s)
+    int32_t trajectory_size;
+    TrajectoryInPrediction trajectory[trajectory_size]; // can have multiple trajectories per obstacle
+    ObstacleIntent intent; // 估计障碍物的意图        0-UNKNOWN, 1-STOP, 2-STATIONARY, 3-移动 MOVING, 4-HANGE_LANE, 5-LOW_ACCELERATION, 6-HIGH_ACCELERATION, 7-LOW_DECELERATION, 8-HIGH_DECELERATION, 
+    ObstaclePriority priority; // 障碍物优先级               1-CAUTION, 2-NORMAL, 3-IGNORE
+    ObstacleInteractiveTag interactive_tag; //  
+    boolean is_static; // is obstacle static (default = false)
+}
+
+// TrajectoryInPrediction::TrajectoryInPrediction
+struct TrajectoryInPrediction
+{
+    double probability; // probability of this trajectory
+    int32_t trajectory_points_size;
+    TrajectoryPoint trajectory_points[trajectory_points_size]; //  
+}
+
+// TrajectoryPointInPrediction::TrajectoryPointInPrediction
+struct TrajectoryPointInPrediction
+{
+    PathPoint path_point; // path point
+    double v; // linear velocity
+    double a; // linear acceleration
+    double relative_time; // relative time from beginning of the trajectory
+}
+
+// PredictionTrajectoryPoint::PredictionTrajectoryPoint
+struct PredictionTrajectoryPoint
+{
+    Point3D predition_path_point; //  
+    double timestamp; //  
+}
+
+// PerceptionObstacle::PerceptionObstacle
+struct PerceptionObstacle
+{
+    int32_t id; //  
+    Point3D position; //  
+    double theta; //  
+    Point3D velocity; //  
+    double length; //  
+    double width; //  
+    double height; //  
+    int32_t polygon_point_size;
+    Point3D polygon_point[polygon_point_size]; //  
+    double tracking_time; //  
+    int32_t type; // 障碍物类型： 0-Unknown 1-Unknown_movable 2-Unknown_unmovable 3-Pedestrian 4-Bicycle   5-Vehicle
+    int32_t lane_position; // 车道线位置 -2-NEXT_LEFT_LANE -1-LEFT_LANE 0-EGO_LANE 1-RIGHT_LANE 2-NEXT_RIGHT_LANE 3-OTHERS 4-UNKNOWN
+    double confidence; //  
+    double timestamp; //  
+    int8_t confidence_type; // 置信度类型                  0-CONFIDENCE_UNKNOWN, 1-CONFIDENCE_CN, 2-CONFIDENCE_RAD
+    Point3D drops; //  
+    Point3D acceleration; //  
+    Point3D anchor_point; //  
+    int32_t bounding_box_size;
+    Point3D bounding_box[bounding_box_size]; //  
+    int32_t sub_type; //  
+    double height_above_ground; //  
+    int32_t position_covariance_size;
+    double position_covariance[position_covariance_size]; //  
+    int32_t velocity_covariance_size;
+    double velocity_covariance[velocity_covariance_size]; //  
+    int32_t acceleration_covariance_size;
+    double acceleration_covariance[acceleration_covariance_size]; //  
+    int8_t light_status; //  
+}
+
+// ObstacleFeature::ObstacleFeature
+struct ObstacleFeature
+{
+    int32_t obstacle_id; // Obstacle ID
+    Point3D polygon_point; // 障碍物边框点列
+    Point3D position; //  
+    Point3D front_position; //  
+    Point3D velocity; //  
+    Point3D raw_velocity; // from perception
+    Point3D acceleration; //  
+    double velocity_heading; //  
+    double speed; //  
+    double acc; //  
+    double theta; //  
+    double length; //  
+    double width; //  
+    double height; //  
+    double tracking_time; //  
+    double timestamp; //  
+    Point3D t_position; //  
+    Point3D t_velocity; // [deprecated = true]
+    double t_velocity_heading; // [deprecated = true]
+    double t_speed; // [deprecated = true]
+    Point3D t_acceleration; // [deprecated = true]
+    double t_acc; // [deprecated = true]
+    boolean is_still; // [deprecated = false]
+    int32_t type; // 感知到的障碍物类型         0-UNKNOWN, 1-UNKNOWN_MOVABLE, 2-UNKNOWN_UNMOVABLE, 3-PEDESTRIAN, 4-BICYCLE,     5-VEHICLE
+    double label_update_time_delta; //  
+    ObstaclePriority priority; // CAUTION = 1; NORMAL = 2; IGNORE = 3;
+    boolean is_near_junction; //  
+    int32_t future_trajectory_points_size;
+    PredictionTrajectoryPoint future_trajectory_points[future_trajectory_points_size]; // Obstacle ground-truth labels:
+    int32_t short_term_predicted_trajectory_points_size;
+    TrajectoryPointInPrediction short_term_predicted_trajectory_points[short_term_predicted_trajectory_points_size]; // Obstacle short-term predicted trajectory points
+    int32_t predicted_trajectory_size;
+    TrajectoryInPrediction predicted_trajectory[predicted_trajectory_size]; // Obstacle predicted trajectories
+    int32_t adc_trajectory_point_size;
+    TrajectoryPointInPrediction adc_trajectory_point[adc_trajectory_point_size]; // ADC trajectory at the same frame
+}
+
+// LaneLine::LaneLine
+struct LaneLine
+{
+    int32_t lane_type; //  车道线类型：   SOLID = 0;   DASHED = 1;   ROAD_DELIMITER = 2;   NONE = 3;   UNKNOWN = 4;
+    int32_t lane_color; //  车道线颜色：   WHITE = 0;   YELLOW = 1;   OTHERS = 2;   UNKNOWN = 3;
+    int32_t pos_type; // 车道线位置类别：    BOLLARD_LEFT = -5;   FOURTH_LEFT = -4;   THIRD_LEFT = -3;   ADJACENT_LEFT = -2;  //!< lane marking on the left side next to ego lane   EGO_LEFT = -1;       //!< left lane marking of the ego lane   EGO_RIGHT = 1;       //!< right lane marking of the ego lane   ADJACENT_RIGHT = 2;  //!< lane marking on the right side next to ego lane   THIRD_RIGHT = 3;   FOURTH_RIGHT = 4;   BOLLARD_RIGHT = 5;   OTHER = 6;    //!< other types of lane   UNKNOWN = 7;  //!< background
+    LaneLineCubicCurve curve_vehicle; // 车辆坐标系车道线三次曲线系数
+    LaneLineCubicCurve curve_image; // 图像坐标系车道线三次曲线系数
+    LaneLineCubicCurve curve_abs; // 世界坐标系车道线三次曲线系数
+    int32_t pts_vehicle_size;
+    Point3D pts_vehicle[pts_vehicle_size]; // 车辆坐标系车道线点集
+    int32_t pts_image_size;
+    Point2D pts_image[pts_image_size]; // 图像坐标系车道线点集
+    int32_t pts_abs_size;
+    Point3D pts_abs[pts_abs_size]; // 世界坐标系车道线点集
+    EndPoints image_end_point; // 车道线上顶点与下顶点
+    int32_t pts_key_size;
+    Point2D pts_key[pts_key_size]; // 车道线关键点数组
+    int8_t hd_lane_id; // 高精车道线id
+    double confidence; // 车道线置信度
+    int32_t lane_quality; //   车道线质量：   VERY_LOW = 0;   LOW = 1;   HIGH = 2;   VERY_HIGH = 3;
+    int32_t fused_lane_type; //   融合车道线类别：   CAMERA = 0;   HD = 1;   FUSED = 2;   UNKNOWN = 3;   if value is 1, lane_quality = 3
+    int32_t homography_mat_size;
+    double homography_mat[homography_mat_size]; // 透视变换矩阵
+    int32_t homography_mat_inv_size;
+    double homography_mat_inv[homography_mat_inv_size]; // 透视变换逆矩阵
+    int32_t lane_coordinate_type; //   坐标系类别：   FRAME = 0;   IMAGE = 1;   CAMERA = 2;   VEHICLE = 3;   ABSOLUTE = 4;
+    int32_t use_type; //   使用类别：   REAL = 0;   VIRTUAL = 1;
+    Time create_time; // 车道线被识别的时间戳
+}
+
+// LaneLineCubicCurve::LaneLineCubicCurve
+struct LaneLineCubicCurve
+{
+    double start_x; // 车道线起始位置
+    double end_x; // 车道线结束位置
+    double a; // 三次曲线系数
+    double b; //  
+    double c; //  
+    double d; //  
+}
+
+// EndPoints::EndPoints
+struct EndPoints
+{
+    Point2D start; // 车道线上顶点
+    Point2D end; // 车道线下顶点
+}
+
+// FreeSpace::FreeSpace
+struct FreeSpace
+{
+    Header header; // timestamp is included in header
+    int32_t sensor_id; // 安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    int32_t freespace_region_size;
+    Polygon2D freespace_region[freespace_region_size]; // freespace轮廓图像坐标
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 障碍物数据是否合法
+}
+
+// HolisticPathPrediction::HolisticPathPrediction
+struct HolisticPathPrediction
+{
+    LaneLineCubicCurve hpp; // 行驶路径预测： 1、针对没有车道线等特殊路段如：收费站附近、进出匝道附近、 维修区域附近，可以虚拟出可行驶路径预测； 2、针对车辆遮挡的区域，可以虚拟出可行驶路径预测；
+    int32_t planning_source; // 规划路径来源:  0 - invalid,  1 - 双侧车道线,  2 - 左侧车道线,  3 - 右侧车道线, 4 - 左侧路沿，  5 - 右侧路沿， 6 - 前车轨迹，  7 - freespace, 8 - 本车轨迹预测
+    double ego_lane_width; // 自车道宽度
+    double confidence; // 置信度[0 - 1]
+}
+
+// RoadMark::RoadMark
+struct RoadMark
+{
+    double longitude_dist; // 相对于车身坐标系原点的纵向距离,单位m
+    double lateral_dist; // 相对于车身坐标系原点的横向距离,单位m
+    double x; // 质心坐标x
+    double y; // 质心坐标y
+    double z; // 质心坐标z
+    double confidence; // 置信度[0 - 1]
+    int32_t type; // 标识类型 1 - 停止线 2 - 斑马线 3 - 禁停区 4 - 直行箭头 5 - 左转箭头 6 - 右转箭头 7 - 直行+左转 8 - 直行+右转 9 - 直行+左转+右转 10 - 掉头 11 - 左掉头 12 - 菱形(前方有人行横道) 13 - 倒三角 (减速让行) 14 - 地面文字
+}
+
+// TrafficLightDebug::TrafficLightDebug
+struct TrafficLightDebug
+{
+    TrafficLightBox cropbox; //  
+    int32_t box_size;
+    TrafficLightBox box[box_size]; //  
+    int32_t signal_num; //  
+    int32_t valid_pos; //  
+    double ts_diff_pos; //  
+    double ts_diff_sys; //  
+    int32_t project_error; //  
+    double distance_to_stop_line; //  
+    int32_t camera_id; //  
+    int32_t crop_roi_size;
+    TrafficLightBox crop_roi[crop_roi_size]; //  
+    int32_t projected_roi_size;
+    TrafficLightBox projected_roi[projected_roi_size]; //  
+    int32_t rectified_roi_size;
+    TrafficLightBox rectified_roi[rectified_roi_size]; //  
+    int32_t debug_roi_size;
+    TrafficLightBox debug_roi[debug_roi_size]; //  
+}
+
+// TrafficLightBox::TrafficLightBox
+struct TrafficLightBox
+{
+    int32_t x; // 交通灯目标在图像上中心点横向方向像素位置
+    int32_t y; // 交通灯目标在图像上中心点纵向方向像素位置
+    int32_t width; // 交通灯目标在图像上宽度
+    int32_t height; // 交通灯目标在图像上高度
+    int32_t color; // UNKNOWN = 0; RED = 1; YELLOW = 2; GREEN = 3; BLACK = 4;
+    boolean selected; // 是否选择
+    string camera_name; // 相机名称
+}
+
+// ImageRect::ImageRect
+struct ImageRect
+{
+    int32_t x; // coordinate x of left-top point of image rect
+    int32_t y; // coordinate y of left-top point of image rect
+    int32_t width; // width of image rect
+    int32_t height; // height of image rect
+}
+
+// RadarState::RadarState
+struct RadarState
+{
+    int8_t sensor_id; //  
+    int8_t nvm_read_status; //  
+    int8_t nvm_write_status; //  
+    RadarStateError radar_state_error; //  
+    RadarStateMode radar_state_mode; //  
+    int16_t max_distance; //  
+    int8_t sort_index; //  
+    int8_t radar_power; //  
+    int8_t ctl_relay; //  
+    int8_t output_type; //  
+    int8_t send_quality; //  
+    int8_t send_extinfo; //  
+    int8_t motion_rx_state; //  
+    int8_t rcs_threshold; //  
+    int8_t connector_direction; //  
+    int8_t radar_position; //  
+    int8_t hw_error; //  
+}
+
+// RadarStateError::RadarStateError
+struct RadarStateError
+{
+    int8_t persistent_error; //  
+    int8_t temporary_error; //  
+    int8_t interference_error; //  
+    int8_t temperature_error; //  
+    int8_t voltage_error; //  
+    int8_t block_error; //  
+    int8_t broadcast_error; //  
+    int8_t electric_axis_error; //  
+    int8_t config_error; //  
+    int8_t calibration_error; //  
+}
+
+// RadarStateMode::RadarStateMode
+struct RadarStateMode
+{
+    int8_t can0_work_mode; // can0工作模式
+    int8_t can1_work_mode; // can1工作模式
+    int8_t dual_can_mode; // 双总线工作模式
+    int8_t timming_mode; // 计时模式
+    int8_t power_mode; // 电源模式
+    int8_t performance_mode; // 效能模式
+}
+
+// SotifMonitorResult::SotifMonitorResult
+struct SotifMonitorResult
+{
+    Header header; //  
+    int32_t region_value_size;
+    Region region_value[region_value_size]; // 区域态势
+    int32_t grid_map_size;
+    Grid grid_map[grid_map_size]; // 栅格地图
+}
+
+// Region::Region
+struct Region
+{
+    int32_t name_region; // 前后左右区域
+    double score; // 车辆前后左右的区域打分获得的分值(0-100表示逐步危险程度)
+    int32_t rank_risk; // 危险程度(0-3四级划分，不同分级对应不同驾驶处理策略)
+    int32_t region_polygon_size;
+    Point3D region_polygon[region_polygon_size]; // 世界坐标系下的区域多边形
+}
+
+// Grid::Grid
+struct Grid
+{
+    double x; // 世界坐标系下的x
+    double y; // 世界坐标系下的y
+    SLPoint sl_point; // Frenet坐标系下的x
+    double yaw; //  
+    double potential; // 势场值
+    int32_t region_id; // 区域编号
+}
+
+// CameraParkingInfo::CameraParkingInfo
+struct CameraParkingInfo
+{
+    Header header; // timestamp is  included in header
+    int32_t parking_space_id; // 停车位id
+    int32_t parking_type; // PARKING_TYPE=0//无效泊车 PARKING_TYPE=1//垂直泊车 PARKING_TYPE=2//水平泊车 PARKING_TYPE=3//倾斜泊车
+    boolean is_parking_enable; // PARKING_ENABLE=0//不可泊入 PARKING_ENABLE=1//可泊入
+    double confidence; // 停车位置信度
+    Point3D center_point_of_parking; // 车辆坐标系的停车位中心点
+    double theta; // 车辆坐标系下停车位的朝向
+    double width; // 停车位宽
+    double length; // 停车位长
+    double yaw_offset; // 停车位角度偏移量（倾斜车位），倾斜车位与道路边线夹角
+    int32_t parking_points_in_image_size;
+    ImageKeyPoint parking_points_in_image[parking_points_in_image_size]; // 图像坐标系下停车位关键点，顺时针方向
+}
+
+// CameraParkingInfoList::CameraParkingInfoList
+struct CameraParkingInfoList
+{
+    Header header; // 消息头，时间戳使用接收的图像的时间戳
+    int32_t sensor_id; // 安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    int32_t camera_parking_size;
+    CameraParkingInfo camera_parking[camera_parking_size]; // 检测出的障碍物数组
+    int32_t camera_parking_stoppers_size;
+    CameraParkingStopper camera_parking_stoppers[camera_parking_stoppers_size]; // 检测出的限位器数组
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 障碍物数据是否合法
+}
+
+// SecurityDecision::SecurityDecision
+struct SecurityDecision
+{
+    Header header; //  
+    WarningCommand warning_command; // 告警指令
+    int32_t brake_report; // 刹车报告
+    int32_t change_lane_command; // 换道指令
+    TrajectoryLimitCommand trajectory_limit_command; // 轨迹限制指令
+    int32_t park_command; // 停车指令
+    int32_t drivingmode_report; // 驾驶模式报告
+}
+
+// WarningCommand::WarningCommand
+struct WarningCommand
+{
+    int32_t sound_alarm; // 声音告警
+    int32_t light_alarm; // 车灯告警
+    int32_t media_alarm; // 媒体告警
+    int32_t motion_alarm; // 震动告警
+}
+
+// TrajectoryLimitCommand::TrajectoryLimitCommand
+struct TrajectoryLimitCommand
+{
+    boolean speed_limit_enable; //  
+    double speed_limit; // m/s
+    boolean kappa_limit_enable; //  
+    double kappa_limit; // deg/m
+}
+
+// ParkingInfoList::ParkingInfoList
+struct ParkingInfoList
+{
+    Header header; // 消息头
+    int32_t parking_info_size;
+    ParkingInfo parking_info[parking_info_size]; // 检测出的停车位数组
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 车位数据是否合法
+    boolean parking_out_enable; // 是否能泊出
+    int32_t parking_out_direction; // 泊出方向
+    int32_t parking_out_id; // 当前自车所在车位ID
+}
+
+// CommCommand::CommCommand
+struct CommCommand
+{
+    Header header; //  
+    string name; // 发送指令的节点名称
+    int8_t self_id; // 发送节点的ID号，参考apps描述
+    int32_t commands_size;
+    Command commands[commands_size]; // 需要发送的指令，如果需要发送给多个节点，需要使用多个command
+}
+
+// CommandRespond::CommandRespond
+struct CommandRespond
+{
+    Header header; //  
+    string name; // 发送指令的节点名称
+    int8_t self_id; // 发送节点的ID号，参考apps描述
+    int8_t respond_id; //  
+    int8_t status; // 0 无响应 1 响应失败 2 响应成功
+    int32_t fail_code; // 失败原因
+}
+
+// ModuleStatus::ModuleStatus
+struct ModuleStatus
+{
+    Header header; //  
+    string name; // 发送指令的节点名称
+    int8_t self_id; // 发送节点的ID号，参考apps描述
+    int32_t status; //  枚举方式 sef_id+status,比如设置1为开，2为关，当前sef_id是21，则在关闭状态下反馈值是 212
+    int32_t messages_size;
+    Message messages[messages_size]; // 需要输出的消息列表：eg:要求显示剩余里程数为100米，self_id 为21，里程数id为08，code值为2108，value值为10000，精度为cm
+}
+
+// Command::Command
+struct Command
+{
+    string target_module; // 目标节点名称
+    int8_t target_id; // 目标节点ID
+    int32_t target_switch; // 0:保持target_module的状态  1:打开target_module 2:关闭target_module
+}
+
+// Message::Message
+struct Message
+{
+    int32_t code; // 指定需要显示的值的code定义，需要与self_id绑定 作为前缀
+    int32_t value; // 对应显示的值或表达的状态
+}
+
+// PlanningAnalysis::PlanningAnalysis
+struct PlanningAnalysis
+{
+    Header header; //  
+    double frame_update_time; // frame update计算时间
+    double generator_time; // 轨迹生成 计算时间
+    int32_t evaluator_time_size;
+    TimeConsume evaluator_time[evaluator_time_size]; // 轨迹评估计算时间
+    double selector_time; // 轨迹选择计算时间
+    PlanningParkingDebug planning_parking_debug; // planning泊车调试消息
+    double dis_to_center_line; // 车辆距离车道中心线的垂直距离
+    double diff_to_velocity; // 目标速度与规划速度之差
+    double referencline_kappa; // 参考线曲率
+}
+
+// TimeConsume::TimeConsume
+struct TimeConsume
+{
+    string name; //  
+    double time_consume; //  
+}
+
+// PlanningParkingDebug::PlanningParkingDebug
+struct PlanningParkingDebug
+{
+    int32_t vehicle_preiew_polygon_size;
+    Polygon2D vehicle_preiew_polygon[vehicle_preiew_polygon_size]; // 车辆预测多边形
+    int32_t obstacles_polygon_size;
+    Polygon2D obstacles_polygon[obstacles_polygon_size]; // 障碍物多边形
+    int32_t path_points_size;
+    PathPoint path_points[path_points_size]; // 轨迹点
+    double lat_error; // 横向误差
+    double lon_error; // 纵向误差
+    double yaw_error; // 角度误差(度)
+    int32_t obstacles_vec_size;
+    Point2dList obstacles_vec[obstacles_vec_size]; //  
+    int32_t warm_start_traj_size;
+    TrajectoryPoint warm_start_traj[warm_start_traj_size]; //  
+    int32_t smoothed_traj_stage1_size;
+    TrajectoryPoint smoothed_traj_stage1[smoothed_traj_stage1_size]; //  
+    int32_t smoothed_traj_stage2_size;
+    TrajectoryPoint smoothed_traj_stage2[smoothed_traj_stage2_size]; //  
+    Trajectory reference_line; //  
+    int32_t trajectory_array_size;
+    Trajectory trajectory_array[trajectory_array_size]; // 轨迹簇
+    Trajectory optimal_coarse_trajectory; //  
+    Trajectory optimal_smooth_trajectory; //  
+    double hybrid_a_star_map_time; //  
+    double hybrid_a_star_heuristic_time; //  
+    double hybrid_a_star_rs_time; //  
+    double hybrid_a_star_total_time; //  
+    double ias_collision_avoidance_time; //  
+    double ias_path_smooth_time; //  
+    double ias_speed_smooth_time; //  
+    double ias_total_time; //  
+    double samping_trajectory_time; //  
+    boolean is_replan; //  
+    string replan_reason; //  
+    double replan_time; //  
+    int32_t replan_num; //  
+    int32_t optimizer_thread_counter; //  
+    int32_t replan_by_context_update_counter; //  
+    int32_t replan_by_large_error_counter; //  
+    int32_t parking_type; //  
+    int32_t moves_counter; // 揉库次数
+    double remain_distance; // 剩余距离
+    double distance_to_leader_obj; // 距离最近障碍物距离
+    int32_t state; //  
+}
+
+// TrajectoryArray::TrajectoryArray
+struct TrajectoryArray
+{
+    Header header; //  
+    int32_t spline_s_size;
+    Path spline_s[spline_s_size]; // 样条拟合曲线
+    int32_t qp_smooth_size;
+    Path qp_smooth[qp_smooth_size]; // qp参考线拟合
+    int32_t trajectory_list_size;
+    Trajectory trajectory_list[trajectory_list_size]; // 轨迹簇
+}
+
+// VehicleState::VehicleState
+struct VehicleState
+{
+    Header header; //  
+    double x; //  
+    double y; //  
+    double z; //  
+    double timestamp; //  
+    double roll; //  
+    double pitch; //  
+    double yaw; //  
+    double heading; //  
+    double kappa; //  
+    double linear_velocity; //  
+    double angular_velocity; //  
+    double linear_acceleration; //  
+    int32_t gear; //  
+    int32_t driving_mode; //  
+    Pose pose; //  
+    double front_steering_value; //  
+    double rear_steering_value; //  
+}
+
+// DrivableRegion::DrivableRegion
+struct DrivableRegion
+{
+    Header header; // timestamp is included in header
+    int32_t drivable_region_size;
+    Polygon3D drivable_region[drivable_region_size]; // 可行驶区域
+}
+
+// ObstacleInteractiveTag::ObstacleInteractiveTag
+struct ObstacleInteractiveTag
+{
+    int32_t interactive_tag; //  
+}
+
+// Twist::Twist
+struct Twist
+{
+    Header header; //  
+    Point3D linear; // 线速度 m/s
+    Point3D angular; // 角速度 deg/s
+}
+
+// ParkingStateDisplay::ParkingStateDisplay
+struct ParkingStateDisplay
+{
+    Header header; //  
+    int32_t parking_type; // 0：无效 1：垂直泊车 2：水平泊车 3：斜方泊车
+    int32_t moves_counter; // 揉库次数
+    double remian_distance; // 剩余距离
+    int32_t display_info; // 详细信息
+    double distance_to_leader_obj; // 距离最近障碍物距离
+    int32_t state; //  
+}
+
+// ParkingRoi::ParkingRoi
+struct ParkingRoi
+{
+    Header header; // 消息头
+    int32_t obstacles_vec_size;
+    Point2dList obstacles_vec[obstacles_vec_size]; // 泊车可行驶区域可视化
+}
+
+// Point2dList::Point2dList
+struct Point2dList
+{
+    int32_t point2d_list_size;
+    Point2D point2d_list[point2d_list_size]; //  
+}
+
+// ParkingOutInfo::ParkingOutInfo
+struct ParkingOutInfo
+{
+    Header header; // timestamp is included in header
+    int32_t parking_out_id; // 若车位有id，同停车位id
+    int32_t parking_direction_type; //  
+    boolean is_parking_out_enable; // true可泊出，false不可泊出
+    Point3D parking_out_point; // 世界坐标系下提车点位置
+    double theta; // 世界坐标系下的夹角（单位rad），提车点与正东方向夹角
+}
+
+// JunctionInfo::JunctionInfo
+struct JunctionInfo
+{
+    int32_t id; //  
+    int32_t light_flag; // 是否有效，无效就可能是清除了，或者已经过路口了
+    int32_t light_color; // 信号灯颜色，绿灯可通行，false红灯不能通行
+    double light_remain_time; // 信号灯剩余时间
+    double distance_to_stop; // 停车距离，停止线
+    int32_t direction_flag; // 是否有效，无效就可能是清除了，或者已经过路口了
+    int32_t direction; // 路口通行方向，0：无效、1：左、2：前、3：右
+    double distance_to_junction; // 距路口距离
+    int32_t stop_line_size;
+    Point3D stop_line[stop_line_size]; // 路口停止线
+}
+
+// TrafficEvents::TrafficEvents
+struct TrafficEvents
+{
+    Header header; // timestamp is included in header
+    RouteFusionInfo route_fusion_info; // 地图融合信息
+    JunctionInfo junction_info; // 路口信息
+    LimitSpeedInfo limit_speed_info; // 限速消息
+}
+
+// LimitSpeedInfo::LimitSpeedInfo
+struct LimitSpeedInfo
+{
+    int32_t limitspeed_valid_flag; // 限速有效性标志位
+    double limit_speed; // 限速大小（m/s）
+    double limit_distance; // 开始减速距离(m)
+}
+
+// Log::Log
+struct Log
+{
+    Time stamp; // 时间戳
+    int8_t level; // log等级 DEBUG   : 10  INFO       : 20   WARN     : 30   ERROR   : 40  FATAL     : 50 
+    string name; // 节点名
+    string msg; // log消息
+    string file; // 发送log文件路径
+    string function; // 模块名
+    int32_t line; // 消息行
+}
+
+// Pavementype::Pavementype
+struct Pavementype
+{
+    Header header; // 消息头
+    int32_t type; // 0-沥青 1-水泥 2-雪地 3-草地 4-泥地 5-沙地
+    double confidence; // 置信度
+}
+
+// WLConstraintInfoList::WLConstraintInfoList
+struct WLConstraintInfoList
+{
+    Header header; // 消息头
+    int32_t wl_constraint_info_size;
+    WLConstraintInfo wl_constraint_info[wl_constraint_info_size]; // 检测出的wheel_location所需约束信息队列
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 障碍物数据是否合法
+}
+
+// WLConstraintInfo::WLConstraintInfo
+struct WLConstraintInfo
+{
+    Header header; // timestamp is included in header
+    int32_t id; // id
+    Point3D vehicle_point1; // 车辆坐标系下约束点1
+    Point3D vehicle_point2; // 车辆坐标系下约束点2
+    Point3D abs_point1; // 绝对坐标系下约束点1
+    Point3D abs_point2; // 绝对坐标系下约束点2
+}
+
+// UssObstacleList::UssObstacleList
+struct UssObstacleList
+{
+    Header header; // 消息头
+    int32_t uss_obstacles_size;
+    UssObstacle uss_obstacles[uss_obstacles_size]; // 检测出的超声波障碍物数组
+    int32_t uss_ranges_size;
+    double uss_ranges[uss_ranges_size]; // 超声波检测的距离数组，存放顺序按照FA,FB,FC,FD,FE,FF,RA,RB,RC,RD,RE,RF
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 超声波障碍物数据是否合法
+}
+
+// UssObstacle::UssObstacle
+struct UssObstacle
+{
+    Header header; // timestamp is included in header
+    int32_t uss_obstacle_region; // 超声波障碍物点区域 0-车辆后方区域 1-车辆前方区域 2-车辆右方区域 3-车辆左方区域
+    double mx; // 车体中心坐标系下，超声波障碍物点x坐标
+    double my; // 车体中心坐标系下，超声波障碍物点y坐标
+}
+
+// UssParkingInfoList::UssParkingInfoList
+struct UssParkingInfoList
+{
+    Header header; // 消息头
+    int32_t uss_parking_info_size;
+    UssParkingInfo uss_parking_info[uss_parking_info_size]; // 超声波检测出的停车位数组
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 超声波车位数据是否合法
+}
+
+// UssParkingInfo::UssParkingInfo
+struct UssParkingInfo
+{
+    Header header; // timestamp is included in header
+    int32_t uss_parking_type; // 超声波车位类型： 0-右侧平行 1-左侧平行 2-右侧垂直 3-左侧垂直
+    Point3D parking_point0; // 车体中心坐标系下，超声波车位0点位置
+    Point3D parking_point1; // 车体中心坐标系下，超声波车位1点位置
+    Point3D parking_point2; // 车体中心坐标系下，超声波车位2点位置
+    Point3D parking_point3; // 车体中心坐标系下，超声波车位3点位置
+}
+
+// CameraParkingStopper::CameraParkingStopper
+struct CameraParkingStopper
+{
+    Header header; // timestamp is  included in header
+    BBox2D bbox2d; // 限位器图像框
+}
+
+// ParkingStopper::ParkingStopper
+struct ParkingStopper
+{
+    Header header; // timestamp is  included in header
+    Point3D center_point_vehicle; // 车辆坐标系下限位器中心点坐标
+    Point3D center_point_abs; // 绝对坐标系下限位器中心点坐标
+    int32_t stopper_points_vehicle_size;
+    Point3D stopper_points_vehicle[stopper_points_vehicle_size]; // 车辆坐标系下限位器关键点
+    int32_t stopper_points_abs_size;
+    Point3D stopper_points_abs[stopper_points_abs_size]; // 绝对坐标系下限位器关键点
+}
+
+// DiagnosticArray::DiagnosticArray
+struct DiagnosticArray
+{
+    Header header; // timestamp is  included in header
+    int32_t status_size;
+    DiagnosticStatus status[status_size]; // 诊断状态
+}
+
+// DiagnosticStatus::DiagnosticStatus
+struct DiagnosticStatus
+{
+    Header header; // timestamp is  included in header
+    int32_t id; // level*100000 + 序号（RECOVER 400000） WARN 车运动状态（静止）100001 左前门状态（关闭）100002 右前门状态（关闭）100003 左后门状态（关闭）100004 右后门状态（关闭）100005 安全带状态（关闭）100006 后视镜状态（打开）100007 充电枪状态 100008 油门状态 （正常）100009 智驾系统（正常）100010 动力系统（正常）100011 左前轮胎压（正常）100012 右前轮胎压（正常）100013 左后轮胎压（正常）100014 右后轮胎压（正常）100015 转向系统（正常）100016 制动系统（正常）100017 档位系统（正常）100018 EPB系统（正常）100019 气囊状态（正常）100020 油箱盖状态（正常）100021 后备箱状态（正常）100022 底盘信息（正常）100023 定位信息（正常）100024 方向盘人工接管 100025 电量表（正常）100026 暂停超时 100027 暂停次数过多 100028 泊车超时 100029 人为刹车 100030 人为挂P挡 100031 障碍物碰撞 100032 EPB状态(释放) 100033 ERROR 规划失败 200000
+    int32_t level; // 诊断状态
+    string name; // 测试/组件报告的描述
+    string message; // 状态描述
+    string hardware_id; // 硬件的唯一描述
+    int32_t values_size;
+    KeyValues values[values_size]; // 与状态关联的key-value组
+}
+
+// KeyValues::KeyValues
+struct KeyValues
+{
+    string key; //  
+    string value; //  
+}
+
+// AlarmMessage::AlarmMessage
+struct AlarmMessage
+{
+    Header header; // 消息头
+    string alarm_proc; // 产生告警的进程名
+    int32_t alarm_level; // 告警等级
+    int32_t alarm_type; // 告警类型
+    int32_t alarm_id; // 告警序列号，用于恢复告警
+    int32_t alarm_display; // 告警展示类型
+    string alarm_data; // 告警正文
+}
+
+// LaneletInfo::LaneletInfo
+struct LaneletInfo
+{
+    int32_t lanelet_id; // 道路id，与地图文件对应
+    double length; // 道路长度
+}
+
+// GlobalRouteMsg::GlobalRouteMsg
+struct GlobalRouteMsg
+{
+    Header header; // 消息头
+    int32_t route_size;
+    LaneletInfo route[route_size]; // 一次导航的全程道路集合，从起点到终点排序
+    LaneletInfo current_lanelet; // 当前所在车道的信息
+    double total_mileage; // 总里程
+    double cur_mileage; // 当前里程
+    int32_t cur_slice_size;
+    LaneletInfo cur_slice[cur_slice_size]; // 当前地图切片,用来绘制局部地图
+}
+
+// RouteFusionInfo::RouteFusionInfo
+struct RouteFusionInfo
+{
+    int32_t fusion_flag; // 是否有效标志位
+    string fusion_reason; // 融合原因
+}
+
+// RoadMarkList::RoadMarkList
+struct RoadMarkList
+{
+    Header header; // timestamp is included in header
+    int32_t roadmarks_size;
+    RoadMark roadmarks[roadmarks_size]; // 交通标识列表
+}
+
+// HMIObuCmd::HMIObuCmd
+struct HMIObuCmd
+{
+    int32_t code; // 指令编码：10001、自动驾驶使能开关；
+    int32_t val; // 编码值：0、不响应；1、自定义状态；2、自定义状态...（更多参考：“ObuCmdMsg.md”）
+}
+
+// HMIObuCmdMsg::HMIObuCmdMsg
+struct HMIObuCmdMsg
+{
+    Header header; // timestamp is included in header
+    int32_t id; // obu的id身份
+    string name; // obu的名称
+    int32_t obu_cmd_list_size;
+    HMIObuCmd obu_cmd_list[obu_cmd_list_size]; // 命令列表
+}
+
+// HMIParkingStateDisplay::HMIParkingStateDisplay
+struct HMIParkingStateDisplay
+{
+    Header header; //  
+    int32_t parking_type; // 0：无效 1：垂直泊车 2：水平泊车 3：斜方泊车
+    int32_t moves_counter; // 揉库次数
+    double remian_distance; // 剩余距离
+    int32_t display_info; // 详细信息
+    double distance_to_leader_obj; // 距离最近障碍物距离
+    int32_t state; //  
+}
+
+// HMIParkingInfo::HMIParkingInfo
+struct HMIParkingInfo
+{
+    Header header; // timestamp is  included in header
+    int32_t parking_space_id; // // 停车位id
+    int32_t parking_type; // // PARKING_TYPE=0 //无效泊车 PARKING_TYPE=1 //水平泊车 PARKING_TYPE=2 //垂直泊车 PARKING_TYPE=3 //倾斜泊车
+    int32_t parking_status; // PARKING_ENABLE=0//可泊 PARKING_DISENABLE=1//不可泊 PARKING_NONOPTIONAL=2//不可选
+    Point3D center_point_of_parking; // // 世界坐标系下停车位中心点
+    double theta; // // 世界坐标系下的夹角（单位rad），车位出口与正东方向夹角
+    double width; // // 停车位宽（单位m）
+    double length; // // 停车位长单位m）
+    boolean is_custom_parking; // // 是否是自定义车位
+    Polygon3D polygon; // 世界坐标系下的车位多边形
+    int32_t parking_source_type; // 0-线车位， 1-空间车位， 2-融合车位
+}
+
+// HMIParkingInfoList::HMIParkingInfoList
+struct HMIParkingInfoList
+{
+    Header header; // timestamp is  included in header
+    int32_t parking_info_size;
+    HMIParkingInfo parking_info[parking_info_size]; //  
+    boolean parking_out_enable; //  
+    int32_t parking_out_direction; //  
+    int32_t parking_out_id; //  
+}
+
+// HMIVehicleMsg::HMIVehicleMsg
+struct HMIVehicleMsg
+{
+    Header header; //  
+    int32_t driving_mode; // 驾驶状态
+    int32_t gear_location; // 档位值
+    double steering_value; // 方向盘转角
+    double accel_value; // 线控驱动值（油门值）
+    double brake_value; // 线控制动值（刹车值）
+    double speed_mps; // 车速（m/s）
+    PointLLH position; // 经纬度高程
+    PointENU utm_position; // 相对参考点xyz坐标
+    double pitch; // 方向(单位弧度，-π～π,正东:0, 逆时针。都满足右手定则)
+    double roll; //  
+    double heading; //  
+    int32_t rtk_flag; // RTK标志值
+    double origin_lat; // // 参考点纬度 GCJ-02格式
+    double origin_lon; // // 参考点经度 GCJ-02格式
+    double current_ins_yaw; //  
+    int32_t auto_safe; // //  安全驾驶0:正常 1:左前车门没关 2:右前车门没关 3:左后车门没关 4:右后车门没关 5:未系安全带 6: 未打开反观镜 7:车辆未静止
+    double battery_power_percentage; // 电池电量值
+    int32_t charging_gun_status; // 充电枪状态
+    int32_t chassis_error_code_size;
+    int32_t chassis_error_code[chassis_error_code_size]; // 底盘错误码
+    int32_t brake_lamp_status; // 刹车灯状态
+    int32_t turn_lamp_status; // 转向灯状态
+    PointENU mercator_position; // 转坐标系后的参考点
+}
+
+// HMIObstacle::HMIObstacle
+struct HMIObstacle
+{
+    int32_t id; // 障碍物id
+    Point3D center_pos_vehicle; // 车辆坐标系下障碍物的中心位置
+    Point3D center_pos_abs; // 世界坐标系下障碍物的中心位置
+    double theta_vehicle; // 车辆坐标系下障碍物的朝向
+    double theta_abs; // 世界坐标系下障碍物的朝向
+    double length; // 障碍物长度
+    double width; // 障碍物宽度
+    double height; // 障碍物高度
+    int32_t type; // 障碍物类别： UNKNOWN = 0; UNKNOWN_MOVABLE = 1; UNKNOWN_UNMOVABLE = 2; PEDESTRIAN = 3; BICYCLE = 4; VEHICLE = 5;
+    double confidence; // 障碍物类别置信度
+    int32_t confidence_type; // 障碍物置信度类别： CONFIDENCE_UNKNOWN = 0; CONFIDENCE_CNN = 1; CONFIDENCE_RADAR = 2;
+    int32_t sub_type; // 障碍物类别： ST_UNKNOWN = 0; ST_UNKNOWN_MOVABLE = 1; ST_UNKNOWN_UNMOVABLE = 2; ST_CAR = 3; ST_VAN = 4; ST_TRUCK = 5; ST_BUS = 6; ST_CYCLIST = 7; ST_MOTORCYCLIST = 8; ST_TRICYCLIST = 9; ST_PEDESTRIAN = 10; ST_TRAFFICCONE = 11; ST_PILLAR = 12; ST_SPEED_BUMP = 13;
+    int32_t points_size;
+    Point3D points[points_size]; //  
+    int8_t cipv_flag; // 障碍物状态标志（0-CIPV 1-CIPS 2-LPIHP 3-RPIHP 4-NONE）
+    int32_t fusion_type; //  
+}
+
+// HMIObstacleList::HMIObstacleList
+struct HMIObstacleList
+{
+    Header header; // 消息头
+    int32_t sensor_id; // 安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    int32_t obstacle_size;
+    HMIObstacle obstacle[obstacle_size]; // 检测出的障碍物数组
+    int32_t error_code; // 错误码（default = OK）
+    boolean is_valid; // 障碍物数据是否合法
+    int32_t change_origin_flag; // 坐标切换状态（0-坐标系切换成功 1-坐标系切换中 2-坐标系切换故障）
+}
+
+// HMITrajectoryPoint::HMITrajectoryPoint
+struct HMITrajectoryPoint
+{
+    Point3D point; //  
+    double v; //  
+}
+
+// HMITrajectory::HMITrajectory
+struct HMITrajectory
+{
+    Header header; // 消息头
+    int32_t trajectory_points_size;
+    HMITrajectoryPoint trajectory_points[trajectory_points_size]; // 抽稀用来显示的轨迹点数组
+}
+
+// HMIDiagnosticStatus::HMIDiagnosticStatus
+struct HMIDiagnosticStatus
+{
+    int32_t id; //  
+    int32_t level; // // 诊断状态
+    string name; // //测试/组件报告的描述
+    string message; // // 状态描述
+    string hardware_id; // // 硬件的唯一描述
+}
+
+// HMIDiagnosticArray::HMIDiagnosticArray
+struct HMIDiagnosticArray
+{
+    Header header; // timestamp is  included in header
+    int32_t status_size;
+    HMIDiagnosticStatus status[status_size]; //  
+}
+
+// GuideInfo::GuideInfo
+struct GuideInfo
+{
+    Header header; // 头部信息
+    double next_dis; // 下一条规划路线上道路的距离
+    GuideRoad current_road; // 当前道路的引导信息
+    GuideRoad next_road; // 下一条规划道路的引导信息
+    int8_t round_status; // 环岛状态: 0：未知或非环岛状态 1：当前为非环岛道路并且规划路线即将驶入环岛主路 2：当前道路类型是环岛并且规划路线还是在环岛主路中行驶 3：当前道路类型是环岛并且规划路线即将驶出环岛主路
+    int8_t intersection_status; // 交叉路口状态: 0：未知 1：非交叉路口状态 2：交叉路口通行状态
+    int8_t roads_status; // 当前行车推荐状态引导：(跨路口) 0：1km内（1km配置文件可配置）无需要左转、右转路口 1：需要左转路口（1km配置文件可配置） 2：需要右转路口  3：车道级规划失败
+}
+
+// GuideRoad::GuideRoad
+struct GuideRoad
+{
+    int64_t road_id; // 道路的id
+    int8_t road_type; // 道路的类型: 0：未知或一般道路  1：环岛 2：交叉路口 3：主路 4：辅路
+    int8_t turn_type; // 规划路线上道路的转向信息 1：左转 2：直行 3：右转
+    double avg_curvature; // 道路的平均曲率
+    int32_t curvature_size; // 道路中心线上点(曲率)数量
+    CurvatureInfo curvature[curvature_size]; // 道路曲率信息数组
+}
+
+// CurvatureInfo::CurvatureInfo
+struct CurvatureInfo
+{
+    double offset; // 道路中心线上点位于该道路的位置（与道路起点的距离）
+    double value; // 道路中心线上点的曲率值
+}
+

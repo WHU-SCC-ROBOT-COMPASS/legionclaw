@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/obstacle.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message HMIObstacle{
+    //障碍物id
+    optional int32 id = 1 [default = 0];
+    //车辆坐标系下障碍物的中心位置
+    optional Point3D center_pos_vehicle = 2;
+    //世界坐标系下障碍物的中心位置
+    optional Point3D center_pos_abs = 3;
+    //车辆坐标系下障碍物的朝向
+    optional double theta_vehicle = 4 [default = 0.0];
+    //世界坐标系下障碍物的朝向
+    optional double theta_abs = 5 [default = 0.0];
+    //障碍物长度
+    optional double length = 6 [default = 0.0];
+    //障碍物宽度
+    optional double width = 7 [default = 0.0];
+    //障碍物高度
+    optional double height = 8 [default = 0.0];
+    //障碍物类别： UNKNOWN = 0; UNKNOWN_MOVABLE = 1; UNKNOWN_UNMOVABLE = 2; PEDESTRIAN = 3; BICYCLE = 4; VEHICLE = 5;
+    optional legion.common.ObstacleType type = 9 [default = OBSTACLE_UNKNOWN];
+    //障碍物类别置信度
+    optional double confidence = 10 [default = 0.0];
+    //障碍物置信度类别： CONFIDENCE_UNKNOWN = 0; CONFIDENCE_CNN = 1; CONFIDENCE_RADAR = 2;
+    optional Obstacle.ConfidenceType confidence_type = 11 [default = CONFIDENCE_UNKNOWN];
+    //障碍物类别： ST_UNKNOWN = 0; ST_UNKNOWN_MOVABLE = 1; ST_UNKNOWN_UNMOVABLE = 2; ST_CAR = 3; ST_VAN = 4; ST_TRUCK = 5; ST_BUS = 6; ST_CYCLIST = 7; ST_MOTORCYCLIST = 8; ST_TRICYCLIST = 9; ST_PEDESTRIAN = 10; ST_TRAFFICCONE = 11; ST_PILLAR = 12; ST_SPEED_BUMP = 13;
+    optional legion.common.ObstacleSubType sub_type = 12 [default = ST_UNKNOWN];
+    repeated Point3D points = 13;
+    //障碍物状态标志（0-CIPV 1-CIPS 2-LPIHP 3-RPIHP 4-NONE）
+    optional uint32 cipv_flag = 14 [default = 0];
+    optional int32 fusion_type = 15 [default = 0];
+}

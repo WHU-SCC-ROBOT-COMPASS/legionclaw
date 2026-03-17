@@ -1,0 +1,44 @@
+ #ifndef __Ins__idl__
+#define __Ins__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct Ins{
+    ros2_interface::msg::Header   _header;
+    boolean   _is_valid;
+    double   _latitude;
+    double   _longitude;
+    double   _elevation;
+    ros2_interface::msg::Point3D   _utm_position;
+    int32   _utm_zone_mumber;
+    uint8   _utm_zone_char;
+    ros2_interface::msg::Point3D   _attitude;
+    ros2_interface::msg::Point3D   _linear_velocity;
+    ros2_interface::msg::Point3D   _sd_position;
+    ros2_interface::msg::Point3D   _sd_attitude;
+    ros2_interface::msg::Point3D   _sd_velocity;
+    double   _cep68;
+    double   _cep95;
+    double   _second;
+    int32   _sat_use_num;
+    int32   _sat_in_view_num;
+    uint16   _solution_status;
+    uint16   _position_type;
+    double   _p_dop;
+    double   _h_dop;
+    double   _v_dop;
+    ros2_interface::msg::Point3D   _attitude_dual;
+    ros2_interface::msg::Point3D   _sd_angle_dual;
+    double   _base_line_length_dual;
+    int32   _solution_status_dual;
+    int32   _position_type_dual;
+    int32   _solution_source_dual;
+    uint32   _aoc;
+    uint32   _rtk_baseline;
+    ros2_interface::msg::Point3D   _angular_velocity;
+    ros2_interface::msg::Point3D   _acceleration;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,16 @@
+gthread
+zlib
+glib
+lcm
+libzmq
+boost
+gflags
+glog
+opencv3
+protobuf
+fastcdr
+fastrtpsJ3
+foonathan_memory
+openssl
+pugixml
+GeographicJ3

@@ -1,0 +1,32 @@
+ #ifndef __ParkingInfo__idl__
+#define __ParkingInfo__idl__
+#include "Polygon3D.idl"
+#include "Header.idl"
+#include "Point3D.idl"
+#include "ParkingStopper.idl"
+module ros2_interface{
+ module msg{
+  struct ParkingInfo{
+    ros2_interface::msg::Header   _header;
+    int32   _parking_space_id;
+    int32   _parking_type;
+    int32   _parking_status;
+    double   _confidence;
+    ros2_interface::msg::Point3D   _center_point_of_parking;
+    double   _theta;
+    double   _width;
+    double   _length;
+    double   _yaw_offset;
+    ros2_interface::msg::Polygon3D   _polygon;
+    int32   _sensor_id;
+    boolean   _is_lane_width_valid;
+    double   _lane_width;
+    sequence<ros2_interface::msg::ParkingStopper> _parking_stoppers;
+    int32   _parking_direction_type;
+    int32   _left_occupied_status;
+    int32   _right_occupied_status;
+    int32   _parking_source_type;
+  };
+ };
+}; 
+#endif

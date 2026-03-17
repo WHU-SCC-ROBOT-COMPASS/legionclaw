@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message LaneletInfo{
+    //道路id，与地图文件对应
+    optional int32 lanelet_id = 1 [default = 0];
+    //道路长度
+    optional double length = 2 [default = 0.0];
+}

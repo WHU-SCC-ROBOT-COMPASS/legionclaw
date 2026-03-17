@@ -1,0 +1,16 @@
+ #ifndef __UssObstacleList__idl__
+#define __UssObstacleList__idl__
+#include "UssObstacle.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct UssObstacleList{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::UssObstacle> _uss_obstacles;
+    sequence<double> _uss_ranges;
+    int32   _error_code;
+    boolean   _is_valid;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message Message{
+    //指定需要显示的值的code定义，需要与self_id绑定 作为前缀
+    optional int32 code = 1 [default = 0];
+    //对应显示的值或表达的状态
+    optional int32 value = 2 [default = 0];
+}

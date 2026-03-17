@@ -1,0 +1,84 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/point_enu.proto";
+import "modules/common/proto/point_llh.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message Location{
+    enum RTKFlag{
+        RTK_NULL = 0;
+        RTK_FIXED = 1;
+        RTK_FLOAT = 2;
+        GNSS_ERROR = 3;
+    }
+
+    enum OdomType{
+        GNSS = 0;
+        Wheel = 1;
+        WG = 2;
+        VG = 3;
+        VWG = 4;
+    }
+
+    enum AuxiliaryType{
+        AUXILIARY_TYPE_NULL = 0;
+        LANELINE_MAP = 1;
+        LIDAR_FEATURE_MAP = 2;
+        LIDAR_CAMERA_FEATURE_MAP = 3;
+    }
+
+    enum ChangeOriginFlag{
+        CHANGE_NULL = 0;
+        CHANGE_ORIGIN_SUCCEED = 1;
+        CHANGE_ORIGIN_SWITCHING = 2;
+        CHANGE_ORIGIN_FAILED = 3;
+    }
+
+    //消息头
+    optional Header header = 1;
+    //经纬度高程
+    optional PointLLH position = 2;
+    //方向(单位弧度，-π～π,正东:0, 逆时针。都满足右手定则)
+    optional double pitch = 3 [default = 0.0];
+    optional double roll = 4 [default = 0.0];
+    optional double heading = 5 [default = 0.0];
+    //线速度（m/s，北东地坐标系）
+    optional Point3D linear_velocity = 6;
+    //线加速度（m/s2，前右下坐标系）
+    optional Point3D linear_acceleration = 7;
+    //角速度（度/s，前右下，满足右手定则）
+    optional Point3D angular_velocity = 8;
+    //RTK标志值
+    optional Location.RTKFlag rtk_flag = 9 [default = RTK_NULL];
+    //融合标志:0-(纯ins) 1-(纯轮速) 2-(泊车递推) 3-(无) 4-(orb匹配定位)
+    optional Location.OdomType odom_type = 10 [default = GNSS];
+    //辅助方式:0-NULL(无辅助方式) 1-laneliine_map(车道线/标识牌)2-feature_map(lidar)3-feature_map(lidar_camera)
+    optional Location.AuxiliaryType auxiliary_type = 11 [default = AUXILIARY_TYPE_NULL];
+    //Location有效性标志位0: invalid； 1: valid
+    optional legion.common.IsValid location_valid_flag = 12 [default = INVALID];
+    //参考点纬度 GCJ-02格式
+    optional double origin_lat = 13 [default = 0.0];
+    //参考点经度 GCJ-02格式
+    optional double origin_lon = 14 [default = 0.0];
+    //相对参考点xyz坐标
+    optional PointENU utm_position = 15;
+    //0::无坐标系切换 1:坐标系切换成功2:坐标系切换中3:坐标系切换故障
+    optional Location.ChangeOriginFlag change_origin_flag = 16 [default = CHANGE_NULL];
+    //相对参考点坐标(切换状态下，为新的原点坐标系下)
+    optional PointENU utm_position_next = 17;
+    //位置标准差
+    optional Point3D position_std_dev = 18;
+    //方向标准差
+    optional Point3D orientation_std_dev = 19;
+    //速度标准差
+    optional Point3D linear_velocity_std_dev = 20;
+    //加速度标准差
+    optional Point3D linear_acceleration_std_dev = 21;
+    //角速度标准差
+    optional Point3D angular_velocity_std_dev = 22;
+}

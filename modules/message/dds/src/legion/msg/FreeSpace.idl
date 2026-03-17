@@ -1,0 +1,16 @@
+ #ifndef __FreeSpace__idl__
+#define __FreeSpace__idl__
+#include "Polygon2D.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct FreeSpace{
+    ros2_interface::msg::Header   _header;
+    int32   _sensor_id;
+    sequence<ros2_interface::msg::Polygon2D> _freespace_region;
+    int32   _error_code;
+    boolean   _is_valid;
+  };
+ };
+}; 
+#endif

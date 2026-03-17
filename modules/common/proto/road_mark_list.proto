@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/road_mark.proto";
+
+
+message RoadMarkList{
+    //timestamp is included in header
+    optional Header header = 1;
+    //交通标识列表
+    repeated RoadMark roadmarks = 2;
+}

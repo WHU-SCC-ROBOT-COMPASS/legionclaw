@@ -1,0 +1,51 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/polygon_3d.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/parking_stopper.proto";
+
+
+message ParkingInfo{
+    //timestamp is included in header
+    optional Header header = 1;
+    //停车位id
+    optional int32 parking_space_id = 2 [default = 0];
+    //PARKING_TYPE=0//无效泊车 PARKING_TYPE=1//水平泊车 PARKING_TYPE=2//垂直泊车 PARKING_TYPE=3//倾斜泊车
+    optional legion.common.ParkingType parking_type = 3 [default = INVALID_PARKING];
+    //PARKING_ENABLE=0//可泊 PARKING_DISENABLE=1//不可泊 PARKING_NONOPTIONAL=2//不可选
+    optional legion.common.ParkingStatus parking_status = 4 [default = PARKING_ENABLE];
+    //车位置信度
+    optional double confidence = 5 [default = 0.0];
+    //世界坐标系下停车位中心点
+    optional Point3D center_point_of_parking = 6;
+    //世界坐标系下的夹角（单位rad），车位出口与正东方向夹角
+    optional double theta = 7 [default = 0.0];
+    //停车位宽（单位m）
+    optional double width = 8 [default = 0.0];
+    //停车位长单位m）
+    optional double length = 9 [default = 0.0];
+    //停车位角度偏移量（倾斜车位），倾斜车位与道路边线夹角,(单位m）
+    optional double yaw_offset = 10 [default = 0.0];
+    //世界坐标系下的车位多边形
+    optional Polygon3D polygon = 11;
+    //车位数据来自相机id 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机 8-相机融合
+    optional legion.common.SensorID sensor_id = 12 [default = CAMERA_FRONT_CENTER];
+    //车道宽度是否有效
+    optional bool is_lane_width_valid = 13 [default = false];
+    //泊车可用(双)车道宽度
+    optional double lane_width = 14 [default = 0.0];
+    //车位内部的限位器数组
+    repeated ParkingStopper parking_stoppers = 15;
+    //  DIR_INVALID = 0,   LEFT = 1,   UP = 2,   RIGHT = 3,   DOWN = 4,
+    optional legion.common.Direction parking_direction_type = 16 [default = DIR_INVALID];
+    //0-unknown 未知，1-empty 空闲，2-occupied 被占用
+    optional legion.common.OccupiedStatus left_occupied_status = 17 [default = UNKNOWN_OCCUPIED_STATUS];
+    //0-unknown 未知，1-empty 空闲，2-occupied 被占用
+    optional legion.common.OccupiedStatus right_occupied_status = 18 [default = UNKNOWN_OCCUPIED_STATUS];
+    //0-线车位， 1-空间车位， 2-融合车位
+    optional legion.common.ParkingSourceType parking_source_type = 19 [default = LINE_PARKING];
+}

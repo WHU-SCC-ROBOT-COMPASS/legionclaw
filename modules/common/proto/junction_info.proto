@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message JunctionInfo{
+    optional int32 id = 1 [default = 0];
+    //是否有效，无效就可能是清除了，或者已经过路口了
+    optional legion.common.IsValid light_flag = 2 [default = INVALID];
+    //信号灯颜色，绿灯可通行，false红灯不能通行
+    optional legion.common.TrafficLightColor light_color = 3 [default = COLOR_UNKNOWN];
+    //信号灯剩余时间
+    optional double light_remain_time = 4 [default = 0.0];
+    //停车距离，停止线
+    optional double distance_to_stop = 5 [default = 0.0];
+    //是否有效，无效就可能是清除了，或者已经过路口了
+    optional legion.common.IsValid direction_flag = 6 [default = INVALID];
+    //路口通行方向，0：无效、1：左、2：前、3：右
+    optional legion.common.Direction direction = 7 [default = DIR_INVALID];
+    //距路口距离
+    optional double distance_to_junction = 8 [default = 0.0];
+    //路口停止线
+    repeated Point3D stop_line = 9;
+}

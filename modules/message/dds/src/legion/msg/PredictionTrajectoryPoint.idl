@@ -1,0 +1,12 @@
+ #ifndef __PredictionTrajectoryPoint__idl__
+#define __PredictionTrajectoryPoint__idl__
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct PredictionTrajectoryPoint{
+    ros2_interface::msg::Point3D   _predition_path_point;
+    double   _timestamp;
+  };
+ };
+}; 
+#endif

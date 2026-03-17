@@ -1,0 +1,13 @@
+ #ifndef __BBox2D__idl__
+#define __BBox2D__idl__
+module ros2_interface{
+ module msg{
+  struct BBox2D{
+    int16   _xmin;
+    int16   _ymin;
+    int16   _xmax;
+    int16   _ymax;
+  };
+ };
+}; 
+#endif

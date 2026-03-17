@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message CurvatureInfo{
+    //道路中心线上点位于该道路的位置（与道路起点的距离）
+    optional double offset = 1 [default = 0.0];
+    //道路中心线上点的曲率值
+    optional double value = 2 [default = 0.0];
+}

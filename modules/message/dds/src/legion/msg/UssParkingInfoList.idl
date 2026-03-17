@@ -1,0 +1,15 @@
+ #ifndef __UssParkingInfoList__idl__
+#define __UssParkingInfoList__idl__
+#include "Header.idl"
+#include "UssParkingInfo.idl"
+module ros2_interface{
+ module msg{
+  struct UssParkingInfoList{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::UssParkingInfo> _uss_parking_info;
+    int32   _error_code;
+    boolean   _is_valid;
+  };
+ };
+}; 
+#endif

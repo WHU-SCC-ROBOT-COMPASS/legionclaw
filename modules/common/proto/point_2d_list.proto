@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_2d.proto";
+
+
+message Point2dList{
+    repeated Point2D point2d_list = 1;
+}

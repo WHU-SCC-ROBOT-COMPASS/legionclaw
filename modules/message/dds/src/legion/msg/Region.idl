@@ -1,0 +1,14 @@
+ #ifndef __Region__idl__
+#define __Region__idl__
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct Region{
+    int32   _name_region;
+    double   _score;
+    int32   _rank_risk;
+    sequence<ros2_interface::msg::Point3D> _region_polygon;
+  };
+ };
+}; 
+#endif

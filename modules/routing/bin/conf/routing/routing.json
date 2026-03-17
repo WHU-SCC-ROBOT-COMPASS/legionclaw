@@ -1,0 +1,86 @@
+{
+    "app_name": "routing",
+    "description": "routing module",
+    "log_file_path": "./log",
+    "log_level": 1,
+    "logging_data_enable": false,
+    "use_system_timestamp": true,
+    "produce_routing_command_duration": 20,
+    "publish_routing_command_duration": 10,
+    "messages": {
+        "active_message": [
+            4
+        ],
+        "message_info": [
+            {
+                "type": 0,
+                "name": "LCM",
+                "url": "udpm://239.255.76.21:7621?ttl=3"
+            },
+            {
+                "type": 1,
+                "name": "DDS",
+                "url": "null"
+            },
+            {
+                "type": 2,
+                "name": "ROS",
+                "url": "null"
+            },
+            {
+                "type": 3,
+                "name": "ADSFI",
+                "url": "null"
+            },
+            {
+                "type": 4,
+                "name": "ROS2",
+                "url": "null"
+            }
+        ]
+    },
+    "status": {
+        "status_detect_duration": 200
+    },
+    "enable_lane_change": true,
+    "enable_3d_map": false,
+    "enable_traffic_junction": true,
+    "enable_path_smooth": false,
+    "enable_replan": true,
+    "enable_system_time": false,
+    "enable_obucmd_handle": true,
+    "enable_downsample":false,
+    "map_file_path": "../../common/data/map/nad.osm",
+    "origin_lat": 30.425457029885372151,
+    "origin_lon": 114.09623523096009023,
+    "path_density": 1.5,
+    "search_range": 8.0,
+    "search_height_range": 30,
+    "speed_limit": 45,
+    "yaw_weight": 10.0,
+    "back_length": 100,
+    "forward_length": 600,
+    "mileage_length": 200,
+    "loop_rate": 1000,
+    "stop_distance": 200.0,
+    "junction_distance": 50.0,
+    "stopline_reserved_length":50,
+    "normal_deceleration": 0.3,
+    "stop_line_distance":4.0,
+    "local_map_range":40,
+    "sleep_time":500,
+    "check_junction_rate":200,
+    "enable_polygon_send":false,
+    "polygon_gen_rate":1000,
+    "polygon_range":100,
+    "enable_route_msg_send":true,
+    "route_msg_gen_rate":1000,
+    "enable_guide_info_send":true,
+    "guide_info_gen_rate":200,
+    "enable_lanelines_send":false,
+    "lanelines_gen_rate":200,
+    "enable_navi_info_send":true,
+    "navi_info_gen_rate":100,
+    "local_route_visual_range":200,
+    "use_tf_flag": false
+}

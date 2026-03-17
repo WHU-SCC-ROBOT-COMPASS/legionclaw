@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/traffic_light.proto";
+import "modules/common/proto/traffic_light_debug.proto";
+
+
+message TrafficLightMsg{
+    enum CameraID{
+        CAMERA_FRONT_LONG = 0;
+        CAMERA_FRONT_NARROW = 1;
+        CAMERA_FRONT_SHORT = 2;
+        CAMERA_FRONT_WIDE = 3;
+    }
+
+    //消息头
+    optional Header header = 1;
+    //检出的交通灯数组
+    repeated TrafficLight traffic_light = 2;
+    //交通灯数组调试
+    optional TrafficLightDebug traffic_light_debug = 3 ;
+    //是否包含交通灯
+    optional bool contain_lights = 4 [default = false];
+    //CAMERA_FRONT_LONG = 0; CAMERA_FRONT_NARROW = 1; CAMERA_FRONT_SHORT = 2; CAMERA_FRONT_WIDE = 3;
+    optional TrafficLightMsg.CameraID camera_id = 5 [default = CAMERA_FRONT_LONG];
+    //true: valid  false: invalid
+    optional bool is_valid = 6 [default = false];
+}

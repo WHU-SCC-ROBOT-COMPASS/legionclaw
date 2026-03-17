@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message ImageKeyPoint{
+    //车位图像关键点x坐标
+    optional double x = 1 [default = 0.0];
+    //车位图像关键点y坐标
+    optional double y = 2 [default = 0.0];
+    //置信度
+    optional double confidence = 3 [default = 0.0];
+}

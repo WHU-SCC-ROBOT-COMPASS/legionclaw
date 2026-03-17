@@ -1,0 +1,12 @@
+ #ifndef __LimitSpeedInfo__idl__
+#define __LimitSpeedInfo__idl__
+module ros2_interface{
+ module msg{
+  struct LimitSpeedInfo{
+    int32   _limitspeed_valid_flag;
+    double   _limit_speed;
+    double   _limit_distance;
+  };
+ };
+}; 
+#endif

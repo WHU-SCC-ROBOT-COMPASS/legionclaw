@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message ObstaclePriority{
+    enum Priority{
+        CAUTION = 1;
+        NORMAL = 2;
+        IGNORE = 3;
+    }
+
+    //CAUTION = 1; NORMAL = 2; IGNORE = 3;
+    optional ObstaclePriority.Priority priority = 1 [default = CAUTION];
+}

@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/hmi_trajectory_points.proto";
+
+
+message HMIADCTrajectory{
+    //timestamp is  included in header
+    optional Header header = 1;
+    repeated HMITrajectoryPoints trajectory_points = 2;
+}

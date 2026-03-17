@@ -1,0 +1,23 @@
+ #ifndef __CameraParkingInfo__idl__
+#define __CameraParkingInfo__idl__
+#include "ImageKeyPoint.idl"
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct CameraParkingInfo{
+    ros2_interface::msg::Header   _header;
+    int32   _parking_space_id;
+    int32   _parking_type;
+    boolean   _is_parking_enable;
+    double   _confidence;
+    ros2_interface::msg::Point3D   _center_point_of_parking;
+    double   _theta;
+    double   _width;
+    double   _length;
+    double   _yaw_offset;
+    sequence<ros2_interface::msg::ImageKeyPoint> _parking_points_in_image;
+  };
+ };
+}; 
+#endif

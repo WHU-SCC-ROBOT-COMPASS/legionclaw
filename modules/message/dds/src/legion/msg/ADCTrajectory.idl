@@ -1,0 +1,28 @@
+ #ifndef __ADCTrajectory__idl__
+#define __ADCTrajectory__idl__
+#include "RSSInfo.idl"
+#include "Header.idl"
+#include "TrajectoryPoint.idl"
+#include "EStop.idl"
+module ros2_interface{
+ module msg{
+  struct ADCTrajectory{
+    ros2_interface::msg::Header   _header;
+    double   _total_path_length;
+    double   _total_path_time;
+    sequence<ros2_interface::msg::TrajectoryPoint> _trajectory_points;
+    int32   _car_action;
+    int32   _behaviour_lat_state;
+    int32   _behaviour_lon_state;
+    int32   _scenario;
+    int32   _driving_mode;
+    int32   _adc_trajectory_type;
+    ros2_interface::msg::EStop   _estop;
+    boolean   _is_replan;
+    string   _replan_reason;
+    int32   _right_of_way_status;
+    ros2_interface::msg::RSSInfo   _rss_info;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,10 @@
+ #ifndef __Stories__idl__
+#define __Stories__idl__
+module ros2_interface{
+ module msg{
+  struct Stories{
+    string   _note;
+  };
+ };
+}; 
+#endif

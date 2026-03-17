@@ -1,0 +1,13 @@
+ #ifndef __WarningCommand__idl__
+#define __WarningCommand__idl__
+module ros2_interface{
+ module msg{
+  struct WarningCommand{
+    int32   _sound_alarm;
+    int32   _light_alarm;
+    int32   _media_alarm;
+    int32   _motion_alarm;
+  };
+ };
+}; 
+#endif

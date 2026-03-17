@@ -1,0 +1,230 @@
+{
+    "behavior_lon_state_machine": [
+        {
+            "StateName": "Start",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                },
+                {
+                    "Key": "NotActive",
+                    "Target": "LonNotActiveState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "NormalState",
+            "Transition": [
+                {
+                    "Key": "PreciseStop",
+                    "Target": "PreciseStopState"
+                },
+                {
+                    "Key": "Stop",
+                    "Target": "StopState"
+                },
+                {
+                    "Key": "TrafficSignStop",
+                    "Target": "TrafficSignStopState"
+                },
+                {
+                    "Key": "TrafficLightStop",
+                    "Target": "TrafficLightStopState"
+                },
+                {
+                    "Key": "Follow",
+                    "Target": "FollowState"
+                },
+                {
+                    "Key": "Cut_In",
+                    "Target": "Cut_InState"
+                },
+                {
+                    "Key": "OnComing",
+                    "Target": "OnComingState"
+                },
+                {
+                    "Key": "Crossing",
+                    "Target": "CrossingState"
+                },
+                {
+                    "Key": "Inward",
+                    "Target": "InwardState"
+                },
+                {
+                    "Key": "Outward",
+                    "Target": "OutwardState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "LonNotActiveState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "PreciseStopState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "StopState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "TrafficSignStopState",
+            "Transition": [
+                {
+                    "Key": "TrafficSignWait",
+                    "Target": "TrafficSignWaitState"
+                },
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "TrafficSignWaitState",
+            "Transition": [
+                {
+                    "Key": "TrafficSignStop",
+                    "Target": "TrafficSignStopState"
+                }
+            ],
+            "Parent": "TrafficSignStopState"
+        },
+        {
+            "StateName": "TrafficLightStopState",
+            "Transition": [
+                {
+                    "Key": "TrafficLightWait",
+                    "Target": "TrafficLightWaitState"
+                },
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "TrafficLightWaitState",
+            "Transition": [
+                {
+                    "Key": "TrafficLightStop",
+                    "Target": "TrafficLightStopState"
+                }
+            ],
+            "Parent": "TrafficLightStopState"
+        },
+        {
+            "StateName": "FollowState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                },
+                {
+                    "Key": "ACC",
+                    "Target": "ACCState"
+                },
+                {
+                    "Key": "TJP",
+                    "Target": "TJPState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "ACCState",
+            "Transition": [
+                {
+                    "Key": "Follow",
+                    "Target": "FollowState"
+                }
+            ],
+            "Parent": "FollowState"
+        },
+        {
+            "StateName": "TJPState",
+            "Transition": [
+                {
+                    "Key": "Follow",
+                    "Target": "FollowState"
+                }
+            ],
+            "Parent": "FollowState"
+        },
+        {
+            "StateName": "Cut_InState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "OnComingState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "CrossingState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "InwardState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "OutwardState",
+            "Transition": [
+                {
+                    "Key": "Normal",
+                    "Target": "NormalState"
+                }
+            ],
+            "Parent": "null"
+        }
+    ]
+}

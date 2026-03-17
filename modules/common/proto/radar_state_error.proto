@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message RadarStateError{
+    optional uint32 persistent_error = 1 [default = 0];
+    optional uint32 temporary_error = 2 [default = 0];
+    optional uint32 interference_error = 3 [default = 0];
+    optional uint32 temperature_error = 4 [default = 0];
+    optional uint32 voltage_error = 5 [default = 0];
+    optional uint32 block_error = 6 [default = 0];
+    optional uint32 broadcast_error = 7 [default = 0];
+    optional uint32 electric_axis_error = 8 [default = 0];
+    optional uint32 config_error = 9 [default = 0];
+    optional uint32 calibration_error = 10 [default = 0];
+}

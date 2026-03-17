@@ -1,0 +1,13 @@
+ #ifndef __ParkingRoi__idl__
+#define __ParkingRoi__idl__
+#include "Header.idl"
+#include "Point2dList.idl"
+module ros2_interface{
+ module msg{
+  struct ParkingRoi{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::Point2dList> _obstacles_vec;
+  };
+ };
+}; 
+#endif

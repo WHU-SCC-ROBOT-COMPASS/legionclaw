@@ -1,0 +1,15 @@
+ #ifndef __CommCommand__idl__
+#define __CommCommand__idl__
+#include "Header.idl"
+#include "Command.idl"
+module ros2_interface{
+ module msg{
+  struct CommCommand{
+    ros2_interface::msg::Header   _header;
+    string   _name;
+    int8   _self_id;
+    sequence<ros2_interface::msg::Command> _commands;
+  };
+ };
+}; 
+#endif

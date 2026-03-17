@@ -1,0 +1,16 @@
+ #ifndef __CommandRespond__idl__
+#define __CommandRespond__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct CommandRespond{
+    ros2_interface::msg::Header   _header;
+    string   _name;
+    int8   _self_id;
+    int8   _respond_id;
+    int8   _status;
+    int32   _fail_code;
+  };
+ };
+}; 
+#endif

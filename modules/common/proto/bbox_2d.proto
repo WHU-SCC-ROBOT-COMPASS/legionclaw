@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message BBox2D{
+    //图像框左上角的x坐标
+    optional int32 xmin = 1 [default = 0];
+    //图像框左上角的y坐标
+    optional int32 ymin = 2 [default = 0];
+    //图像框右下角的x坐标
+    optional int32 xmax = 3 [default = 0];
+    //图像框右下角的y坐标
+    optional int32 ymax = 4 [default = 0];
+}

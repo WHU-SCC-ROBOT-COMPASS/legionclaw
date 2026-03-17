@@ -1,0 +1,13 @@
+ #ifndef __HMITrajectory__idl__
+#define __HMITrajectory__idl__
+#include "Header.idl"
+#include "HMITrajectoryPoint.idl"
+module ros2_interface{
+ module msg{
+  struct HMITrajectory{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::HMITrajectoryPoint> _trajectory_points;
+  };
+ };
+}; 
+#endif

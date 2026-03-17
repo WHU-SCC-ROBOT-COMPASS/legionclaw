@@ -1,0 +1,14 @@
+ #ifndef __Events__idl__
+#define __Events__idl__
+#include "Header.idl"
+#include "Event.idl"
+module ros2_interface{
+ module msg{
+  struct Events{
+    ros2_interface::msg::Header   _header;
+    int32   _version;
+    sequence<ros2_interface::msg::Event> _events;
+  };
+ };
+}; 
+#endif

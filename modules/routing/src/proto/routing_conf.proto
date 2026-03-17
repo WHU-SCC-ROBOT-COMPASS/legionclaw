@@ -1,0 +1,65 @@
+syntax = "proto2";
+
+package legionclaw.routing;
+
+import "modules/common/base_message/message.proto";
+
+message RoutingConf {
+ optional string app_name = 1;
+ optional string description = 2;
+ optional string log_file_path = 3;
+ optional int32 log_level = 4;
+ optional bool logging_data_enable = 5;
+ optional bool use_system_timestamp = 6;
+ optional double produce_routing_command_duration = 7;
+ optional double publish_routing_command_duration = 8;
+ optional legion.common.Message messages = 9;
+
+ optional bool enable_lane_change = 10;
+ optional bool enable_3d_map = 11;
+ optional bool enable_traffic_junction = 12;
+ optional bool enable_path_smooth = 13;
+ optional bool enable_replan = 14;
+ optional bool enable_system_time = 15;
+ optional bool enable_obucmd_handle = 16;
+ optional bool enable_downsample = 17;
+ optional string map_file_path = 18;
+ optional double origin_lat = 19;
+ optional double origin_lon = 20;
+ optional double path_density = 21;
+ optional double search_range = 22;
+ optional double search_height_range = 23;
+ optional double speed_limit = 24;
+ optional double yaw_weight = 25;
+ optional double back_length = 26;
+ optional double forward_length = 27;
+ optional double mileage_length = 28;
+ optional double loop_rate = 29;
+ optional double stop_distance = 30;
+ optional double junction_distance = 31;
+ optional double stopline_reserved_length = 32;
+ optional double normal_deceleration = 33;
+ optional double stop_line_distance = 34;
+ optional double local_map_range = 35;
+ optional double sleep_time = 36;
+ optional double check_junction_rate = 37;
+ optional bool enable_polygon_send = 38;
+ optional double polygon_gen_rate = 39;
+ optional double polygon_range = 40;
+ optional bool enable_route_msg_send = 41;
+ optional double route_msg_gen_rate = 42;
+ optional bool enable_guide_info_send = 43;
+ optional double guide_info_gen_rate = 44;
+ optional bool enable_lanelines_send = 45;
+ optional double lanelines_gen_rate = 46;
+ optional bool enable_navi_info_send = 47;
+ optional double navi_info_gen_rate = 48;
+ optional double local_route_visual_range = 49;
+ optional bool use_tf_flag = 50;
+
+ optional StatusConfig status = 51;
+}
+
+message StatusConfig {
+  optional double status_detect_duration = 1;
+}

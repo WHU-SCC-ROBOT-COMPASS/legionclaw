@@ -1,0 +1,18 @@
+ #ifndef __PointCloud__idl__
+#define __PointCloud__idl__
+#include "PointXYZIRT.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct PointCloud{
+    ros2_interface::msg::Header   _header;
+    string   _frame_id;
+    boolean   _is_dense;
+    sequence<ros2_interface::msg::PointXYZIRT> _point;
+    double   _measurement_time;
+    uint32   _width;
+    uint32   _height;
+  };
+ };
+}; 
+#endif

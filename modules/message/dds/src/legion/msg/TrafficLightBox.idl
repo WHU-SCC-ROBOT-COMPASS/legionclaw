@@ -1,0 +1,16 @@
+ #ifndef __TrafficLightBox__idl__
+#define __TrafficLightBox__idl__
+module ros2_interface{
+ module msg{
+  struct TrafficLightBox{
+    int32   _x;
+    int32   _y;
+    int32   _width;
+    int32   _height;
+    int32   _color;
+    boolean   _selected;
+    string   _camera_name;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_enu.proto";
+import "modules/common/proto/quaternion.proto";
+
+
+message Odometry{
+    //含有时间戳信息的结构体
+    optional Header header = 1;
+    //位置
+    optional PointENU position = 2;
+    //角度
+    optional Quaternion orientation = 3;
+    //方差
+  repeated double covariance = 4;
+}

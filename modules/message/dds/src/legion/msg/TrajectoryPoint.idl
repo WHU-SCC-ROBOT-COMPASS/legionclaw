@@ -1,0 +1,19 @@
+ #ifndef __TrajectoryPoint__idl__
+#define __TrajectoryPoint__idl__
+#include "PathPoint.idl"
+module ros2_interface{
+ module msg{
+  struct TrajectoryPoint{
+    ros2_interface::msg::PathPoint   _path_point;
+    double   _v;
+    double   _a;
+    double   _relative_time;
+    double   _da;
+    boolean   _is_steer_valid;
+    double   _front_steer;
+    double   _rear_steer;
+    int32   _gear;
+  };
+ };
+}; 
+#endif

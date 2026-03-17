@@ -1,0 +1,25 @@
+ #ifndef __TrafficLight__idl__
+#define __TrafficLight__idl__
+#include "Time.idl"
+#include "Point3D.idl"
+#include "ImageRect.idl"
+module ros2_interface{
+ module msg{
+  struct TrafficLight{
+    int32   _color;
+    uint32   _id;
+    int32   _type;
+    double   _confidence;
+    ros2_interface::msg::ImageRect   _light_rect;
+    ros2_interface::msg::Point3D   _position;
+    double   _distance;
+    sequence<int32> _light_lanes;
+    double   _tracking_time;
+    boolean   _blink;
+    double   _blinking_time;
+    double   _remaining_time;
+    ros2_interface::msg::Time   _create_time;
+  };
+ };
+}; 
+#endif

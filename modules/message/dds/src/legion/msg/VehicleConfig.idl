@@ -1,0 +1,13 @@
+ #ifndef __VehicleConfig__idl__
+#define __VehicleConfig__idl__
+#include "VehicleParam.idl"
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct VehicleConfig{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::VehicleParam   _vehicle_param;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,76 @@
+{
+    "gear_state_machine": [
+        {
+            "StateName": "Start",
+            "Transition": [
+                {
+                    "Key": "started",
+                    "Target": "Init"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Init",
+            "Transition": [
+                {
+                    "Key": "N",
+                    "Target": "Neutral"
+                },
+                {
+                    "Key": "P",
+                    "Target": "Parking"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Parking",
+            "Transition": [
+                {
+                    "Key": "D",
+                    "Target": "Drive"
+                },
+                {
+                    "Key": "R",
+                    "Target": "Reverse"
+                }
+            ],
+            "Parent": "Init"
+        },
+        {
+            "StateName": "Neutral",
+            "Transition": [
+                {
+                    "Key": "D",
+                    "Target": "Drive"
+                },
+                {
+                    "Key": "R",
+                    "Target": "Reverse"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Drive",
+            "Transition": [
+                {
+                    "Key": "N",
+                    "Target": "Neutral"
+                }
+            ],
+            "Parent": "null"
+        },
+        {
+            "StateName": "Reverse",
+            "Transition": [
+                {
+                    "Key": "N",
+                    "Target": "Neutral"
+                }
+            ],
+            "Parent": "null"
+        }
+    ]
+}

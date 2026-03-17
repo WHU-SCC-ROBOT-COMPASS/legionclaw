@@ -1,0 +1,17 @@
+ #ifndef __LocalMap__idl__
+#define __LocalMap__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+#include "LaneInfoExtend.idl"
+module ros2_interface{
+ module msg{
+  struct LocalMap{
+    ros2_interface::msg::Header   _header;
+    int32   _seq;
+    ros2_interface::msg::Point3D   _ego_point;
+    double   _range;
+    sequence<ros2_interface::msg::LaneInfoExtend> _lane_list;
+  };
+ };
+}; 
+#endif

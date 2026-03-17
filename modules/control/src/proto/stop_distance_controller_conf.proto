@@ -1,0 +1,47 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+import "modules/control/src/proto/pid_conf.proto";
+import "modules/control/src/proto/calibration_table.proto";
+
+message StopDistanceControllerConf{
+    optional double ts =1;
+    optional double brake_delay_time_d =2;
+    optional double brake_delay_time_r =3;
+    optional double  vehicle_speed_in_idle =4;
+    optional double deceleration_in_idle_speed =5;
+    optional double starting_acceleration_in_d =6;
+    optional double starting_acceleration_in_r =7;
+    optional double brake_switch_throttle_delay =8;
+    optional double brake_sign =9;
+    optional double kp_brake =10;
+    optional double starting_speed =11;
+    optional double pitch_offset =12;
+    optional double brake_minimum_action =13;
+    optional double throttle_minimum_action =14;
+    optional double speed_controller_input_limit =15;
+    optional double station_error_limit =16;
+    optional double preview_window =17;
+    optional bool enable_reverse_leadlag_compensation =18;
+    optional bool lon_print_enable = 19;
+    optional bool enable_log_debug =20;
+    optional bool enable_slope_offset =21;
+    optional bool enable_aero_offset =22;
+    optional bool enable_turning_offset =23;
+    optional bool enable_rolling_offset =24;
+    optional bool use_calibration_table =25;
+    optional double stop_distance_limit_when_pid_applied = 26;
+    optional double max_stop_distance = 27;
+    optional double min_stop_distance = 28;
+    optional double stop_threshold = 29;
+    optional double pid_buffer_limit = 30;
+    optional double dkappa_threshold = 31;
+    optional double dkappa_stopdistance_limit = 32;
+    optional double end_s_diff_limit = 33;
+    optional double stop_distance_forward_coefficient= 34;
+    optional double stop_distance_backward_coefficient= 35;
+    optional PIDConf stop_distance_pid_conf = 36;
+    optional StopDistanceCalibrationTable calibration_table = 37;
+    optional SpeedLimitTable speed_limit_table = 38;
+}

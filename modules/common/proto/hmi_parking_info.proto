@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+import "modules/common/proto/polygon_3d.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message HMIParkingInfo{
+    //timestamp is  included in header
+    optional Header header = 1;
+    //// 停车位id
+    optional int32 parking_space_id = 2 [default = 0];
+    //// PARKING_TYPE=0 //无效泊车 PARKING_TYPE=1 //水平泊车 PARKING_TYPE=2 //垂直泊车 PARKING_TYPE=3 //倾斜泊车
+    optional legion.common.ParkingType parking_type = 3 [default = INVALID_PARKING];
+    //PARKING_ENABLE=0//可泊 PARKING_DISENABLE=1//不可泊 PARKING_NONOPTIONAL=2//不可选
+    optional legion.common.ParkingStatus parking_status = 4 [default = PARKING_ENABLE];
+    //// 世界坐标系下停车位中心点
+    optional Point3D center_point_of_parking = 5;
+    //// 世界坐标系下的夹角（单位rad），车位出口与正东方向夹角
+    optional double theta = 6 [default = 0.0];
+    //// 停车位宽（单位m）
+    optional double width = 7 [default = 0.0];
+    //// 停车位长单位m）
+    optional double length = 8 [default = 0.0];
+    //// 是否是自定义车位
+    optional bool is_custom_parking = 9 [default = false];
+    //世界坐标系下的车位多边形
+    optional Polygon3D polygon = 10;
+    //0-线车位， 1-空间车位， 2-融合车位
+    optional legion.common.ParkingSourceType parking_source_type = 11 [default = LINE_PARKING];
+}

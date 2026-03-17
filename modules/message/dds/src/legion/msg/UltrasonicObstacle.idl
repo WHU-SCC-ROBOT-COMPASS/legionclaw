@@ -1,0 +1,11 @@
+ #ifndef __UltrasonicObstacle__idl__
+#define __UltrasonicObstacle__idl__
+module ros2_interface{
+ module msg{
+  struct UltrasonicObstacle{
+    int32   _id;
+    double   _range;
+  };
+ };
+}; 
+#endif

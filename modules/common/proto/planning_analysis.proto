@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/time_consume.proto";
+import "modules/common/proto/planning_parking_debug.proto";
+
+
+message PlanningAnalysis{
+    optional Header header = 1;
+    //frame update计算时间
+    optional double frame_update_time = 2 [default = 0.0];
+    //轨迹生成 计算时间
+    optional double generator_time = 3 [default = 0.0];
+    //轨迹评估计算时间
+    repeated TimeConsume evaluator_time = 4;
+    //轨迹选择计算时间
+    optional double selector_time = 5 [default = 0.0];
+    //planning泊车调试消息
+    optional PlanningParkingDebug planning_parking_debug = 6 ;
+    //车辆距离车道中心线的垂直距离
+    optional double dis_to_center_line = 7 [default = 0.0];
+    //目标速度与规划速度之差
+    optional double diff_to_velocity = 8 [default = 0.0];
+    //参考线曲率
+    optional double referencline_kappa = 9 [default = 0.0];
+}

@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+message LonSpeedControllerConf{
+    optional bool use_station_pid = 1;
+    optional double ts = 2;
+    optional double preview_window = 3;
+    optional double starting_speed = 4;
+    optional double acceleration_threshold_when_brake= 5;
+}

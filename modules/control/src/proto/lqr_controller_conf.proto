@@ -1,0 +1,58 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+import "modules/control/src/proto/leadlag_conf.proto";
+import "modules/control/src/proto/mrac_conf.proto";
+import "modules/control/src/proto/gain_scheduler_conf.proto";
+import "modules/control/src/proto/lqr_calibration_table.proto";
+
+message LQRControllerConf{
+    optional bool enable_log_debug =1;
+    optional bool lqr_print_enable =2;
+    optional double eps =3;
+    optional double ts =4;
+    optional double preview_window =5;
+    repeated double matrix_q =6;
+    repeated double reverse_matrix_q =7;
+    optional double cutoff_freq =8;
+    optional double mean_filter_window_size=9;
+    optional double max_iteration=10;
+    optional double max_lateral_acceleration=11;
+    optional bool enable_reverse_leadlag_compensation=12;
+    optional bool enable_look_ahead_back_control=13;
+    optional bool enable_steer_mrac_control =14;
+    optional bool enable_gain_scheduler =15;
+    optional double lookahead_station =16;
+    optional double lookback_station =17;
+    optional bool reverse_heading_control =18;
+    optional bool use_preview_speed_for_table =19;
+    optional bool enable_error_sigmoid_control =20;
+    optional bool enable_error_apc_scheduler =21;
+    optional double lateral_error_threshold =22;
+    optional double heading_error_threshold =23;
+    optional double q_lat_err_max =24;
+    optional double q_heading_err_max=25;
+    repeated GainSchedulerInfo lat_err_gain_scheduler=26;
+    repeated GainSchedulerInfo heading_err_gain_scheduler=27;
+    repeated ErrGainSchedulerInfo lat_err_apc_scheduler=28;
+    repeated ErrGainSchedulerInfo heading_err_apc_scheduler=29;
+    optional LeadlagConf reverse_leadlag_conf =30;
+    optional MracConf steer_mrac_conf =31;
+    optional ErrorSigmoidConf error_sigmoid_conf =32;
+    repeated GainSchedulerInfo lat_speed_kp_scheduler = 33;
+    optional bool use_lqr_calibration_table =34;
+    optional LqrCalibrationTable lqr_calibration_table = 35;
+    optional bool enable_timedelay_control = 36;
+    optional int32 delay_time_window = 37;
+    optional double offset_range = 38;
+    optional bool enable_steer_offset = 39;
+    repeated GainSchedulerInfo steer_offset_kp_scheduler = 40;
+}
+
+message ErrorSigmoidConf{
+    optional double lat_error_axis =1;
+    optional int32 lat_error_slope =2;
+    optional double heading_error_axis =3;
+    optional int32 heading_error_slope =4;
+}

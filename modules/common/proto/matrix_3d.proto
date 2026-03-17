@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message Matrix3D{
+    //第一行第一列元素
+    optional double a00 = 1 [default = 0.0];
+    //第一行第二列元素
+    optional double a01 = 2 [default = 0.0];
+    //第一行第三列元素
+    optional double a02 = 3 [default = 0.0];
+    //第二行第一列元素
+    optional double a10 = 4 [default = 0.0];
+    //第二行第二列元素
+    optional double a11 = 5 [default = 0.0];
+    //第二行第三列元素
+    optional double a12 = 6 [default = 0.0];
+    //第三行第一列元素
+    optional double a20 = 7 [default = 0.0];
+    //第三行第二列元素
+    optional double a21 = 8 [default = 0.0];
+    //第三行第三列元素
+    optional double a22 = 9 [default = 0.0];
+}

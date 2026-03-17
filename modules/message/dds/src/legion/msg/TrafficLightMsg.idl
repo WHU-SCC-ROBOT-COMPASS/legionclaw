@@ -1,0 +1,18 @@
+ #ifndef __TrafficLightMsg__idl__
+#define __TrafficLightMsg__idl__
+#include "TrafficLightDebug.idl"
+#include "Header.idl"
+#include "TrafficLight.idl"
+module ros2_interface{
+ module msg{
+  struct TrafficLightMsg{
+    ros2_interface::msg::Header   _header;
+    sequence<ros2_interface::msg::TrafficLight> _traffic_light;
+    ros2_interface::msg::TrafficLightDebug   _traffic_light_debug;
+    boolean   _contain_lights;
+    int32   _camera_id;
+    boolean   _is_valid;
+  };
+ };
+}; 
+#endif

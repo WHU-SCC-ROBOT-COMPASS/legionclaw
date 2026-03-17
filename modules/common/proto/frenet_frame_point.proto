@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message FrenetFramePoint{
+    //纵向位移
+    optional double s = 1 [default = 0.0];
+    //横向位移
+    optional double l = 2 [default = 0.0];
+    //横向位移变化率
+    optional double dl = 3 [default = 0.0];
+    //横向位移变化率的变化率
+    optional double ddl = 4 [default = 0.0];
+}

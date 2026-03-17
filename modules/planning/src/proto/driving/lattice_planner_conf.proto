@@ -1,0 +1,152 @@
+syntax = "proto2";
+
+package legionclaw.planning;
+
+message LatticePlannerConf {
+  optional BehaviourSelectorConf behaviour_selector_conf = 1;
+  optional TrajectoryGeneratorConf trajectory_generator_conf = 2;
+  optional TrajectoryEvaluatorConf trajectory_evaluator_conf = 3;
+}
+
+message BehaviourSelectorConf {
+  optional int32 reliable_count = 1;
+  optional double tjp_collision_time = 2;
+  optional double tjp_base_length = 3;
+  optional double tjp_min_length = 4;
+  optional double tjp_delta_length_gain = 5;
+  optional double tjp_delta_speed_gain = 6;
+  optional double pre_acc_to_tjp_time = 7;
+  optional double stop_to_acceleration_min_time = 8;
+  optional double acc_collision_time = 9;
+  optional double acc_min_length = 10;
+  optional double acc_delta_length_gain = 11;
+  optional double acc_delta_speed_gain = 12;
+  optional double acc_delta_1_length_gain = 13;
+  optional double acc_delta_1_speed_gain = 14;
+  optional double acc_delta_2_length_gain = 15;
+  optional double acc_delta_2_speed_gain = 16;
+  optional double acc_delta_3_length_gain = 17;
+  optional double acc_delta_3_speed_gain = 18;
+  optional double acc_prediction_time = 19;
+  optional double acc_activate_speed = 20;
+  optional double acc_activate_obj_speed = 21;
+  optional double acc_delta_0_v = 22;
+  optional double acc_t_immerse = 23;
+  optional double acc_t_000_compensate = 24;
+  optional double acc_t_222_compensate = 25;
+  optional double acc_t_111_compensate = 26;
+  optional double acc_t_00_compensate = 27;
+  optional double acc_t_22_compensate = 28;
+  optional double acc_t_11_compensate = 29;
+  optional double acc_t_0_compensate = 30;
+  optional double acc_t_2_compensate = 31;
+  optional double acc_t_1_compensate = 32;
+  optional double max_lat_acc = 33;
+  optional double min_limit_speed = 34;
+  optional double min_turn_distance = 35;
+  optional double intersection_limit_speed = 36;
+  optional double goal_match_error = 37;
+  optional double avoidance_speed_ratio = 38;
+  optional double replan_speed_diff = 39;
+  optional double norm_acc_time = 40;
+  optional double norm_dec_time = 41;
+  optional double threshold_start_end_lat_diff = 42;
+  optional double threshold_lat_offset = 43;
+  optional double pre_avoidance_max_time = 44;
+  optional double pre_avoidance_min_time = 45;
+  optional double keep_avoidance_max_time = 46;
+  optional double avoidance_distance_time = 47;
+  optional double pre_back_max_time = 48;
+  optional double pre_back_min_time = 49;
+  optional double relative_distance_of_next = 50;
+  optional double pre_lane_change_time = 51;
+  optional double goal_max_distance = 52;
+  optional double goal_min_distance = 53;
+  optional double goal_wait_max_time = 54;
+  optional double distance_to_stop_line_buffer = 55;
+  optional double distance_to_goal = 56;
+  optional double distance_stop_earlier = 57;
+  optional double norm_acceleration_rate = 58;
+  optional double distance_satisfy_wait = 59;
+  optional double oncoming_brake_distance_buffer = 60;
+  optional double crossing_brake_distance_buffer = 61;
+  optional double cut_in_state_boundary = 62;
+  optional double acc_state_boundary = 63;
+  optional double obstacle_speed_multiplier = 64;
+  optional double curve_speed_adjuster = 65;
+  optional double outwardcreep_distance = 66;
+  optional double outwardstop_distance = 67;
+  optional double limit_speed_outwardcreep = 68;
+  optional double decision_making_time = 69;
+  optional double additional_braking_distance = 70;
+  optional double turn_lamp_kappa = 71;
+}
+
+message TrajectoryGeneratorConf {
+  optional double stitching_path_base_length = 1;
+  optional double stitching_path_time = 2;
+  optional double out_side_margin = 3;
+  optional double trajectory_bundles_density = 4;
+  optional double traj_sampling_base_length = 5;
+  optional double traj_sampling_max_time = 6;
+  optional double traj_sampling_min_lon_step = 7;
+  optional double traj_sampling_min_time = 8;
+  optional double trajectory_match_error = 9;
+  optional double traj_min_length = 10;
+  optional double traj_max_length = 11;
+  optional double traj_gen_time = 12;
+  optional double traj_lc_sampling_time = 13;
+  optional double traj_lc_offset = 14;
+  optional bool trajectory_array_debug_enable = 15;
+}
+
+message TrajectoryEvaluatorConf {
+  optional bool enablePrediction = 1;
+  optional bool enableFilterObstaleByMap = 2;
+  optional bool b_cost_value_dynamic_log = 3;
+  optional bool bFilterObstacleBackVehicle = 4;
+  optional double weight_rightmost = 5;
+  optional double weight_priority = 6;
+  optional double weight_transition = 7;
+  optional double weight_lon = 8;
+  optional double weight_lat = 9;
+  optional double weight_lane_change = 10;
+  optional double weight_curvature = 11;
+  optional double weight_pot = 12;
+  optional double horizon_dist_diff = 13;
+  optional double weight_horizon = 14;
+  optional double weight_junction = 15;
+  optional double distance_to_junction = 16;
+  optional double collision_time_diff = 17;
+  optional double bias_prefer_current_lane = 18;
+  optional double object_impact_lower_range = 19;
+  optional double object_impact_upper_range = 20;
+  optional double object_impact_lower_speed = 21;
+  optional double object_impact_upper_speed = 22;
+  optional double coeff_object_potential = 23;
+  optional double scale_grid_gampling = 24;
+  optional double length_back_vehicle_potential = 25;
+  optional int32 visualize_potential_mode = 26;
+  optional int32 obstacle_filter_mode = 27;
+  optional double forward_obs_min_time_dclc = 28;
+  optional double forward_obs_max_time_dclc = 29;
+  optional double forward_obs_speed_ratio_dclc = 30;
+  optional double backward_obs_speed_ratio_dclc = 31;
+  optional double c_upper_length_dclc = 32;
+  optional double c_lower_length_dclc = 33;
+  optional double d_length_dclc = 34;
+  optional double forward_obs_speed_ratio = 35;
+  optional double backward_obs_speed_ratio = 36;
+  optional double c_upper_length = 37;
+  optional double c_lower_length = 38;
+  optional double d_length = 39;
+  optional double passage_safe_lateral_buffer = 40;
+  optional double closest_obs_lat_offset_err = 41;
+  optional double object_impact_real_time_range = 42 [default = 0.0];
+  optional double safe_width_real_time = 43 [default = 0.0];
+  optional double safe_length_real_time = 44 [default = 0.0];
+  optional bool is_costvalue_log = 45 [default = false];
+  optional double obj_range = 46 [default = 0.0];
+  optional double obj_min_suitable_dis = 47 [default = 0.0];
+}
+

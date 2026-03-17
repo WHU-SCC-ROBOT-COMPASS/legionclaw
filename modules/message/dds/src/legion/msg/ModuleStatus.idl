@@ -1,0 +1,16 @@
+ #ifndef __ModuleStatus__idl__
+#define __ModuleStatus__idl__
+#include "Header.idl"
+#include "Message.idl"
+module ros2_interface{
+ module msg{
+  struct ModuleStatus{
+    ros2_interface::msg::Header   _header;
+    string   _name;
+    int8   _self_id;
+    int32   _status;
+    sequence<ros2_interface::msg::Message> _messages;
+  };
+ };
+}; 
+#endif

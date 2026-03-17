@@ -1,0 +1,17 @@
+ #ifndef __WLConstraintInfo__idl__
+#define __WLConstraintInfo__idl__
+#include "Header.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct WLConstraintInfo{
+    ros2_interface::msg::Header   _header;
+    int32   _id;
+    ros2_interface::msg::Point3D   _vehicle_point1;
+    ros2_interface::msg::Point3D   _vehicle_point2;
+    ros2_interface::msg::Point3D   _abs_point1;
+    ros2_interface::msg::Point3D   _abs_point2;
+  };
+ };
+}; 
+#endif

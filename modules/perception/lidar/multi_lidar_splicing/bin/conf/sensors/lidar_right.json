@@ -1,0 +1,16 @@
+{
+    "channel": "/sensor/lidar/right/PointCloud2",
+    "distortion": [],
+    "image_size": [0, 0],
+    "intrinsic": [],
+    "modality": "lidar",
+    "rotation": [
+         0.013348122,  0.999408342, 0.031681947,
+        -0.998047895,  0.011383581, 0.061398392,
+         0.061001461, -0.032439638, 0.997610389
+    ],
+    "target": "main",
+    "translation": [0.734360000, -0.502627000, 0.616689000],
+    "undistort_distortion": [],
+    "undistort_intrinsic": []
+}

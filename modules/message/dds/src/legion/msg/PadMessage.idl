@@ -1,0 +1,10 @@
+ #ifndef __PadMessage__idl__
+#define __PadMessage__idl__
+module ros2_interface{
+ module msg{
+  struct PadMessage{
+    string   _cmd;
+  };
+ };
+}; 
+#endif

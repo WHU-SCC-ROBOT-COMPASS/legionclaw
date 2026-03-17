@@ -1,0 +1,13 @@
+ #ifndef __FrenetFramePoint__idl__
+#define __FrenetFramePoint__idl__
+module ros2_interface{
+ module msg{
+  struct FrenetFramePoint{
+    double   _s;
+    double   _l;
+    double   _dl;
+    double   _ddl;
+  };
+ };
+}; 
+#endif

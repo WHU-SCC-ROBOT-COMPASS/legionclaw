@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_3d.proto";
+
+
+message Twist{
+    optional Header header = 1;
+    //线速度 m/s
+    optional Point3D linear = 2;
+    //角速度 deg/s
+    optional Point3D angular = 3;
+}

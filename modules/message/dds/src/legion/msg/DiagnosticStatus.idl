@@ -1,0 +1,18 @@
+ #ifndef __DiagnosticStatus__idl__
+#define __DiagnosticStatus__idl__
+#include "Header.idl"
+#include "KeyValues.idl"
+module ros2_interface{
+ module msg{
+  struct DiagnosticStatus{
+    ros2_interface::msg::Header   _header;
+    int32   _id;
+    int32   _level;
+    string   _name;
+    string   _message;
+    string   _hardware_id;
+    sequence<ros2_interface::msg::KeyValues> _values;
+  };
+ };
+}; 
+#endif

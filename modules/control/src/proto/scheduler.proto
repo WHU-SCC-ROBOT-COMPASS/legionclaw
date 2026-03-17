@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+message Scheduler {
+  optional double speed = 1;
+  optional double ratio = 2;
+  optional double error = 3;
+}

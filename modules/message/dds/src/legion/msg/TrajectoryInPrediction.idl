@@ -1,0 +1,12 @@
+ #ifndef __TrajectoryInPrediction__idl__
+#define __TrajectoryInPrediction__idl__
+#include "TrajectoryPoint.idl"
+module ros2_interface{
+ module msg{
+  struct TrajectoryInPrediction{
+    double   _probability;
+    sequence<ros2_interface::msg::TrajectoryPoint> _trajectory_points;
+  };
+ };
+}; 
+#endif

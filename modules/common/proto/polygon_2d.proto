@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/point_2d.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message Polygon2D{
+    //坐标系
+    optional legion.common.CoordinateSystem coordinate_system = 1 [default = INVALID_COORDINATE_SYSTEM];
+    //二维点集
+    repeated Point2D points = 2;
+}

@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/polygon_3d.proto";
+
+
+message DrivableRegion{
+    //timestamp is included in header
+    optional Header header = 1;
+    //可行驶区域
+    repeated Polygon3D drivable_region = 2;
+}

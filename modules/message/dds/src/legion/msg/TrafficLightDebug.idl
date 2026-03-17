@@ -1,0 +1,23 @@
+ #ifndef __TrafficLightDebug__idl__
+#define __TrafficLightDebug__idl__
+#include "TrafficLightBox.idl"
+module ros2_interface{
+ module msg{
+  struct TrafficLightDebug{
+    ros2_interface::msg::TrafficLightBox   _cropbox;
+    sequence<ros2_interface::msg::TrafficLightBox> _box;
+    int32   _signal_num;
+    int32   _valid_pos;
+    double   _ts_diff_pos;
+    double   _ts_diff_sys;
+    int32   _project_error;
+    double   _distance_to_stop_line;
+    int32   _camera_id;
+    sequence<ros2_interface::msg::TrafficLightBox> _crop_roi;
+    sequence<ros2_interface::msg::TrafficLightBox> _projected_roi;
+    sequence<ros2_interface::msg::TrafficLightBox> _rectified_roi;
+    sequence<ros2_interface::msg::TrafficLightBox> _debug_roi;
+  };
+ };
+}; 
+#endif

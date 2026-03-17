@@ -1,0 +1,17 @@
+ #ifndef __AlarmMessage__idl__
+#define __AlarmMessage__idl__
+#include "Header.idl"
+module ros2_interface{
+ module msg{
+  struct AlarmMessage{
+    ros2_interface::msg::Header   _header;
+    string   _alarm_proc;
+    int32   _alarm_level;
+    int32   _alarm_type;
+    int32   _alarm_id;
+    int32   _alarm_display;
+    string   _alarm_data;
+  };
+ };
+}; 
+#endif

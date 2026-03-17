@@ -1,0 +1,16 @@
+ #ifndef __GuideRoad__idl__
+#define __GuideRoad__idl__
+#include "CurvatureInfo.idl"
+module ros2_interface{
+ module msg{
+  struct GuideRoad{
+    int64   _road_id;
+    int8   _road_type;
+    int8   _turn_type;
+    double   _avg_curvature;
+    int32   _curvature_size;
+    sequence<ros2_interface::msg::CurvatureInfo> _curvature;
+  };
+ };
+}; 
+#endif

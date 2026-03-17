@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/location.proto";
+import "modules/common/proto/lane_line.proto";
+import "modules/common/proto/road_mark.proto";
+import "modules/common/proto/common_enum.proto";
+import "modules/common/proto/sensor_calibrator.proto";
+import "modules/common/proto/holistic_path_prediction.proto";
+
+
+message LaneList{
+    //消息头
+    optional Header header = 1;
+    //安装的传感器id(camera,lidar,radar) ' 相机id: 0-front_center相机 1-front_left相机 2-front_right相机 3-left_front相机 4-left_back右后相机 5-right_front相机 6-right_back相机 7-back相机'  8-相机融合
+    optional legion.common.SensorID sensor_id = 2 [default = CAMERA_FRONT_CENTER];
+    //错误码： ERROR_NONE = 0; ERROR_UNKNOWN = 1;
+    optional int32 error_code = 3 [default = 0];
+    //传感器状态： NORMAL=0； ABNORMAL=1；
+    optional uint32 sensor_status = 4 [default = 0];
+    //坐标切换状态（0-坐标系切换成功 1-坐标系切换中 2-坐标系切换故障）
+    optional Location.ChangeOriginFlag change_origin_flag = 5 [default = CHANGE_NULL];
+    //车道线数据是否合法
+    optional bool is_valid = 6 [default = false];
+    //传感器标定参数
+    optional SensorCalibrator sensor_calibrator = 7 ;
+    //车道线检测结果数组
+    repeated LaneLine camera_laneline = 8;
+    //行驶预测线
+    optional HolisticPathPrediction hpp = 9 ;
+    //路面标识
+    repeated RoadMark road_marks = 10;
+}

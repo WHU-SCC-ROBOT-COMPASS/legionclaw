@@ -1,0 +1,35 @@
+ #ifndef __Location__idl__
+#define __Location__idl__
+#include "PointENU.idl"
+#include "Header.idl"
+#include "Point3D.idl"
+#include "PointLLH.idl"
+module ros2_interface{
+ module msg{
+  struct Location{
+    ros2_interface::msg::Header   _header;
+    ros2_interface::msg::PointLLH   _position;
+    double   _pitch;
+    double   _roll;
+    double   _heading;
+    ros2_interface::msg::Point3D   _linear_velocity;
+    ros2_interface::msg::Point3D   _linear_acceleration;
+    ros2_interface::msg::Point3D   _angular_velocity;
+    int32   _rtk_flag;
+    int32   _odom_type;
+    int32   _auxiliary_type;
+    int32   _location_valid_flag;
+    double   _origin_lat;
+    double   _origin_lon;
+    ros2_interface::msg::PointENU   _utm_position;
+    int32   _change_origin_flag;
+    ros2_interface::msg::PointENU   _utm_position_next;
+    ros2_interface::msg::Point3D   _position_std_dev;
+    ros2_interface::msg::Point3D   _orientation_std_dev;
+    ros2_interface::msg::Point3D   _linear_velocity_std_dev;
+    ros2_interface::msg::Point3D   _linear_acceleration_std_dev;
+    ros2_interface::msg::Point3D   _angular_velocity_std_dev;
+  };
+ };
+}; 
+#endif

@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/point_2d_list.proto";
+
+
+message ParkingRoi{
+    //消息头
+    optional Header header = 1;
+    //泊车可行驶区域可视化
+    repeated Point2dList obstacles_vec = 2;
+}

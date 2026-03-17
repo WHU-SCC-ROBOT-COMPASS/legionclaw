@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/pose.proto";
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message VehicleState{
+    optional Header header = 1;
+    optional double x = 2 [default = 0.0];
+    optional double y = 3 [default = 0.0];
+    optional double z = 4 [default = 0.0];
+    optional double timestamp = 5 [default = 0.0];
+    optional double roll = 6 [default = 0.0];
+    optional double pitch = 7 [default = 0.0];
+    optional double yaw = 8 [default = 0.0];
+    optional double heading = 9 [default = 0.0];
+    optional double kappa = 10 [default = 0.0];
+    optional double linear_velocity = 11 [default = 0.0];
+    optional double angular_velocity = 12 [default = 0.0];
+    optional double linear_acceleration = 13 [default = 0.0];
+    optional legion.common.GearPosition gear = 14 [default = GEAR_NEUTRAL];
+    optional legion.common.DrivingMode driving_mode = 15 [default = COMPLETE_MANUAL];
+    optional Pose pose = 16;
+    optional double front_steering_value = 17 [default = 0.0];
+    optional double rear_steering_value = 18 [default = 0.0];
+}

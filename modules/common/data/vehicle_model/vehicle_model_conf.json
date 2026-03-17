@@ -1,0 +1,6 @@
+{
+    "model_type":0,
+    "rc_kinematic_bicycle_model":{
+        "dt":0.06
+    }
+}

@@ -1,0 +1,28 @@
+ #ifndef __RadarState__idl__
+#define __RadarState__idl__
+#include "RadarStateError.idl"
+#include "RadarStateMode.idl"
+module ros2_interface{
+ module msg{
+  struct RadarState{
+    uint8   _sensor_id;
+    uint8   _nvm_read_status;
+    uint8   _nvm_write_status;
+    ros2_interface::msg::RadarStateError   _radar_state_error;
+    ros2_interface::msg::RadarStateMode   _radar_state_mode;
+    uint16   _max_distance;
+    uint8   _sort_index;
+    uint8   _radar_power;
+    uint8   _ctl_relay;
+    uint8   _output_type;
+    uint8   _send_quality;
+    uint8   _send_extinfo;
+    uint8   _motion_rx_state;
+    uint8   _rcs_threshold;
+    uint8   _connector_direction;
+    uint8   _radar_position;
+    uint8   _hw_error;
+  };
+ };
+}; 
+#endif

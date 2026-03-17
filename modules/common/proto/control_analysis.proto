@@ -1,0 +1,168 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message ControlAnalysis{
+    optional Header header = 1;
+    //驾驶模式
+    optional legion.common.DrivingMode driving_mode = 2 [default = COMPLETE_MANUAL];
+    //驾驶模式反馈
+    optional legion.common.DrivingMode driving_mode_fd = 3 [default = COMPLETE_MANUAL];
+    //档位反馈
+    optional legion.common.GearPosition gear_location_fd = 4 [default = GEAR_NEUTRAL];
+    //档位命令
+    optional legion.common.GearPosition gear_location_cmd = 5 [default = GEAR_NEUTRAL];
+    //EPB状态反馈
+    optional legion.common.EPBLevel epb_level_fd = 6 [default = RELEASED];
+    //EPB命令
+    optional legion.common.EPBLevel epb_level_cmd = 7 [default = RELEASED];
+    //车辆速度
+    optional double speed_mps = 8 [default = 0.0];
+    //参考速度
+    optional double speed_reference = 9 [default = 0.0];
+    //油门反馈
+    optional double accel_value_fd = 10 [default = 0.0];
+    //油门命令
+    optional double accel_value_cmd = 11 [default = 0.0];
+    //刹车反馈
+    optional double brake_value_fd = 12 [default = 0.0];
+    //刹车命令
+    optional double brake_value_cmd = 13 [default = 0.0];
+    //剩余轨迹里程
+    optional double path_remain = 14 [default = 0.0];
+    //是否有停车点
+    optional bool has_stop_point = 15 [default = false];
+    //是否有停车轨迹
+    optional bool is_full_stop = 16 [default = false];
+    //是否停车
+    optional bool is_stopped = 17 [default = false];
+    //纵向加加速度
+    optional double lon_acc_jerk = 18 [default = 0.0];
+    //加速度命令
+    optional double acceleration_cmd = 19 [default = 0.0];
+    //闭环加速度命令
+    optional double acceleration_cmd_closeloop = 20 [default = 0.0];
+    //预描参考加速度
+    optional double preview_acceleration_reference = 21 [default = 0.0];
+    //坡道补偿
+    optional double slope_offset_compensation = 22 [default = 0.0];
+    //转向补偿
+    optional double turning_offset_compensation = 23 [default = 0.0];
+    //速度差限值
+    optional double speed_error_limited = 24 [default = 0.0];
+    //速度差
+    optional double speed_error = 25 [default = 0.0];
+    optional double speed_offset = 26 [default = 0.0];
+    //位置误差限值
+    optional double station_error_limited = 27 [default = 0.0];
+    //位置误差
+    optional double station_error = 28 [default = 0.0];
+    //纵向控制目标点里程
+    optional double lon_target_point_s = 29 [default = 0.0];
+    //纵向计算时间
+    optional int64 lon_calculate_time = 30 [default = 0];
+    //纵向时间限值
+    optional int64 lon_calculate_time_max = 31 [default = 0];
+    //参考曲率
+    optional double ref_curvature = 32 [default = 0.0];
+    //参考航向角
+    optional double ref_heading = 33 [default = 0.0];
+    //当前航向角
+    optional double current_heading = 34 [default = 0.0];
+    //航向角误差
+    optional double heading_error = 35 [default = 0.0];
+    //航向角误差率
+    optional double heading_error_rate = 36 [default = 0.0];
+    //横向误差
+    optional double lateral_error = 37 [default = 0.0];
+    //横向误差率
+    optional double lateral_error_rate = 38 [default = 0.0];
+    //纵向误差
+    optional double lon_error = 39 [default = 0.0];
+    //前轮转向反馈
+    optional double front_steering_value_fd = 40 [default = 0.0];
+    //前轮目标转向
+    optional double front_steering_target = 41 [default = 0.0];
+    //前轮转向角速率
+    optional double front_steering_rate = 42 [default = 0.0];
+    //前轮前馈计算
+    optional double front_steer_angle_feedforward = 43 [default = 0.0];
+    //前轮反馈计算
+    optional double front_steer_angle_feedback = 44 [default = 0.0];
+    //前轮横向误差贡献
+    optional double front_steer_angle_lateral_contribution = 45 [default = 0.0];
+    //前轮横向误差率贡献
+    optional double front_steer_angle_lateral_rate_contribution = 46 [default = 0.0];
+    //前轮航向角误差贡献
+    optional double front_steer_angle_heading_contribution = 47 [default = 0.0];
+    //前轮航向角误差率贡献
+    optional double front_steer_angle_heading_rate_contribution = 48 [default = 0.0];
+    //后轮转向反馈
+    optional double rear_steering_value_fd = 49 [default = 0.0];
+    //后轮目标转向
+    optional double rear_steering_target = 50 [default = 0.0];
+    //后轮转向角速率
+    optional double rear_steering_rate = 51 [default = 0.0];
+    //后轮前馈计算
+    optional double rear_steer_angle_feedforward = 52 [default = 0.0];
+    //后轮反馈计算
+    optional double rear_steer_angle_feedback = 53 [default = 0.0];
+    //后轮横向误差贡献
+    optional double rear_steer_angle_lateral_contribution = 54 [default = 0.0];
+    //后轮横向误差率贡献
+    optional double rear_steer_angle_lateral_rate_contribution = 55 [default = 0.0];
+    //后轮航向角误差贡献
+    optional double rear_steer_angle_heading_contribution = 56 [default = 0.0];
+    //后轮航向角误差率贡献
+    optional double rear_steer_angle_heading_rate_contribution = 57 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_00 = 58 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_01 = 59 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_02 = 60 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_03 = 61 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_10 = 62 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_11 = 63 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_12 = 64 [default = 0.0];
+    //k矩阵
+    optional double matrix_k_13 = 65 [default = 0.0];
+    //状态矩阵
+    optional double matrix_state_0 = 66 [default = 0.0];
+    //状态矩阵
+    optional double matrix_state_1 = 67 [default = 0.0];
+    //状态矩阵
+    optional double matrix_state_2 = 68 [default = 0.0];
+    //状态矩阵
+    optional double matrix_state_3 = 69 [default = 0.0];
+    //权重矩阵
+    optional double matrix_q_updated_0 = 70 [default = 0.0];
+    //权重矩阵
+    optional double matrix_q_updated_1 = 71 [default = 0.0];
+    //权重矩阵
+    optional double matrix_q_updated_2 = 72 [default = 0.0];
+    //权重矩阵
+    optional double matrix_q_updated_3 = 73 [default = 0.0];
+    //当前位置x
+    optional double current_x = 74 [default = 0.0];
+    //当前位置y
+    optional double current_y = 75 [default = 0.0];
+    //目标点x
+    optional double target_point_x = 76 [default = 0.0];
+    //目标点y
+    optional double target_point_y = 77 [default = 0.0];
+    //横向目标点里程
+    optional double lat_target_point_s = 78 [default = 0.0];
+    //LQR计算时间
+    optional int64 lqr_calculate_time = 79 [default = 0];
+    //LQR计算时间限值
+    optional int64 lqr_calculate_time_max = 80 [default = 0];
+}

@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message TrajectoryLimitCommand{
+    optional bool speed_limit_enable = 1 [default = false];
+    //m/s
+    optional double speed_limit = 2 [default = 0.0];
+    optional bool kappa_limit_enable = 3 [default = false];
+    //deg/m
+    optional double kappa_limit = 4 [default = 0.0];
+}

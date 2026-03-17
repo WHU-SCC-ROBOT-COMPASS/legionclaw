@@ -1,0 +1,21 @@
+ #ifndef __Pose__idl__
+#define __Pose__idl__
+#include "PointENU.idl"
+#include "Quaternion.idl"
+#include "Point3D.idl"
+module ros2_interface{
+ module msg{
+  struct Pose{
+    ros2_interface::msg::PointENU   _position;
+    ros2_interface::msg::Quaternion   _orientation;
+    ros2_interface::msg::Point3D   _linear_velocity;
+    ros2_interface::msg::Point3D   _linear_acceleration;
+    ros2_interface::msg::Point3D   _angular_velocity;
+    double   _heading;
+    ros2_interface::msg::Point3D   _linear_acceleration_vrf;
+    ros2_interface::msg::Point3D   _angular_velocity_vrf;
+    ros2_interface::msg::Point3D   _euler_angles;
+  };
+ };
+}; 
+#endif

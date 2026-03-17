@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+
+
+message PointENU{
+    //East from the origin, in meters.
+    optional double x = 1 [default = 0.0];
+    //North from the origin, in meters.
+    optional double y = 2 [default = 0.0];
+    //Up from the WGS-84 ellipsoid, in meters.
+    optional double z = 3 [default = 0.0];
+}

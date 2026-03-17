@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package legionclaw.control;
+
+message GainScheduler {
+  repeated GainSchedulerInfo scheduler = 1;
+}
+
+message GainSchedulerInfo {
+  optional double speed = 1;  // m/s
+  optional double ratio = 2;
+}
+
+message ErrGainScheduler {
+  repeated ErrGainSchedulerInfo scheduler = 1;
+}
+
+message ErrGainSchedulerInfo{
+    optional double error =1;
+    optional double ratio =2;
+}

@@ -1,0 +1,10 @@
+uint8   persistent_error     #  
+uint8   temporary_error     #  
+uint8   interference_error     #  
+uint8   temperature_error     #  
+uint8   voltage_error     #  
+uint8   block_error     #  
+uint8   broadcast_error     #  
+uint8   electric_axis_error     #  
+uint8   config_error     #  
+uint8   calibration_error     #  

@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/vehicle_motion_point.proto";
+
+
+message VehicleMotion{
+    //名称
+    optional string name = 1;
+    repeated VehicleMotionPoint vehicle_motion_point = 2;
+}

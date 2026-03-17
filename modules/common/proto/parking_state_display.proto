@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package legionclaw.interface;
+
+import "modules/common/proto/header.proto";
+import "modules/common/proto/common_enum.proto";
+
+
+message ParkingStateDisplay{
+    enum ParkingState{
+        PARKING_STATE_NORMAL = 0;
+        PARKING_STATE_ABNORMAL = 1;
+        PARKING_STATE_FINISH = 2;
+        PARKING_PAUSE_STATE_NORMAL = 3;
+        PARKING_PAUSE_STATE_ABNORMAL = 4;
+    }
+
+    enum InfoMessage{
+        NORMAL = 0;
+        ABNORMAL = 1;
+    }
+
+    optional Header header = 1;
+    //0：无效 1：垂直泊车 2：水平泊车 3：斜方泊车
+    optional legion.common.ParkingType parking_type = 2 [default = INVALID_PARKING];
+    //揉库次数
+    optional int32 moves_counter = 3 [default = 0];
+    //剩余距离
+    optional double remian_distance = 4 [default = 0.0];
+    //详细信息
+    optional ParkingStateDisplay.InfoMessage display_info = 5 [default = NORMAL];
+    //距离最近障碍物距离
+    optional double distance_to_leader_obj = 6 [default = 0.0];
+    optional ParkingStateDisplay.ParkingState state = 7 [default = PARKING_STATE_NORMAL];
+}

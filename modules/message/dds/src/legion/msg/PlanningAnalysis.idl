@@ -1,0 +1,21 @@
+ #ifndef __PlanningAnalysis__idl__
+#define __PlanningAnalysis__idl__
+#include "Header.idl"
+#include "TimeConsume.idl"
+#include "PlanningParkingDebug.idl"
+module ros2_interface{
+ module msg{
+  struct PlanningAnalysis{
+    ros2_interface::msg::Header   _header;
+    double   _frame_update_time;
+    double   _generator_time;
+    sequence<ros2_interface::msg::TimeConsume> _evaluator_time;
+    double   _selector_time;
+    ros2_interface::msg::PlanningParkingDebug   _planning_parking_debug;
+    double   _dis_to_center_line;
+    double   _diff_to_velocity;
+    double   _referencline_kappa;
+  };
+ };
+}; 
+#endif
