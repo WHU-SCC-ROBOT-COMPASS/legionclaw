@@ -241,3 +241,36 @@ cd modules/prediction/bin
 2. 所有模块的编译都依赖于消息接口的编译，请先完成消息接口的编译
 3. 默认编译为Debug模式，如需Release模式，请修改对应的编译脚本
 4. 不同平台的编译脚本可能略有不同，请根据目标平台选择合适的脚本
+
+## Skills
+
+本项目提供了一组 Cursor AI Skills，帮助你理解和使用 LegionClaw 的各个模块。
+
+### 可用的 Skills
+
+| Skill | 描述 |
+|-------|------|
+| `legionclaw-overview` | 系统架构总览，了解模块间消息流和算法流程 |
+| `legionclaw-lidar-ground-segmentation` | 激光雷达地面分割模块 |
+| `legionclaw-lidar-cluster-detect` | 激光雷达聚类检测模块 |
+| `legionclaw-lidar-voxel-detect` | Voxel 障碍物检测模块 (CenterPoint) |
+| `legionclaw-motion-manager-fusion` | 障碍物跟踪与融合模块 |
+| `legionclaw-map` | FAST-LIO-SAM 建图模块 |
+| `legionclaw-localization` | HDL NDT 定位模块 |
+| `legionclaw-planning` | 路径规划模块 (Lattice + Parking) |
+| `legionclaw-control` | 控制模块 (PID + LQR) |
+| `legionclaw-prediction` | 障碍物预测模块 |
+| `legionclaw-routing` | 路由规划模块 |
+
+### 使用方法
+
+在 Cursor 中输入 `@legionclaw-xxx` 即可调用对应的 skill，例如：
+- `@legionclaw-overview` - 查看系统架构
+- `@legionclaw-planning` - 了解规划模块的使用
+
+每个 skill 包含：
+- 消息流 (输入/输出 Topic)
+- 核心算法流程
+- 参数配置说明
+- 编译和运行方法
+- 常见问题排查
