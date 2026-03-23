@@ -1,0 +1,9 @@
+std_msgs/Header header
+bool matching
+float32 score
+float32 transform_probability
+float32 iteration
+geometry_msgs/PoseWithCovariance pose
+float32[] fitness_scores
+geometry_msgs/Pose[] candidate_poses
+string matcher_name

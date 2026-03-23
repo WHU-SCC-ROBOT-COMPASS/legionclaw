@@ -1,0 +1,44 @@
+{
+  "engine_name": "BBS",
+  "globalmap_downsample_resolution": 0.5,
+  "query_downsample_resolution": 0.5,
+  "bbs": {
+    "max_range": 15.0,
+    "min_tx": -50.0,
+    "max_tx": 50.0,
+    "min_ty": -50.0,
+    "max_ty": 50.0,
+    "min_theta": -3.15,
+    "max_theta": 3.15,
+    "map_min_z": 2.0,
+    "map_max_z": 2.4,
+    "map_resolution": 0.5,
+    "map_width": 512,
+    "map_height": 1024,
+    "pyramid_level": 6,
+    "max_points_per_cell": 5,
+    "scan_min_z": -0.2,
+    "scan_max_z": 0.2
+  },
+  "fpfh_ransac": {
+    "fpfh_normal_radius": 2.0,
+    "fpfh_search_radius": 4.0,
+    "ransac_max_iterations": 100000,
+    "ransac_matching_budget": 10000,
+    "ransac_max_corr_dist": 1.0,
+    "ransac_similarity_thresh": 0.5,
+    "ransac_correspondence_randomness": 2,
+    "ransac_inlier_fraction": 0.25,
+    "ransac_voxel_based": true
+  },
+  "teaser": {
+    "noise_bound": 0.5,
+    "cbar2": 1.0,
+    "rotation_max_iter": 100,
+    "rotation_gnc_factor": 1.4,
+    "rotation_cost_thresh": 0.005,
+    "cross_check": false,
+    "tuple_test": false,
+    "tuple_scale": 0.95
+  }
+}

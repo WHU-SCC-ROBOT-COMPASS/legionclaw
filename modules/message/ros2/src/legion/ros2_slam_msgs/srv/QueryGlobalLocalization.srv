@@ -1,0 +1,10 @@
+sensor_msgs/PointCloud2 cloud
+builtin_interfaces/Time query_time
+uint32 max_num_candidates
+---
+builtin_interfaces/Time header
+builtin_interfaces/Time globalmap_time
+builtin_interfaces/Time query_time
+float32[] inlier_fractions
+float32[] errors
+geometry_msgs/Pose[] poses

@@ -1,0 +1,3 @@
+sensor_msgs/PointCloud2 global_map
+---
+string engine_name

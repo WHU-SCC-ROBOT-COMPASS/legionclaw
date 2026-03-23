@@ -1,0 +1,7 @@
+# Save the point cloud map to a PCD file
+# @param resolution  Resolution for downsampling before saving (0 = no downsample)
+# @param destination  Output directory path
+float32 resolution
+string destination
+---
+bool success

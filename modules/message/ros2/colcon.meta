@@ -1,0 +1,16 @@
+{
+    "names": {
+        "ros2_slam_msgs": {
+            "type": "ament_cmake",
+            "depends": ["rosidl_default_generators", "std_msgs", "builtin_interfaces", "geometry_msgs", "sensor_msgs", "nav_msgs"]
+        },
+        "ros2_interface": {
+            "type": "ament_cmake",
+            "depends": ["rosidl_default_generators", "std_msgs", "builtin_interfaces", "geometry_msgs"]
+        },
+        "rosbridge_msgs": {
+            "type": "ament_cmake",
+            "depends": ["rosidl_default_generators", "builtin_interfaces"]
+        }
+    }
+}

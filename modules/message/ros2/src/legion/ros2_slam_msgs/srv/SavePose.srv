@@ -1,0 +1,7 @@
+# Save the trajectory (poses) to a text file
+# @param resolution  Sampling resolution (0 = no sampling)
+# @param destination  Output file path
+float32 resolution
+string destination
+---
+bool success
