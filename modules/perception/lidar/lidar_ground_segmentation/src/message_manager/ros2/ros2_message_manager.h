@@ -22,11 +22,11 @@
 #include "message_manager/message_manager.h"
 
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
 /**
@@ -51,35 +51,21 @@ public:
    * @param[in] point_cloud.
    * @return    void.
    */
-  void PublishGroundPoints(legionclaw::interface::PointCloud msg) override;
-
-  /**
-   * @brief     PointCloud消息发布（Eigen格式）.
-   * @param[in] ground_points Eigen Matrix格式的地面点云.
-   * @return    void.
-   */
-  void PublishGroundPoints(const Eigen::MatrixX3f& ground_points) override;
+  void PublishGroundPoints(const legion::interface::PointCloud& msg);
 
   /**
    * @brief     PointCloud消息发布.
    * @param[in] point_cloud.
    * @return    void.
    */
-  void PublishNoGroundPoints(legionclaw::interface::PointCloud msg) override;
-
-  /**
-   * @brief     PointCloud消息发布（Eigen格式）.
-   * @param[in] no_ground_points Eigen Matrix格式的非地面点云.
-   * @return    void.
-   */
-  void PublishNoGroundPoints(const Eigen::MatrixX3f& no_ground_points);
+  void PublishNoGroundPoints(const legion::interface::PointCloud& msg);
 
   /**
    * @brief     Faults消息发布.
    * @param[in] faults.
    * @return    void.
    */
-  void PublishFaults(legionclaw::interface::Faults msg) override;
+  void PublishFaults(legion::interface::Faults msg) override;
 
   bool Activate() override;
   bool DeActivate() override;
@@ -140,6 +126,6 @@ protected:
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion
 #include "ros2_message_manager.hpp"
 #endif // ROS2_ENABLE

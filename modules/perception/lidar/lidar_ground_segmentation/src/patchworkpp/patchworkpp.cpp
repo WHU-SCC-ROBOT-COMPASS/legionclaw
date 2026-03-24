@@ -320,6 +320,32 @@ void PatchWorkpp::estimateGround(Eigen::MatrixXf cloud_in) {
   clock_t end = clock();
   time_taken_ = end - beg;
 
+  // Filter cloud_nonground_ by sensor height
+  // Remove points that are too low (below ground level, likely noise)
+  double height_threshold = params_.filter_ground_height;  // Similar to RNR threshold
+  vector<PointXYZ> filtered_nonground;
+  filtered_nonground.reserve(cloud_nonground_.size());
+  std::vector<PointXYZ> new_nonground;
+  
+  int filtered_count = 0;
+  for (const auto &point : cloud_nonground_) {
+    if (point.z >= height_threshold) {
+      filtered_nonground.push_back(point);
+    } else {
+      filtered_count++;
+      new_nonground.push_back(point);
+    }
+  }
+  cloud_nonground_ = std::move(filtered_nonground);
+  
+  addCloud(cloud_ground_, new_nonground);
+  
+  if (params_.verbose && filtered_count > 0) {
+    cout << "PatchWorkpp::estimateGround() - Filtered " << filtered_count 
+         << " points from cloud_nonground_ by sensor height (threshold: " 
+         << height_threshold << ")" << endl;
+  }
+
   if (params_.verbose) {
     cout << "Time taken : " << time_taken_ / static_cast<double>(1000000)
          << "(sec) ~ "
@@ -420,7 +446,7 @@ void PatchWorkpp::temporal_ground_revert(std::vector<double> ring_flatness,
   if (params_.verbose) {
     cout << "[" << candidates[0].concentric_idx << ", " << candidates[0].sector_idx << "]"
          << " mean_flatness: " << mean_flatness << ", stdev_flatness: " << stdev_flatness
-         << "\n";
+         << std::endl;
   }
 
   for (auto candidate : candidates) {

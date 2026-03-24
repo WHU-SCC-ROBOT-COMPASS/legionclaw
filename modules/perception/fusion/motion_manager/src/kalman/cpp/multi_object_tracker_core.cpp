@@ -43,17 +43,17 @@
 
 void MultiObjectTracker::parseConfig(std::string config_path)
 {
-  std::cout << "start parse config ....." << "\n"; 
+  std::cout << "start parse config ....." << std::endl; 
   std::ifstream in(config_path);
   in >> multi_object_tracker_json_;
   if (multi_object_tracker_json_.is_null())
   {
-    std::cout << "multi_object_tracker_json_ is null" << "\n";
+    std::cout << "multi_object_tracker_json_ is null" << std::endl;
     return;
   }
   in.close();
 
-  std::cout << "finishs parse config ....." << "\n"; 
+  std::cout << "finishs parse config ....." << std::endl; 
 
 
   std::vector<int> can_assign_matrix = multi_object_tracker_json_.at("can_assign_matrix").get<std::vector<int>>();
@@ -84,7 +84,7 @@ void MultiObjectTracker::parseConfig(std::string config_path)
     min_iou_matrix);
 
 
-  std::cout << "get  config param ....." << "\n"; 
+  std::cout << "get  config param ....." << std::endl; 
 }
 
 motion_manager::interface::TrackedObjects MultiObjectTracker::onMeasurement(
@@ -189,7 +189,7 @@ motion_manager::interface::TrackedObjects MultiObjectTracker::onMeasurement(
       
       // std::string object_id = tier4_autoware_utils::toHexString(object1.object_id);
       // int decimalNumber = std::stoi(object_id, nullptr, 16);
-      // std::cout << "no publish object_id " << decimalNumber  << " object type  " << object1.classification[0] << "\n";
+      // std::cout << "no publish object_id " << decimalNumber  << " object type  " << object1.classification[0] << std::endl;
       continue;
     } 
     motion_manager::interface::TrackedObject object;
@@ -202,7 +202,7 @@ motion_manager::interface::TrackedObjects MultiObjectTracker::onMeasurement(
 
   double time_end=motion_manager::common::TimeTool::Now2Ms();
 
-  std::cout << "track time : " << time_end- time_begin << " ms " <<"\n";
+  std::cout << "track time : " << time_end- time_begin << " ms " <<std::endl;
   return output_msg;
 }
 
@@ -326,7 +326,7 @@ inline bool MultiObjectTracker::shouldTrackerPublish(
   const std::shared_ptr<const Tracker> tracker) const
 {
   constexpr int measurement_count_threshold = 1;
-  // std::cout << " track num : " << tracker->getTotalMeasurementCount() <<"\n";
+  // std::cout << " track num : " << tracker->getTotalMeasurementCount() <<std::endl;
   if (tracker->getTotalMeasurementCount() < measurement_count_threshold)
   {
     return false;

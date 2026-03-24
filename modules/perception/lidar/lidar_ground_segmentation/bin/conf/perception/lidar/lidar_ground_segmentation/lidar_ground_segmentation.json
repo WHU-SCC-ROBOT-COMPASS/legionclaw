@@ -4,7 +4,7 @@
     "log_file_path": "./log",
     "log_level": 0,
     "logging_data_enable": false,
-    "use_system_timestamp": true,
+    "use_system_timestamp": false,
     "produce_lidar_ground_segmentation_command_duration": 20,
     "publish_lidar_ground_segmentation_command_duration": 10,
     "message": {

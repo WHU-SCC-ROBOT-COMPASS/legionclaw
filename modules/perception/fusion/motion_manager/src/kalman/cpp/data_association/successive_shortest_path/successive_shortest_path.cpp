@@ -78,14 +78,14 @@ void SSP::maximizeLinearAssignment(
   int n_nodes = n_agents + n_tasks + n_dummies + 2;
 
   // // Print cost matrix
-  // std::cout << "\n";
+  // std::cout << std::endl;
   // for (int agent = 0; agent < n_agents; agent++)
   // {
   //   for (int task = 0; task < n_tasks; task++)
   //   {
   //     std::cout << cost.at(agent).at(task) << " ";
   //   }
-  //   std::cout << "\n";
+  //   std::cout << std::endl;
   // }
 
   // std::chrono::system_clock::time_point start_time, end_time;
@@ -216,7 +216,7 @@ void SSP::maximizeLinearAssignment(
     while (!p_queue.empty()) {
       // Get the next element
       std::pair<double, int> cur_elem = p_queue.top();
-      // std::cout << "[pop]: (" << cur_elem.first << ", " << cur_elem.second << ")" << "\n";
+      // std::cout << "[pop]: (" << cur_elem.first << ", " << cur_elem.second << ")" << std::endl;
       p_queue.pop();
 
       double cur_node_dist = cur_elem.first;
@@ -251,7 +251,7 @@ void SSP::maximizeLinearAssignment(
             distances.at(it_incident_edge->dst) = reduced_cost;
             prev_values.at(it_incident_edge->dst) =
               std::make_pair(cur_node, it_incident_edge - adjacency_list.at(cur_node).cbegin());
-            // std::cout << "[push]: (" << reduced_cost << ", " << next_v << ")" << "\n";
+            // std::cout << "[push]: (" << reduced_cost << ", " << next_v << ")" << std::endl;
             p_queue.push(std::make_pair(reduced_cost, it_incident_edge->dst));
           }
         }
@@ -275,7 +275,7 @@ void SSP::maximizeLinearAssignment(
     // {
     //   std::cout << potentials.at(v) << ", ";
     // }
-    // std::cout << "\n";
+    // std::cout << std::endl;
 
     // Increase/decrease flow and capacity along the shortest path from the source to the sink
     int v = sink;

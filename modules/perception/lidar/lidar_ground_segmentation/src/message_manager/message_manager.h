@@ -16,28 +16,26 @@
 
 #include <Eigen/Core>
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
-using namespace legionclaw::common;
+using namespace legion::common;
 template <typename T> class MessageManager {
 public:
   MessageManager() = default;
   virtual ~MessageManager() = default;
 
   virtual void Init(T* t) = 0;
-  virtual void PublishGroundPoints(legionclaw::interface::PointCloud msg) = 0;
-  virtual void PublishNoGroundPoints(legionclaw::interface::PointCloud msg) = 0;
-  virtual void PublishGroundPoints(const Eigen::MatrixX3f& ground_points) = 0;
-  virtual void PublishNoGroundPoints(const Eigen::MatrixX3f& ground_points) = 0;
-  virtual void PublishFaults(legionclaw::interface::Faults msg) = 0;
+  virtual void PublishGroundPoints(const legion::interface::PointCloud& msg) = 0;
+  virtual void PublishNoGroundPoints(const legion::interface::PointCloud& msg) = 0;
+  virtual void PublishFaults(legion::interface::Faults msg) = 0;
   virtual bool Activate() = 0;
   virtual bool DeActivate() = 0;
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion

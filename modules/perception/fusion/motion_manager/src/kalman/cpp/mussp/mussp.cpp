@@ -44,20 +44,20 @@
 //   int n = 0, m = 0;  ////no of nodes, no of arcs;
 //   std::string line_inf;
 //   std::getline(file, line_inf);
-//   //cout << line << "\n";
+//   //cout << line << std::endl;
 //   sscanf(line_inf.c_str(), "%*c %3s %d %d", pr_type, &n, &m);
 
 //   double en_weight = 0;
 //   double ex_weight = 0;
 //   //getline(file, line_inf);
-//   //cout << line << "\n";
+//   //cout << line << std::endl;
 //   //sscanf(line_inf.c_str(), "%*c %4s %lf %lf", pr_type, &en_weight, &ex_weight);
 
 //   auto * resG = new Graph(n, m, 0, n - 1, en_weight, ex_weight);
 //   int edges = 0;
 //   int edge_id = 0;
 //   if (verbose) {
-//     std::cout << "Parsing edges: " << "\n";
+//     std::cout << "Parsing edges: " << std::endl;
 //   }
 //   for (std::string line; getline(file, line);) {
 //     switch (line[0]) {
@@ -73,11 +73,11 @@
 //         double weight = 0;
 //         sscanf(line.c_str(), "%*c %d %d %lf", &tail, &head, &weight);
 //         edges++;
-//         if (tail > n || head > n) std::cout << "ERROR: more nodes than expected!" << "\n";
+//         if (tail > n || head > n) std::cout << "ERROR: more nodes than expected!" << std::endl;
 //         resG->add_edge(tail - 1, head - 1, edge_id, weight);
 //         edge_id++;
 //         if (verbose) {
-//           if (edges % 10000 == 0) std::cout << edges << "\n";
+//           if (edges % 10000 == 0) std::cout << edges << std::endl;
 //         }
 //         break;
 //       }
@@ -86,7 +86,7 @@
 //     }
 //   }
 //   if (verbose) {
-//     std::cout << "Parsing done!" << "\n";
+//     std::cout << "Parsing done!" << std::endl;
 //   }
 
 //   return resG;
@@ -366,7 +366,7 @@ int solve_muSSP(
 
   //// out put results and time consuming
   if (verbose) {
-    std::cout << "Parsing time is: " << parsing_time / CLOCKS_PER_SEC << " s" << "\n";
+    std::cout << "Parsing time is: " << parsing_time / CLOCKS_PER_SEC << " s" << std::endl;
   }
 
   long double all_cpu_time = 0;
@@ -426,7 +426,7 @@ int solve_muSSP(
       for (auto node : path) {
         std::cout << node + 1 << "->";
       }
-      std::cout << "\n";
+      std::cout << std::endl;
     }
   }
 

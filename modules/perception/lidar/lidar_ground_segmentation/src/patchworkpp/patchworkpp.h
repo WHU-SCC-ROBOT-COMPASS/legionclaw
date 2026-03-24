@@ -66,6 +66,7 @@ struct Params {
   double RNR_intensity_thr;
 
   double sensor_height;
+  double filter_ground_height;
   double th_seeds;
   double th_dist;
   double th_seeds_v;
@@ -103,6 +104,7 @@ struct Params {
                                 // relatively small intensity than others.
 
     sensor_height = 1.723;
+    filter_ground_height = 0;
     th_seeds      = 0.125;    // threshold for lowest point representatives using in initial seeds
                               // selection of ground points.
     th_dist    = 0.125;       // threshold for thickenss of ground.

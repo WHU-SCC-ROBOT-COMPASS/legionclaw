@@ -1,18 +1,19 @@
 {
-    "cell_map_min_x": 0.0,
-    "cell_map_max_x": 80.0,
-    "cell_map_min_y": -10.0,
-    "cell_map_max_y": 10.0,
-    "cell_map_min_z": -0.9,
-    "cell_map_max_z": 0.5,
-    "cell_width": 0.4,
-    "cell_length": 0.8,
+    "cell_map_min_x": -20.0,
+    "cell_map_max_x": 20.0,
+    "cell_map_min_y": -15.0,
+    "cell_map_max_y": 15.0,
+    "cell_map_min_z": 0.0,
+    "cell_map_max_z": 1.5,
+    "cell_width": 0.2,
+    "cell_length": 0.2,
     "point_min_size_for_cell": 5,
     "point_min_size_for_box": 10,
     "cell_max_size_for_big_box": 100,
     "obstacle_min_height": 0.05,
     "delta_x": 0.0,
     "delta_y": 0.0,
-    "in_estimate_pose": false
+    "in_estimate_pose": false,
+    "max_polygon_points": 50
 }
 

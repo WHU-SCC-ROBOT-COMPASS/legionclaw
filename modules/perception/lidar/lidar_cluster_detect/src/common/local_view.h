@@ -12,16 +12,16 @@
 #include "modules/common/interface/point_cloud.hpp"
 
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
 struct LocalView {
-  legionclaw::interface::PointCloud point_cloud_;
+  legion::interface::PointCloud point_cloud_;
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion

@@ -14,14 +14,14 @@
 
 #if DDS_ENABLE
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
-using namespace legionclaw::common;
+using namespace legion::common;
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastdds::rtps;
 using namespace eprosima::fastrtps::rtps;
@@ -190,7 +190,7 @@ template <typename T> void DdsMessageManager<T>::TaskStop() {
 }
 template <typename T>
 void DdsMessageManager<T>::PublishGroundPoints(
-    legionclaw::interface::PointCloud msg) {
+    legion::interface::PointCloud msg) {
   if (is_init_ == false)
     return;
   ros2_interface::msg::PointCloud point_cloud;
@@ -198,7 +198,7 @@ void DdsMessageManager<T>::PublishGroundPoints(
   point_cloud.frame_id() = msg.frame_id();
   point_cloud.is_dense() = msg.is_dense();
   std::vector<ros2_interface::msg::PointXYZIRT> dds_point;
-  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
+  std::vector<legion::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
   for (auto it_point : legion_point) {
     ros2_interface::msg::PointXYZIRT point_cloud_point_xyzirt;
@@ -220,7 +220,7 @@ void DdsMessageManager<T>::PublishGroundPoints(
 
 template <typename T>
 void DdsMessageManager<T>::PublishNoGroundPoints(
-    legionclaw::interface::PointCloud msg) {
+    legion::interface::PointCloud msg) {
   if (is_init_ == false)
     return;
   ros2_interface::msg::PointCloud point_cloud;
@@ -228,7 +228,7 @@ void DdsMessageManager<T>::PublishNoGroundPoints(
   point_cloud.frame_id() = msg.frame_id();
   point_cloud.is_dense() = msg.is_dense();
   std::vector<ros2_interface::msg::PointXYZIRT> dds_point;
-  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
+  std::vector<legion::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
   for (auto it_point : legion_point) {
     ros2_interface::msg::PointXYZIRT point_cloud_point_xyzirt;
@@ -249,7 +249,7 @@ void DdsMessageManager<T>::PublishNoGroundPoints(
 }
 
 template <typename T>
-void DdsMessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
+void DdsMessageManager<T>::PublishFaults(legion::interface::Faults msg) {
   if (is_init_ == false)
     return;
   MESSAGE_DDS_HEADER_ASSIGN(ros2_interface::msg, faults)
@@ -261,13 +261,13 @@ void DdsMessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
 template <typename T>
 void DdsMessageManager<T>::HandleMLCPointCloudMessage(
     const ros2_interface::msg::PointCloud* msg) {
-  legionclaw::interface::PointCloud point_cloud;
+  legion::interface::PointCloud point_cloud;
   MESSAGE_DDS_HEADER_PARSER(point_cloud)
   point_cloud.set_frame_id(msg->frame_id());
   point_cloud.set_is_dense(msg->is_dense());
-  std::vector<legionclaw::interface::PointXYZIRT> point;
+  std::vector<legion::interface::PointXYZIRT> point;
   for (auto it_point : msg->point()) {
-    legionclaw::interface::PointXYZIRT point_cloud_point_xyzirt;
+    legion::interface::PointXYZIRT point_cloud_point_xyzirt;
     point_cloud_point_xyzirt.set_x(it_point.x());
     point_cloud_point_xyzirt.set_y(it_point.y());
     point_cloud_point_xyzirt.set_z(it_point.z());
@@ -346,5 +346,5 @@ template <typename T> void DdsMessageManager<T>::Run() {
 template <typename T> void DdsMessageManager<T>::Stop() {}
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion
 #endif

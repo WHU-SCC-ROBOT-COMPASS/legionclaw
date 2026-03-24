@@ -8,21 +8,21 @@
  */
 
 #include "ros2_message_manager.h"
-#include "Utils.hpp"
+// #include "Utils.hpp"
 #include "modules/common/macros/macros.h"
 #include "modules/common/logging/logging.h"
 #include <std_msgs/msg/header.hpp>
 
 #if ROS2_ENABLE
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
-using namespace legionclaw::common;
+using namespace legion::common;
 
 using ::ros2_interface::msg::Faults;
 using ::ros2_interface::msg::PointCloud;
@@ -95,7 +95,7 @@ template <typename T> void Ros2MessageManager<T>::TaskStart() {
 
   std::cout << "ros2 activate" << std::endl;
   point_cloud_input_sub_ = create_subscription<sensor_msgs::msg::PointCloud2>(
-      "/sensor/lidar/mid/PointCloud2", QoS{30},
+      "/rslidar_points", QoS{30},
       [this](const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) {
         Ros2MessageManager::HandlePointCloudInputMessage(msg);
       },
@@ -131,94 +131,187 @@ template <typename T> void Ros2MessageManager<T>::TaskStop() {
 
 template <typename T>
 void Ros2MessageManager<T>::PublishGroundPoints(
-    legionclaw::interface::PointCloud msg) {
+    const legion::interface::PointCloud& msg) {
   if (is_active_ == false)
     return;
-  ::ros2_interface::msg::PointCloud point_cloud;
-  MESSAGE_HEADER_ROS2_ASSIGN(std_msgs::msg, point_cloud)
-  point_cloud.frame_id = msg.frame_id();
-  point_cloud.is_dense = msg.is_dense();
-  std::vector<ros2_interface::msg::PointXYZIRT> ros_point;
-  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
-  msg.point(legion_point);
-  for (auto it_point : legion_point) {
-    ::ros2_interface::msg::PointXYZIRT point_cloud_point_xyzirt;
-    point_cloud_point_xyzirt.x = it_point.x();
-    point_cloud_point_xyzirt.y = it_point.y();
-    point_cloud_point_xyzirt.z = it_point.z();
-    point_cloud_point_xyzirt.intensity = it_point.intensity();
-    point_cloud_point_xyzirt.ring_id = it_point.ring_id();
-    point_cloud_point_xyzirt.timestamp = it_point.timestamp();
-    ros_point.emplace_back(point_cloud_point_xyzirt);
-  }
-  point_cloud.point = ros_point;
-  point_cloud.measurement_time = msg.measurement_time();
-  point_cloud.width = msg.width();
-  point_cloud.height = msg.height();
 
-  // ground_points_pub_->publish(point_cloud);
+  // Convert legion::interface::PointCloud to sensor_msgs::msg::PointCloud2
+  sensor_msgs::msg::PointCloud2 cloud_msg;
+  MESSAGE_HEADER_ROS2_ASSIGN(std_msgs::msg, cloud_msg)
+  // Get point data
+  std::vector<legion::interface::PointXYZIRT> legion_point;
+  msg.point(legion_point);
+
+  uint32_t width  = msg.width();
+  uint32_t height = msg.height();
+  const uint32_t point_count =
+      static_cast<uint32_t>(legion_point.size());
+
+  if (width == 0 || height == 0 ||
+      width * height != point_count) {
+    width  = point_count;
+    height = 1;
+  }
+
+  cloud_msg.height = height;
+  cloud_msg.width  = width;
+
+  // Define fields: x, y, z, intensity, ring, timestamp
+  cloud_msg.fields.resize(6);
+
+  cloud_msg.fields[0].name   = "x";
+  cloud_msg.fields[0].offset = 0;
+  cloud_msg.fields[0].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[0].count  = 1;
+
+  cloud_msg.fields[1].name   = "y";
+  cloud_msg.fields[1].offset = 4;
+  cloud_msg.fields[1].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[1].count  = 1;
+
+  cloud_msg.fields[2].name   = "z";
+  cloud_msg.fields[2].offset = 8;
+  cloud_msg.fields[2].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[2].count  = 1;
+
+  cloud_msg.fields[3].name   = "intensity";
+  cloud_msg.fields[3].offset = 12;
+  cloud_msg.fields[3].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[3].count  = 1;
+
+  cloud_msg.fields[4].name   = "ring";
+  cloud_msg.fields[4].offset = 16;
+  cloud_msg.fields[4].datatype = sensor_msgs::msg::PointField::UINT16;
+  cloud_msg.fields[4].count  = 1;
+
+  cloud_msg.fields[5].name   = "timestamp";
+  cloud_msg.fields[5].offset = 18;
+  cloud_msg.fields[5].datatype = sensor_msgs::msg::PointField::FLOAT64;
+  cloud_msg.fields[5].count  = 1;
+
+  cloud_msg.point_step = 26;  // 4+4+4+4+2+8 bytes
+  cloud_msg.row_step   = cloud_msg.point_step * cloud_msg.width;
+  cloud_msg.is_bigendian = false;
+  cloud_msg.is_dense     = msg.is_dense();
+
+  cloud_msg.data.resize(static_cast<std::size_t>(cloud_msg.row_step) *
+                        cloud_msg.height);
+
+  uint8_t *data_ptr = cloud_msg.data.data();
+  for (uint32_t i = 0; i < point_count; ++i) {
+    const auto &p = legion_point[i];
+    uint8_t *point_data = data_ptr + i * cloud_msg.point_step;
+
+    *reinterpret_cast<float *>(point_data + 0)  =
+        static_cast<float>(p.x());
+    *reinterpret_cast<float *>(point_data + 4)  =
+        static_cast<float>(p.y());
+    *reinterpret_cast<float *>(point_data + 8)  =
+        static_cast<float>(p.z());
+    *reinterpret_cast<float *>(point_data + 12) =
+        static_cast<float>(p.intensity());
+    *reinterpret_cast<uint16_t *>(point_data + 16) =
+        static_cast<uint16_t>(p.ring_id());
+    *reinterpret_cast<double *>(point_data + 18) =
+        static_cast<double>(p.timestamp());
+  }
+
+  ground_points_pub_->publish(cloud_msg);
 }
 
 template <typename T>
 void Ros2MessageManager<T>::PublishNoGroundPoints(
-    legionclaw::interface::PointCloud msg) {
+    const legion::interface::PointCloud& msg) {
   if (is_active_ == false)
     return;
-  ::ros2_interface::msg::PointCloud point_cloud;
-  MESSAGE_HEADER_ROS2_ASSIGN(std_msgs::msg, point_cloud)
-  point_cloud.frame_id = msg.frame_id();
-  point_cloud.is_dense = msg.is_dense();
-  std::vector<ros2_interface::msg::PointXYZIRT> ros_point;
-  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
+
+  // Convert legion::interface::PointCloud to sensor_msgs::msg::PointCloud2
+  sensor_msgs::msg::PointCloud2 cloud_msg;
+
+  MESSAGE_HEADER_ROS2_ASSIGN(std_msgs::msg, cloud_msg)
+  
+  std::vector<legion::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
-  for (auto it_point : legion_point) {
-    ::ros2_interface::msg::PointXYZIRT point_cloud_point_xyzirt;
-    point_cloud_point_xyzirt.x = it_point.x();
-    point_cloud_point_xyzirt.y = it_point.y();
-    point_cloud_point_xyzirt.z = it_point.z();
-    point_cloud_point_xyzirt.intensity = it_point.intensity();
-    point_cloud_point_xyzirt.ring_id = it_point.ring_id();
-    point_cloud_point_xyzirt.timestamp = it_point.timestamp();
-    ros_point.emplace_back(point_cloud_point_xyzirt);
+
+  uint32_t width  = msg.width();
+  uint32_t height = msg.height();
+  const uint32_t point_count =
+      static_cast<uint32_t>(legion_point.size());
+
+  if (width == 0 || height == 0 ||
+      width * height != point_count) {
+    width  = point_count;
+    height = 1;
   }
-  point_cloud.point = ros_point;
-  point_cloud.measurement_time = msg.measurement_time();
-  point_cloud.width = msg.width();
-  point_cloud.height = msg.height();
 
-  // no_ground_points_pub_->publish(point_cloud);
+  cloud_msg.height = height;
+  cloud_msg.width  = width;
+
+  cloud_msg.fields.resize(6);
+
+  cloud_msg.fields[0].name   = "x";
+  cloud_msg.fields[0].offset = 0;
+  cloud_msg.fields[0].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[0].count  = 1;
+
+  cloud_msg.fields[1].name   = "y";
+  cloud_msg.fields[1].offset = 4;
+  cloud_msg.fields[1].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[1].count  = 1;
+
+  cloud_msg.fields[2].name   = "z";
+  cloud_msg.fields[2].offset = 8;
+  cloud_msg.fields[2].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[2].count  = 1;
+
+  cloud_msg.fields[3].name   = "intensity";
+  cloud_msg.fields[3].offset = 12;
+  cloud_msg.fields[3].datatype = sensor_msgs::msg::PointField::FLOAT32;
+  cloud_msg.fields[3].count  = 1;
+
+  cloud_msg.fields[4].name   = "ring";
+  cloud_msg.fields[4].offset = 16;
+  cloud_msg.fields[4].datatype = sensor_msgs::msg::PointField::UINT16;
+  cloud_msg.fields[4].count  = 1;
+
+  cloud_msg.fields[5].name   = "timestamp";
+  cloud_msg.fields[5].offset = 18;
+  cloud_msg.fields[5].datatype = sensor_msgs::msg::PointField::FLOAT64;
+  cloud_msg.fields[5].count  = 1;
+
+  cloud_msg.point_step = 26;
+  cloud_msg.row_step   = cloud_msg.point_step * cloud_msg.width;
+  cloud_msg.is_bigendian = false;
+  cloud_msg.is_dense     = msg.is_dense();
+
+  cloud_msg.data.resize(static_cast<std::size_t>(cloud_msg.row_step) *
+                        cloud_msg.height);
+
+  uint8_t *data_ptr = cloud_msg.data.data();
+  for (uint32_t i = 0; i < point_count; ++i) {
+    const auto &p = legion_point[i];
+    uint8_t *point_data = data_ptr + i * cloud_msg.point_step;
+
+    *reinterpret_cast<float *>(point_data + 0)  =
+        static_cast<float>(p.x());
+    *reinterpret_cast<float *>(point_data + 4)  =
+        static_cast<float>(p.y());
+    *reinterpret_cast<float *>(point_data + 8)  =
+        static_cast<float>(p.z());
+    *reinterpret_cast<float *>(point_data + 12) =
+        static_cast<float>(p.intensity());
+    *reinterpret_cast<uint16_t *>(point_data + 16) =
+        static_cast<uint16_t>(p.ring_id());
+    *reinterpret_cast<double *>(point_data + 18) =
+        static_cast<double>(p.timestamp());
+  }
+
+  no_ground_points_pub_->publish(cloud_msg);
 }
 
-template <typename T>
-void Ros2MessageManager<T>::PublishGroundPoints(
-    const Eigen::MatrixX3f& ground_points) {
-  if (is_active_ == false)
-    return;
-  
-  std_msgs::msg::Header header;
-  header.stamp = this->now();
-  header.frame_id = "lidar";
-  
-  auto point_cloud_msg = patchworkpp_ros::utils::EigenMatToPointCloud2(ground_points, header);
-  ground_points_pub_->publish(std::move(*point_cloud_msg));
-}
 
 template <typename T>
-void Ros2MessageManager<T>::PublishNoGroundPoints(
-    const Eigen::MatrixX3f& no_ground_points) {
-  if (is_active_ == false)
-    return;
-  
-  std_msgs::msg::Header header;
-  header.stamp = this->now();
-  header.frame_id = "lidar";
-  
-  auto point_cloud_msg = patchworkpp_ros::utils::EigenMatToPointCloud2(no_ground_points, header);
-  no_ground_points_pub_->publish(std::move(*point_cloud_msg));
-}
-
-template <typename T>
-void Ros2MessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
+void Ros2MessageManager<T>::PublishFaults(legion::interface::Faults msg) {
   if (is_init_ == false)
     return;
   ::ros2_interface::msg::Faults faults;
@@ -236,13 +329,13 @@ void Ros2MessageManager<T>::HandleObuCmdMsgMessage(
   std::shared_ptr<ros2_interface::msg::ObuCmdMsg> msg =
       std::const_pointer_cast<ros2_interface::msg::ObuCmdMsg>(msg_obj_ptr);
 
-  legionclaw::interface::ObuCmdMsg obu_cmd_msg;
+  legion::interface::ObuCmdMsg obu_cmd_msg;
   MESSAGE_HEADER_ROS2_PARSER(obu_cmd_msg)
   obu_cmd_msg.set_id(msg->id);
   obu_cmd_msg.set_name(msg->name);
-  std::vector<legionclaw::interface::ObuCmd> obu_cmd_list;
+  std::vector<legion::interface::ObuCmd> obu_cmd_list;
   for (auto it_obu_cmd_list : msg->obu_cmd_list) {
-    legionclaw::interface::ObuCmd obu_cmd_msg_obu_cmd;
+    legion::interface::ObuCmd obu_cmd_msg_obu_cmd;
     obu_cmd_msg_obu_cmd.set_code(it_obu_cmd_list.code);
     obu_cmd_msg_obu_cmd.set_val(it_obu_cmd_list.val);
     obu_cmd_list.emplace_back(obu_cmd_msg_obu_cmd);
@@ -257,8 +350,95 @@ void Ros2MessageManager<T>::HandlePointCloudInputMessage(
     const sensor_msgs::msg::PointCloud2::ConstSharedPtr &msg) {
   if (is_active_ == false)
     return;
-  const auto &cloud = patchworkpp_ros::utils::PointCloud2ToEigenMat(msg);
-  instance_->HandlePointCloudInput(cloud);
+  legion::interface::PointCloud point_cloud;
+  MESSAGE_HEADER_ROS2_PARSER(point_cloud)
+  point_cloud.set_frame_id(msg->header.frame_id);
+  point_cloud.set_is_dense(msg->is_dense);
+  point_cloud.set_width(msg->width);
+  point_cloud.set_height(msg->height);
+
+  // Parse PointCloud2 fields to find offsets
+  int x_offset = -1, y_offset = -1, z_offset = -1;
+  int intensity_offset = -1, ring_offset = -1, timestamp_offset = -1;
+  
+  for (const auto& field : msg->fields) {
+    if (field.name == "x" && field.datatype == sensor_msgs::msg::PointField::FLOAT32) {
+      x_offset = field.offset;
+    } else if (field.name == "y" && field.datatype == sensor_msgs::msg::PointField::FLOAT32) {
+      y_offset = field.offset;
+    } else if (field.name == "z" && field.datatype == sensor_msgs::msg::PointField::FLOAT32) {
+      z_offset = field.offset;
+    } else if (field.name == "intensity" && field.datatype == sensor_msgs::msg::PointField::FLOAT32) {
+      intensity_offset = field.offset;
+    } else if (field.name == "ring" && field.datatype == sensor_msgs::msg::PointField::UINT16) {
+      ring_offset = field.offset;
+    } else if (field.name == "timestamp" && field.datatype == sensor_msgs::msg::PointField::FLOAT64) {
+      timestamp_offset = field.offset;
+    }
+  }
+
+  // Check if required fields exist
+  if (x_offset < 0 || y_offset < 0 || z_offset < 0) {
+    AERROR << "PointCloud2 missing required fields (x, y, z)";
+    return;
+  }
+
+  // Convert point cloud data
+  std::vector<legion::interface::PointXYZIRT> point;
+  const uint8_t* data_ptr = msg->data.data();
+  size_t point_count = msg->width * msg->height;
+  
+  for (size_t i = 0; i < point_count; ++i) {
+    const uint8_t* point_data = data_ptr + i * msg->point_step;
+    
+    legion::interface::PointXYZIRT point_xyzirt;
+    
+    // Extract x, y, z (required)
+    float x = *reinterpret_cast<const float*>(point_data + x_offset);
+    float y = *reinterpret_cast<const float*>(point_data + y_offset);
+    float z = *reinterpret_cast<const float*>(point_data + z_offset);
+    
+    point_xyzirt.set_x(x);
+    point_xyzirt.set_y(y);
+    point_xyzirt.set_z(z);
+    
+    // Extract intensity (optional, default to 0)
+    if (intensity_offset >= 0) {
+      float intensity = *reinterpret_cast<const float*>(point_data + intensity_offset);
+      point_xyzirt.set_intensity(intensity);
+    } else {
+      point_xyzirt.set_intensity(0.0f);
+    }
+    
+    // Extract ring_id (optional, default to 0)
+    if (ring_offset >= 0) {
+      uint16_t ring_id = *reinterpret_cast<const uint16_t*>(point_data + ring_offset);
+      point_xyzirt.set_ring_id(ring_id);
+    } else {
+      point_xyzirt.set_ring_id(0);
+    }
+    
+    // Extract timestamp (optional, default to 0)
+    if (timestamp_offset >= 0) {
+      double timestamp = *reinterpret_cast<const double*>(point_data + timestamp_offset);
+      point_xyzirt.set_timestamp(timestamp);
+    } else {
+      point_xyzirt.set_timestamp(0.0);
+    }
+    
+    point.emplace_back(point_xyzirt);
+  }
+  
+  point_cloud.set_point(&point);
+  
+  // Set measurement time from header if available
+  if (msg->header.stamp.sec > 0 || msg->header.stamp.nanosec > 0) {
+    point_cloud.set_measurement_time(
+        msg->header.stamp.sec + msg->header.stamp.nanosec * 1e-9);
+  } else {
+    point_cloud.set_measurement_time(0.0);
+  }
+  instance_->HandlePointCloudInput(point_cloud);
 }
 
 template <typename T> void Ros2MessageManager<T>::Run() {
@@ -298,5 +478,5 @@ template <typename T> void Ros2MessageManager<T>::Stop() {
 }
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion
 #endif

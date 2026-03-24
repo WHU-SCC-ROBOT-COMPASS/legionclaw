@@ -569,7 +569,7 @@ bool NormalVehicleTracker::getTrackedObject(
     tf2::Quaternion filtered_quaternion;
     // filtered_quaternion.setRPY(roll, pitch, X_t(IDX::YAW));
     filtered_quaternion.setRPY(roll, pitch, yaw);
-    // std::cout << "yaw :" << X_t(IDX::YAW)  << " " << yaw << "\n";
+    // std::cout << "yaw :" << X_t(IDX::YAW)  << " " << yaw << std::endl;
     pose_with_cov.mutable_pose()->mutable_orientation()->set_qx(filtered_quaternion.x());
     pose_with_cov.mutable_pose()->mutable_orientation()->set_qy(filtered_quaternion.y());
     pose_with_cov.mutable_pose()->mutable_orientation()->set_qz(filtered_quaternion.z());

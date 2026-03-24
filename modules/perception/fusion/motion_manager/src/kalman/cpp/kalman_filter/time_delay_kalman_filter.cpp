@@ -85,7 +85,7 @@ bool TimeDelayKalmanFilter::updateWithDelay(
   const int delay_step)
 {
   if (delay_step >= max_delay_step_) {
-    std::cerr << "delay step is larger than max_delay_step. ignore update." << "\n";
+    std::cerr << "delay step is larger than max_delay_step. ignore update." << std::endl;
     return false;
   }
 

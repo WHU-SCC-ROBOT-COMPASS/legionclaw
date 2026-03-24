@@ -40,14 +40,14 @@
 #include "message_manager/message_manager.h"
 
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
-using namespace legionclaw::common;
+using namespace legion::common;
 /**
  * @class DdsMessageManager
  * @brief DDS消息管理器.
@@ -74,21 +74,21 @@ public:
    * @param[in] point_cloud
    * @return    void.
    */
-  void PublishGroundPoints(legionclaw::interface::PointCloud msg) override;
+  void PublishGroundPoints(legion::interface::PointCloud msg) override;
 
   /**
    * @brief     PointCloud消息发送.
    * @param[in] point_cloud
    * @return    void.
    */
-  void PublishNoGroundPoints(legionclaw::interface::PointCloud msg) override;
+  void PublishNoGroundPoints(legion::interface::PointCloud msg) override;
 
   /**
    * @brief     Faults消息发送.
    * @param[in] faults
    * @return    void.
    */
-  void PublishFaults(legionclaw::interface::Faults msg) override;
+  void PublishFaults(legion::interface::Faults msg) override;
 
 protected:
   T* instance_;
@@ -150,6 +150,6 @@ private:
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion
 #include "dds_message_manager.hpp"
 #endif

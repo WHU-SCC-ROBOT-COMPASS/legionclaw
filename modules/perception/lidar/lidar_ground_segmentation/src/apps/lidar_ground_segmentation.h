@@ -24,6 +24,7 @@
 #include "modules/perception/lidar/lidar_ground_segmentation/src/common/local_view.h"
 
 #include "patchworkpp/patchworkpp.h"
+#include "common/utils.hpp"
 
 #if LCM_ENABLE
 #include "message_manager/lcm/lcm_message_manager.h"
@@ -40,14 +41,14 @@
 
 #include "conf/lidar_ground_segmentation_conf.hpp"
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
-using namespace legionclaw::common;
+using namespace legion::common;
 using json = nlohmann::json;
 /**
  * @class LidarGroundSegmentation
@@ -174,13 +175,13 @@ protected:
    * @brief
    * @param  ground_points Eigen Matrix格式的地面点云
    */
-  void PublishGroundPoints(const Eigen::MatrixX3f& ground_points);
+  void PublishGroundPoints(legion::interface::PointCloud& ground_points);
 
   /**
    * @brief
    * @param  no_ground_points Eigen Matrix格式的非地面点云
    */
-  void PublishNoGroundPoints(const Eigen::MatrixX3f& no_ground_points);
+  void PublishNoGroundPoints(legion::interface::PointCloud& no_ground_points);
 
   /**
    * @brief
@@ -206,14 +207,14 @@ public:
    * @param[in] obu_cmd_msg .
    * @return    void.
    */
-  void HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cmd_msg);
+  void HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg);
 
   /**
    * @brief     Eigen Matrix点云消息接收（用于ROS2）.
    * @param[in] cloud Eigen Matrix格式的点云数据.
    * @return    void.
    */
-  void HandlePointCloudInput(const Eigen::MatrixXf& cloud);
+  void HandlePointCloudInput(legion::interface::PointCloud cloud);
 
   /**
    * @brief     计算算法输出.
@@ -236,13 +237,13 @@ public:
   void StatusDetectOnTimer();
 
 protected:
-  legionclaw::interface::PointCloud point_cloud_input_;
-  legionclaw::interface::PointCloud ground_points_;
-  legionclaw::interface::PointCloud no_ground_points_;
-  legionclaw::interface::ObuCmdMsg obu_cmd_msg_;
-  legionclaw::interface::Faults faults_;
+  legion::interface::PointCloud point_cloud_input_;
+  legion::interface::PointCloud ground_points_;
+  legion::interface::PointCloud no_ground_points_;
+  legion::interface::ObuCmdMsg obu_cmd_msg_;
+  legion::interface::Faults faults_;
 
-  legionclaw::interface::FaultCodeSet* faultcodeset_;
+  legion::interface::FaultCodeSet* faultcodeset_;
   //控制命令生产周期
   int32_t produce_lidar_ground_segmentation_command_duration_;
   //控制命令发送周期
@@ -252,7 +253,7 @@ protected:
   // 功能激活状态,激活为true，未激活为false
   bool function_activation_;
   //消息状态
-  std::map<std::string, legionclaw::common::MessageStatus> message_status_;
+  std::map<std::string, legion::common::MessageStatus> message_status_;
   // task线程
   std::unique_ptr<std::thread> task_thread_;
 
@@ -273,4 +274,4 @@ protected:
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion

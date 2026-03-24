@@ -14,11 +14,11 @@
 #include <mutex>
 
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
 
@@ -51,25 +51,25 @@ public:
   inline bool* mutable_use_system_timestamp() { return &use_system_timestamp_; }
 
   inline void
-  set_logging_conf(const legionclaw::common::LoggingConf& logging_conf) {
+  set_logging_conf(const legion::common::LoggingConf& logging_conf) {
     logging_conf_ = logging_conf;
   }
 
-  inline const legionclaw::common::LoggingConf& logging_conf() const {
+  inline const legion::common::LoggingConf& logging_conf() const {
     return logging_conf_;
   }
 
-  inline legionclaw::common::LoggingConf* mutable_logging_conf() {
+  inline legion::common::LoggingConf* mutable_logging_conf() {
     return &logging_conf_;
   }
 
   inline void
-  set_messages(const std::map<std::string, legionclaw::common::Message>& messages) {
+  set_messages(const std::map<std::string, legion::common::Message>& messages) {
     std::lock_guard<std::mutex> lock(*messages_mutex_);
     messages_ = messages;
   }
 
-  inline const std::map<std::string, legionclaw::common::Message>&
+  inline const std::map<std::string, legion::common::Message>&
   messages() const {
     std::lock_guard<std::mutex> lock(*messages_mutex_);
     return messages_;
@@ -83,9 +83,9 @@ public:
 protected:
   std::shared_ptr<std::mutex> messages_mutex_;
   bool use_system_timestamp_;
-  legionclaw::common::LoggingConf logging_conf_;
-  std::map<std::string, legionclaw::common::Message> messages_;
+  legion::common::LoggingConf logging_conf_;
+  std::map<std::string, legion::common::Message> messages_;
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion

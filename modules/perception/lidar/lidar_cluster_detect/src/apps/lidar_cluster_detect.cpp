@@ -13,6 +13,8 @@
 #include <limits>
 #include <algorithm>
 #include <string>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc.hpp>
 
 #include "lidar_cluster_detect.h"
 #include "modules/common/macros/macros.h"
@@ -21,11 +23,11 @@
 #include "modules/common/interface/obstacle_list.hpp"
 
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
 
@@ -44,15 +46,15 @@ void LidarClusterDetect::Init() {
     std::ifstream in(config_file_path_);
     in >> lidar_cluster_detect_json_;
     if (lidar_cluster_detect_json_.is_null()) {
-      std::cout << "lidar_cluster_detect_json_ is null" << "\n";
+      std::cout << "lidar_cluster_detect_json_ is null" << std::endl;
       return;
     }
   }
   // step4 日志初始化
-  {LOGGING_INIT2(lidar_cluster_detect_conf_, lidar_cluster_detect_json_)}
+  {LOGGING_INIT(lidar_cluster_detect_conf_, lidar_cluster_detect_json_)}
 
   // step4 IPC初始化
-  {MESSAGE_INIT2(lidar_cluster_detect_conf_, lidar_cluster_detect_json_)}
+  {MESSAGE_INIT(lidar_cluster_detect_conf_, lidar_cluster_detect_json_)}
 
   // step5 读取配置文件
   {
@@ -87,14 +89,14 @@ void LidarClusterDetect::Init() {
       if (params_in.is_open()) {
         params_in >> params_json;
         params_in.close();
-        std::cout << "Loaded clustering parameters from: " << params_file_path << "\n";
+        std::cout << "Loaded clustering parameters from: " << params_file_path << std::endl;
       } else {
         std::cout << "Warning: Cannot open params file: " << params_file_path 
-                  << ", using default values" << "\n";
+                  << ", using default values" << std::endl;
         params_json = json::object(); // 空对象，使用默认值
       }
     // } else {
-    //   std::cout << "Warning: params_file not found in config, using default values" << "\n";
+    //   std::cout << "Warning: params_file not found in config, using default values" << std::endl;
     //   params_json = json::object(); // 空对象，使用默认值
     // }
     
@@ -114,6 +116,7 @@ void LidarClusterDetect::Init() {
     delta_x_ = params_json.value("delta_x", 0.0f);
     delta_y_ = params_json.value("delta_y", 0.0f);
     in_estimate_pose_ = params_json.value("in_estimate_pose", false);
+    max_polygon_points_ = params_json.value("max_polygon_points", 50);  // 默认最大50个点
     
     col_size_ = (int)((cell_map_max_x_ - cell_map_min_x_) / cell_width_) + 1;
     row_size_ = (int)((cell_map_max_y_ - cell_map_min_y_) / cell_length_) + 1;
@@ -140,7 +143,7 @@ void LidarClusterDetect::Init() {
       return;
     }
   }
-  std::cout << "lidar_cluster_detect init" << "\n";
+  std::cout << "lidar_cluster_detect init" << std::endl;
 
   // step9 初始化状态为true
   { is_init_ = true; }
@@ -177,7 +180,7 @@ void LidarClusterDetect::TaskActivate() {
   task_100ms_->AddTimer(100, &LidarClusterDetect::Task100ms, this);
   // 所有定时器都使用高级定时器，方便激活和去激活。
   std::cout << "===================function activate=================="
-            << "\n";
+            << std::endl;
   function_activation_ = true;
   return;
 }
@@ -195,7 +198,7 @@ void LidarClusterDetect::TaskStop() {
   {
     // 清除所有内部计算的中间结果，保证回到刚init完的状态
   }
-  std::cout << "******************function stop***************" << "\n";
+  std::cout << "******************function stop***************" << std::endl;
   function_activation_ = false;
   return;
 }
@@ -217,7 +220,7 @@ void LidarClusterDetect::Task100ms(void* param) {
 }
 
 void LidarClusterDetect::PublishObstacleList(
-    legionclaw::interface::ObstacleList obstacle_list) {
+    legion::interface::ObstacleList obstacle_list) {
 #if LCM_ENABLE
   if (message_manager_.count("LCM") > 0)
     message_manager_["LCM"]->PublishObstacleList(obstacle_list);
@@ -241,20 +244,32 @@ void LidarClusterDetect::PublishObstacleList(
 
 void LidarClusterDetect::PublishClusterPointCloud(
     ClusterVectorPtr& filter_cluster_vector_ptr,
-    const std::string& frame_id) {
+    const legion::interface::Header& header) {
 #if ROS2_ENABLE
   if (message_manager_.count("ROS2") > 0 && ros2_message_manager_ != nullptr) {
-    // Convert clusters to simple format for publishing
-    std::vector<std::vector<std::tuple<float, float, float, float>>> clusters;
+    // Convert clusters to common PointCloud interface for publishing
+    legion::interface::PointCloud cluster_cloud;
+    cluster_cloud.set_header(header);
+    cluster_cloud.set_is_dense(true);
+
+    std::vector<legion::interface::PointXYZIRT> points;
     for (size_t i = 0; i < filter_cluster_vector_ptr->size(); ++i) {
-      std::vector<std::tuple<float, float, float, float>> cluster_points;
       for (const auto& pt : (*filter_cluster_vector_ptr)[i].cluster_points_) {
-        // Use cluster index * 10 as intensity to distinguish different clusters
-        cluster_points.emplace_back(pt.x, pt.y, pt.z, static_cast<float>(i * 10));
+        legion::interface::PointXYZIRT point_xyzirt;
+        point_xyzirt.set_x(pt.x);
+        point_xyzirt.set_y(pt.y);
+        point_xyzirt.set_z(pt.z);
+        // Use cluster index * 10 as intensity to distinguish clusters
+        point_xyzirt.set_intensity(static_cast<uint32_t>(i * 10));
+        points.emplace_back(point_xyzirt);
       }
-      clusters.push_back(cluster_points);
     }
-    ros2_message_manager_->PublishClusterPointCloud(clusters, frame_id);
+
+    cluster_cloud.set_point(points);
+    cluster_cloud.set_width(static_cast<uint32_t>(cluster_cloud.point_size()));
+    cluster_cloud.set_height(1);
+
+    ros2_message_manager_->PublishClusterPointCloud(cluster_cloud);
   }
 #endif
 }
@@ -262,14 +277,14 @@ void LidarClusterDetect::PublishFaults() {
   if (is_init_ == false) {
     return;
   }
-  legionclaw::interface::Faults faults;
+  legion::interface::Faults faults;
   faultcodeset_->get_fault_code_list(&faults);
   // 填app的id，唯一标识符
   faults.set_app_id(faultcodeset_->get_target_id());
   // 填状态
   faults.set_is_active(function_activation_);
   // 消息头
-  legionclaw::interface::Header header;
+  legion::interface::Header header;
   INTERFACE_HEADER_ASSIGN(faults);
   {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -301,14 +316,14 @@ std::shared_ptr<LidarClusterDetectConf> LidarClusterDetect::GetConf() const {
   return lidar_cluster_detect_conf_;
 }
 
-void LidarClusterDetect::HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cmd_msg) {
+void LidarClusterDetect::HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg) {
   if (is_init_ == false) {
     return;
   }
   {
     std::lock_guard<std::mutex> lock(mutex_);
     if (lidar_cluster_detect_conf_->use_system_timestamp() == true) {
-      legionclaw::interface::Header header = obu_cmd_msg.header();
+      legion::interface::Header header = obu_cmd_msg.header();
       header.set_stamp(TimeTool::Now2TmeStruct());
       obu_cmd_msg.set_header(header);
     }
@@ -317,7 +332,7 @@ void LidarClusterDetect::HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cm
   for (auto cmd : obu_cmd_msg.obu_cmd_list()) {
     // 编码值待定
     if (cmd.code() == 10086) {
-      std::cout << "code : " << cmd.code() << "\n";
+      std::cout << "code : " << cmd.code() << std::endl;
       switch (cmd.val()) {
       case FunctionMode::DEACTIVATE_BOTH:
         // 全部去激活
@@ -347,7 +362,7 @@ void LidarClusterDetect::HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cm
 }
 
 void LidarClusterDetect::HandlePointCloud(
-    legionclaw::interface::PointCloud point_cloud) {
+    legion::interface::PointCloud point_cloud) {
   if (is_init_ == false) {
     return;
   }
@@ -357,21 +372,22 @@ void LidarClusterDetect::HandlePointCloud(
   {
     std::lock_guard<std::mutex> lock(mutex_);
     if (lidar_cluster_detect_conf_->use_system_timestamp() == true) {
-      legionclaw::interface::Header header = point_cloud.header();
+      legion::interface::Header header = point_cloud.header();
       header.set_stamp(TimeTool::Now2TmeStruct());
       point_cloud.set_header(header);
     }
     point_cloud_ = point_cloud;
+
   }
 }
 
 LidarClusterDetect::CellMatrixPtr LidarClusterDetect::BuildCellMap(
-    const legionclaw::interface::PointCloud& point_cloud,
+    const legion::interface::PointCloud& point_cloud,
     int col_size, int row_size) {
   CellMatrixPtr cell_matrix_ptr = std::make_shared<CellMatrix>(
       col_size, CellVector(row_size, PointsCell()));
   
-  std::vector<legionclaw::interface::PointXYZIRT> point_vec;
+  std::vector<legion::interface::PointXYZIRT> point_vec;
   point_cloud.point(point_vec);
   
   for (const auto& pt : point_vec) {
@@ -487,7 +503,7 @@ void LidarClusterDetect::Find8(int col_id, int row_id,
 void LidarClusterDetect::BuildCluster(
     ClusterVectorPtr& cluster_vector_ptr,
     ClusterVectorPtr& filter_cluster_vector_ptr,
-    const legionclaw::interface::Header& header) {
+    const legion::interface::Header& header) {
   for (auto& cluster : *cluster_vector_ptr) {
     if (cluster.cluster_points_.size() < (size_t)point_min_size_for_box_) {
       continue;
@@ -545,19 +561,19 @@ void LidarClusterDetect::BuildCluster(
 
 void LidarClusterDetect::ConvertClustersToObstacleList(
     ClusterVectorPtr& filter_cluster_vector_ptr,
-    const legionclaw::interface::Header& header,
-    legionclaw::interface::ObstacleList& obstacle_list) {
+    const legion::interface::Header& header,
+    legion::interface::ObstacleList& obstacle_list) {
   obstacle_list.clear_obstacle();
   obstacle_list.set_header(header);
-  // obstacle_list.set_sensor_id(legionclaw::common::SensorID::LIDAR_TOP);
+  // obstacle_list.set_sensor_id(legion::common::SensorID::LIDAR_TOP);
   obstacle_list.set_is_valid(true);
-  // obstacle_list.set_error_code(legionclaw::common::ErrorCode::OK);
+  // obstacle_list.set_error_code(legion::common::ErrorCode::OK);
   
-  std::vector<legionclaw::interface::Obstacle> obstacles;
+  std::vector<legion::interface::Obstacle> obstacles;
   int obstacle_id = 0;
   
   for (const auto& cluster : *filter_cluster_vector_ptr) {
-    legionclaw::interface::Obstacle obstacle;
+    legion::interface::Obstacle obstacle;
     
     // Set basic properties
     obstacle.set_id(obstacle_id++);
@@ -566,7 +582,7 @@ void LidarClusterDetect::ConvertClustersToObstacleList(
     obstacle.set_confidence(1.0);
     
     // Set center position
-    legionclaw::interface::Point3D center_pos;
+    legion::interface::Point3D center_pos;
     center_pos.set_x(cluster.center_x + delta_x_);
     center_pos.set_y(cluster.center_y + delta_y_);
     center_pos.set_z(cluster.min_z + cluster.height / 2.0f);
@@ -578,20 +594,69 @@ void LidarClusterDetect::ConvertClustersToObstacleList(
     obstacle.set_width((cluster.width < 0) ? -cluster.width : cluster.width);
     obstacle.set_height((cluster.height < 0) ? -cluster.height : cluster.height);
     
-    // Set polygon points (convex hull approximation)
-    std::vector<legionclaw::interface::Point3D> polygon_points;
-    for (const auto& pt : cluster.cluster_points_) {
-      legionclaw::interface::Point3D poly_pt;
-      poly_pt.set_x(pt.x + delta_x_);
-      poly_pt.set_y(pt.y + delta_y_);
-      poly_pt.set_z(cluster.min_z);
-      polygon_points.push_back(poly_pt);
+    // Set polygon points (convex hull)
+    std::vector<legion::interface::Point3D> polygon_points;
+    if (cluster.cluster_points_.size() >= 3) {
+      // Convert cluster points to OpenCV Point2f for convex hull calculation
+      std::vector<cv::Point2f> points;
+      for (const auto& pt : cluster.cluster_points_) {
+        points.push_back(cv::Point2f(pt.x + delta_x_, pt.y + delta_y_));
+      }
+      
+      // Calculate convex hull using OpenCV
+      std::vector<cv::Point2f> hull;
+      cv::convexHull(points, hull);
+      
+      // 如果凸包点数超过限制，使用 approxPolyDP 简化
+      std::vector<cv::Point2f> simplified_hull;
+      if (hull.size() > static_cast<size_t>(max_polygon_points_)) {
+        // 使用 Douglas-Peucker 算法简化多边形
+        // epsilon 参数控制简化程度，这里根据多边形周长动态计算
+        double perimeter = cv::arcLength(hull, true);
+        double epsilon = perimeter * 0.01;  // 1% 的周长作为容差
+        cv::approxPolyDP(hull, simplified_hull, epsilon, false);
+        
+        // 如果简化后仍然超过限制，使用均匀采样
+        if (simplified_hull.size() > static_cast<size_t>(max_polygon_points_)) {
+          simplified_hull.clear();
+          size_t step = std::max(1UL, hull.size() / max_polygon_points_);
+          for (size_t i = 0; i < hull.size(); i += step) {
+            simplified_hull.push_back(hull[i]);
+            if (simplified_hull.size() >= static_cast<size_t>(max_polygon_points_)) {
+              break;
+            }
+          }
+          // 确保包含最后一个点
+          if (!simplified_hull.empty() && simplified_hull.back() != hull.back()) {
+            simplified_hull.push_back(hull.back());
+          }
+        }
+        hull = simplified_hull;
+      }
+      
+      // Convert convex hull points back to Point3D
+      for (const auto& hull_pt : hull) {
+        legion::interface::Point3D poly_pt;
+        poly_pt.set_x(hull_pt.x);
+        poly_pt.set_y(hull_pt.y);
+        poly_pt.set_z(cluster.min_z);
+        polygon_points.push_back(poly_pt);
+      }
+    } else {
+      // If less than 3 points, use all points directly
+      for (const auto& pt : cluster.cluster_points_) {
+        legion::interface::Point3D poly_pt;
+        poly_pt.set_x(pt.x + delta_x_);
+        poly_pt.set_y(pt.y + delta_y_);
+        poly_pt.set_z(cluster.min_z);
+        polygon_points.push_back(poly_pt);
+      }
     }
     obstacle.set_polygon_point_vehicle(&polygon_points);
     obstacle.set_polygon_point_abs(&polygon_points);
     
     // Set timestamp
-    legionclaw::interface::Time timestamp;
+    legion::interface::Time timestamp;
     timestamp.set_sec(header.stamp().sec());
     timestamp.set_nsec(header.stamp().nsec());
     obstacle.set_timestamp(timestamp);
@@ -619,7 +684,7 @@ void LidarClusterDetect::ComputeLidarClusterDetectCommandOnTimer() {
   }
 
   // 算法计算 - 点云聚类
-  std::vector<legionclaw::interface::PointXYZIRT> point_vec;
+  std::vector<legion::interface::PointXYZIRT> point_vec;
   local_view_.point_cloud_.point(point_vec);
   
   if (point_vec.empty()) {
@@ -647,7 +712,8 @@ void LidarClusterDetect::ComputeLidarClusterDetectCommandOnTimer() {
   
   // Publish cluster point cloud for visualization
   PublishClusterPointCloud(filter_cluster_vector_ptr,
-                           local_view_.point_cloud_.frame_id());
+                           local_view_.point_cloud_.header());
+                           
 }
 Status LidarClusterDetect::CheckInput(LocalView* local_view) {
   return Status::Ok();
@@ -657,13 +723,13 @@ void LidarClusterDetect::MessagesInit() {
   if (lidar_cluster_detect_conf_ == nullptr)
     return;
 
-  std::map<std::string, legionclaw::common::Message>::iterator iter;
+  std::map<std::string, legion::common::Message>::iterator iter;
   for (auto& iter : lidar_cluster_detect_conf_->messages()) {
     auto message = iter.second;
 
     switch (message.type) {
 #if LCM_ENABLE
-    case legionclaw::common::MessageType::LCM: {
+    case legion::common::MessageType::LCM: {
       AINFO << "message type:LCM";
 
       lcm_message_manager_ =
@@ -674,7 +740,7 @@ void LidarClusterDetect::MessagesInit() {
     } break;
 #endif
 #if DDS_ENABLE
-    case legionclaw::common::MessageType::DDS: {
+    case legion::common::MessageType::DDS: {
       AINFO << "message type:DDS";
 
       dds_message_manager_ =
@@ -685,7 +751,7 @@ void LidarClusterDetect::MessagesInit() {
     } break;
 #endif
 #if ROS_ENABLE
-    case legionclaw::common::MessageType::ROS: {
+    case legion::common::MessageType::ROS: {
       AINFO << "message type:ROS";
 
       ros_message_manager_ =
@@ -695,7 +761,7 @@ void LidarClusterDetect::MessagesInit() {
     } break;
 #endif
 #if ROS2_ENABLE
-    case legionclaw::common::MessageType::ROS2: {
+    case legion::common::MessageType::ROS2: {
       AINFO << "message type:ROS2";
 
       ros2_message_manager_ =
@@ -707,7 +773,7 @@ void LidarClusterDetect::MessagesInit() {
 #endif
 
 #if ADSFI_ENABLE
-    case legionclaw::common::MessageType::ADSFI: {
+    case legion::common::MessageType::ADSFI: {
       AINFO << "message type:ADSFI";
 
       adsfi_message_manager_ =
@@ -725,9 +791,9 @@ void LidarClusterDetect::MessagesInit() {
 }
 
 void LidarClusterDetect::FaultMonitorInit() {
-  legionclaw::interface::FaultCodeCallback sendheart_callback_func =
+  legion::interface::FaultCodeCallback sendheart_callback_func =
       std::bind(&LidarClusterDetect::PublishFaults, this);
-  legionclaw::interface::FaultCodeCallback fault_callback_func = nullptr;
+  legion::interface::FaultCodeCallback fault_callback_func = nullptr;
   FAULTCODE_INIT("../../../../common/data/faults/faults.json",
                  "lidar_cluster_detect", faultcodeset_, sendheart_callback_func,
                  fault_callback_func)
@@ -767,4 +833,4 @@ void LidarClusterDetect::Spin() {
 
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion

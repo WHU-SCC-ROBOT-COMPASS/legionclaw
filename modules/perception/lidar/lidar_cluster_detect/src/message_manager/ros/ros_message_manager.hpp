@@ -13,14 +13,14 @@
 
 #if ROS_ENABLE
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
-using namespace legionclaw::common;
+using namespace legion::common;
 template <typename T> void RosMessageManager<T>::Init(T* t) {
   is_init_ = false;
   is_active_ = false;
@@ -101,14 +101,14 @@ template <typename T> void RosMessageManager<T>::TaskStop() {
 }
 template <typename T>
 void RosMessageManager<T>::PublishObstacleList(
-    legionclaw::interface::ObstacleList msg) {
+    legion::interface::ObstacleList msg) {
   if (is_init_ == false)
     return;
   ::ros_interface::ObstacleList obstacle_list;
   MESSAGE_HEADER_ASSIGN(std_msgs, obstacle_list)
   obstacle_list.sensor_id = msg.sensor_id();
   std::vector<ros_interface::Obstacle> ros_obstacle;
-  std::vector<legionclaw::interface::Obstacle> legion_obstacle;
+  std::vector<legion::interface::Obstacle> legion_obstacle;
   msg.obstacle(legion_obstacle);
   for (auto it_obstacle : legion_obstacle) {
     ::ros_interface::Obstacle obstacle_list_obstacle;
@@ -164,7 +164,7 @@ void RosMessageManager<T>::PublishObstacleList(
     obstacle_list_obstacle.width = it_obstacle.width();
     obstacle_list_obstacle.height = it_obstacle.height();
     std::vector<ros_interface::ImageKeyPoint> ros_image_key_points;
-    std::vector<legionclaw::interface::ImageKeyPoint> legion_image_key_points;
+    std::vector<legion::interface::ImageKeyPoint> legion_image_key_points;
     it_obstacle.image_key_points(legion_image_key_points);
     for (auto it_image_key_points : legion_image_key_points) {
       ::ros_interface::ImageKeyPoint obstacle_list_obstacle_image_key_point;
@@ -176,7 +176,7 @@ void RosMessageManager<T>::PublishObstacleList(
     }
     obstacle_list_obstacle.image_key_points = ros_image_key_points;
     std::vector<ros_interface::Point3D> ros_polygon_point_abs;
-    std::vector<legionclaw::interface::Point3D> legion_polygon_point_abs;
+    std::vector<legion::interface::Point3D> legion_polygon_point_abs;
     it_obstacle.polygon_point_abs(legion_polygon_point_abs);
     for (auto it_polygon_point_abs : legion_polygon_point_abs) {
       ::ros_interface::Point3D obstacle_list_obstacle_point_3d;
@@ -187,7 +187,7 @@ void RosMessageManager<T>::PublishObstacleList(
     }
     obstacle_list_obstacle.polygon_point_abs = ros_polygon_point_abs;
     std::vector<ros_interface::Point3D> ros_polygon_point_vehicle;
-    std::vector<legionclaw::interface::Point3D> legion_polygon_point_vehicle;
+    std::vector<legion::interface::Point3D> legion_polygon_point_vehicle;
     it_obstacle.polygon_point_vehicle(legion_polygon_point_vehicle);
     for (auto it_polygon_point_vehicle : legion_polygon_point_vehicle) {
       ::ros_interface::Point3D obstacle_list_obstacle_point_3d;
@@ -202,7 +202,7 @@ void RosMessageManager<T>::PublishObstacleList(
     obstacle_list_obstacle.confidence = it_obstacle.confidence();
     obstacle_list_obstacle.confidence_type = it_obstacle.confidence_type();
     std::vector<ros_interface::Point3D> ros_drops;
-    std::vector<legionclaw::interface::Point3D> legion_drops;
+    std::vector<legion::interface::Point3D> legion_drops;
     it_obstacle.drops(legion_drops);
     for (auto it_drops : legion_drops) {
       ::ros_interface::Point3D obstacle_list_obstacle_point_3d;
@@ -334,7 +334,7 @@ void RosMessageManager<T>::PublishObstacleList(
 }
 
 template <typename T>
-void RosMessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
+void RosMessageManager<T>::PublishFaults(legion::interface::Faults msg) {
   if (is_init_ == false)
     return;
   ::ros_interface::Faults faults;
@@ -353,13 +353,13 @@ void RosMessageManager<T>::HandlePointCloudMessage(
   ros_interface::PointCloud* msg =
       const_cast<ros_interface::PointCloud*>(msg_obj_ptr);
 
-  legionclaw::interface::PointCloud point_cloud;
+  legion::interface::PointCloud point_cloud;
   MESSAGE_HEADER_PARSER(point_cloud)
   point_cloud.set_frame_id(msg->frame_id);
   point_cloud.set_is_dense(msg->is_dense);
-  std::vector<legionclaw::interface::PointXYZIRT> point;
+  std::vector<legion::interface::PointXYZIRT> point;
   for (auto it_point : msg->point) {
-    legionclaw::interface::PointXYZIRT point_cloud_point_xyzirt;
+    legion::interface::PointXYZIRT point_cloud_point_xyzirt;
     point_cloud_point_xyzirt.set_x(it_point.x);
     point_cloud_point_xyzirt.set_y(it_point.y);
     point_cloud_point_xyzirt.set_z(it_point.z);
@@ -415,5 +415,5 @@ template <typename T> void RosMessageManager<T>::Stop() {
 }
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion
 #endif

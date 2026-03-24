@@ -4,7 +4,7 @@
     "log_file_path": "./log",
     "log_level": 1,
     "logging_data_enable": false,
-    "use_system_timestamp": true,
+    "use_system_timestamp": false,
     "produce_lidar_cluster_detect_command_duration": 20,
     "publish_lidar_cluster_detect_command_duration": 10,
     "message": {

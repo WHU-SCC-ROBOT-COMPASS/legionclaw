@@ -386,6 +386,9 @@ protected:
   void MotionManagerRun();
 
   void SyncStamp(legion::interface::ObstacleList &obl_list, legion::interface::Location &location);
+  bool FindSynchronizedLocation(const legion::interface::ObstacleList &obl_list,
+                                const legion::interface::Location &fallback_location,
+                                legion::interface::Location *synced_location) const;
   void VehicleToWorld(legion::interface::ObstacleList &data, legion::interface::Location &location);
   void ConvertPoint(legion::interface::Point3D &point, legion::interface::Location &location);
   void GetPolygon(legion::interface::ObstacleList &result_obstacle_list);

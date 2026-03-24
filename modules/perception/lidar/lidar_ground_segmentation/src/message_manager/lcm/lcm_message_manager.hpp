@@ -15,19 +15,19 @@
 
 #if LCM_ENABLE
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
-using namespace legionclaw::common;
+using namespace legion::common;
 template <typename T> void LcmMessageManager<T>::Init(T* t) {
   is_init_ = false;
   is_active_ = false;
   instance_ = t;
-  std::map<std::string, legionclaw::common::Message> messages =
+  std::map<std::string, legion::common::Message> messages =
       instance_->GetConf()->messages();
   lcm_ = std::make_shared<lcm::LCM>(messages["LCM"].url);
 
@@ -75,7 +75,7 @@ template <typename T> bool LcmMessageManager<T>::DeActivate() {
 
 template <typename T>
 void LcmMessageManager<T>::PublishGroundPoints(
-    legionclaw::interface::PointCloud msg) {
+    legion::interface::PointCloud msg) {
   if (is_init_ == false)
     return;
   lcm_interface::PointCloud point_cloud;
@@ -83,7 +83,7 @@ void LcmMessageManager<T>::PublishGroundPoints(
   point_cloud.frame_id = msg.frame_id();
   point_cloud.is_dense = msg.is_dense();
   std::vector<lcm_interface::PointXYZIRT> lcm_point;
-  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
+  std::vector<legion::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
   for (auto it_point : legion_point) {
     lcm_interface::PointXYZIRT point_cloud_point_xyzirt;
@@ -107,7 +107,7 @@ void LcmMessageManager<T>::PublishGroundPoints(
 
 template <typename T>
 void LcmMessageManager<T>::PublishNoGroundPoints(
-    legionclaw::interface::PointCloud msg) {
+    legion::interface::PointCloud msg) {
   if (is_init_ == false)
     return;
   lcm_interface::PointCloud point_cloud;
@@ -115,7 +115,7 @@ void LcmMessageManager<T>::PublishNoGroundPoints(
   point_cloud.frame_id = msg.frame_id();
   point_cloud.is_dense = msg.is_dense();
   std::vector<lcm_interface::PointXYZIRT> lcm_point;
-  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
+  std::vector<legion::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
   for (auto it_point : legion_point) {
     lcm_interface::PointXYZIRT point_cloud_point_xyzirt;
@@ -138,7 +138,7 @@ void LcmMessageManager<T>::PublishNoGroundPoints(
 }
 
 template <typename T>
-void LcmMessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
+void LcmMessageManager<T>::PublishFaults(legion::interface::Faults msg) {
   if (is_init_ == false)
     return;
   lcm_interface::Faults faults;
@@ -156,13 +156,13 @@ void LcmMessageManager<T>::HandlePointCloudInputMessage(
   if (is_active_ == false)
     return;
 
-  legionclaw::interface::PointCloud point_cloud;
+  legion::interface::PointCloud point_cloud;
   MESSAGE_HEADER_ROS2_PARSER(point_cloud)
   point_cloud.set_frame_id(msg->frame_id);
   point_cloud.set_is_dense(msg->is_dense);
-  std::vector<legionclaw::interface::PointXYZIRT> point;
+  std::vector<legion::interface::PointXYZIRT> point;
   for (auto it_point : msg->point) {
-    legionclaw::interface::PointXYZIRT point_cloud_point_xyzirt;
+    legion::interface::PointXYZIRT point_cloud_point_xyzirt;
     point_cloud_point_xyzirt.set_x(it_point.x);
     point_cloud_point_xyzirt.set_y(it_point.y);
     point_cloud_point_xyzirt.set_z(it_point.z);
@@ -193,5 +193,5 @@ template <typename T> void LcmMessageManager<T>::Stop() {
 }
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion
 #endif

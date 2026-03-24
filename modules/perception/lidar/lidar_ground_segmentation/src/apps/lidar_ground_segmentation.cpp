@@ -17,11 +17,11 @@
 #include "modules/common/interface/point_cloud.hpp"
 
 /**
- * @namespace legionclaw::perception::lidar
- * @brief legionclaw::perception::lidar
+ * @namespace legion::perception::lidar
+ * @brief legion::perception::lidar
  */
 
-namespace legionclaw {
+namespace legion {
 namespace perception {
 namespace lidar {
 
@@ -40,15 +40,15 @@ void LidarGroundSegmentation::Init() {
     std::ifstream in(config_file_path_);
     in >> lidar_ground_segmentation_json_;
     if (lidar_ground_segmentation_json_.is_null()) {
-      std::cout << "lidar_ground_segmentation_json_ is null" << "\n";
+      std::cout << "lidar_ground_segmentation_json_ is null" << std::endl;
       return;
     }
   }
   // step4 日志初始化
-  {LOGGING_INIT2(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
+  {LOGGING_INIT(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
 
   // step4 IPC初始化
-  {MESSAGE_INIT2(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
+  {MESSAGE_INIT(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
 
   // step5 读取配置文件
   {
@@ -84,7 +84,7 @@ void LidarGroundSegmentation::Init() {
       return;
     }
   }
-  std::cout << "lidar_ground_segmentation init" << "\n";
+  std::cout << "lidar_ground_segmentation init" << std::endl;
 
   // step9 初始化状态为true
   { is_init_ = true; }
@@ -110,8 +110,8 @@ patchwork::Params LidarGroundSegmentation::LoadParamsFromJSON(const std::string&
     
     std::ifstream file(config_file);
     if (!file.is_open()) {
-        std::cerr << "Error: Cannot open config file: " << config_file << "\n";
-        std::cerr << "Using default parameters." << "\n";
+        std::cerr << "Error: Cannot open config file: " << config_file << std::endl;
+        std::cerr << "Using default parameters." << std::endl;
         return params;
     }
     
@@ -124,6 +124,7 @@ patchwork::Params LidarGroundSegmentation::LoadParamsFromJSON(const std::string&
         
         if (pp.find("verbose") != pp.end()) params.verbose = pp["verbose"];
         if (pp.find("sensor_height") != pp.end()) params.sensor_height = pp["sensor_height"];
+        if (pp.find("filter_ground_height") != pp.end()) params.filter_ground_height = pp["filter_ground_height"];
         if (pp.find("num_iter") != pp.end()) params.num_iter = pp["num_iter"];
         if (pp.find("num_lpr") != pp.end()) params.num_lpr = pp["num_lpr"];
         if (pp.find("num_min_pts") != pp.end()) params.num_min_pts = pp["num_min_pts"];
@@ -181,7 +182,7 @@ void LidarGroundSegmentation::TaskActivate() {
   task_1000ms_->AddTimer(1000, &LidarGroundSegmentation::Task1000ms, this);
   // 所有定时器都使用高级定时器，方便激活和去激活。
   std::cout << "===================function activate=================="
-            << "\n";
+            << std::endl;
   function_activation_ = true;
   return;
 }
@@ -199,7 +200,7 @@ void LidarGroundSegmentation::TaskStop() {
   {
     // 清除所有内部计算的中间结果，保证回到刚init完的状态
   }
-  std::cout << "******************function stop***************" << "\n";
+  std::cout << "******************function stop***************" << std::endl;
   function_activation_ = false;
   return;
 }
@@ -216,14 +217,14 @@ void LidarGroundSegmentation::ResigerMessageManager(
 void LidarGroundSegmentation::Task1000ms(void* param) {}
 
 void LidarGroundSegmentation::PublishGroundPoints(
-    const Eigen::MatrixX3f& ground_points) {
+    legion::interface::PointCloud &ground_points) {
 #if ROS2_ENABLE
   if (message_manager_.count("ROS2") > 0)
     message_manager_["ROS2"]->PublishGroundPoints(ground_points);
 #endif
 }
 void LidarGroundSegmentation::PublishNoGroundPoints(
-    const Eigen::MatrixX3f& no_ground_points) {
+    legion::interface::PointCloud &no_ground_points) {
 #if ROS2_ENABLE
   if (message_manager_.count("ROS2") > 0)
     message_manager_["ROS2"]->PublishNoGroundPoints(no_ground_points);
@@ -233,14 +234,14 @@ void LidarGroundSegmentation::PublishFaults() {
   if (is_init_ == false) {
     return;
   }
-  legionclaw::interface::Faults faults;
+  legion::interface::Faults faults;
   faultcodeset_->get_fault_code_list(&faults);
   // 填app的id，唯一标识符
   faults.set_app_id(faultcodeset_->get_target_id());
   // 填状态
   faults.set_is_active(function_activation_);
   // 消息头
-  legionclaw::interface::Header header;
+  legion::interface::Header header;
   INTERFACE_HEADER_ASSIGN(faults);
   {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -272,14 +273,14 @@ std::shared_ptr<LidarSegmentGroundConf> LidarGroundSegmentation::GetConf() const
   return lidar_ground_segmentation_conf_;
 }
 
-void LidarGroundSegmentation::HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cmd_msg) {
+void LidarGroundSegmentation::HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg) {
   if (is_init_ == false) {
     return;
   }
   {
     std::lock_guard<std::mutex> lock(mutex_);
     if (lidar_ground_segmentation_conf_->use_system_timestamp() == true) {
-      legionclaw::interface::Header header = obu_cmd_msg.header();
+      legion::interface::Header header = obu_cmd_msg.header();
       header.set_stamp(TimeTool::Now2TmeStruct());
       obu_cmd_msg.set_header(header);
     }
@@ -288,7 +289,7 @@ void LidarGroundSegmentation::HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg o
   for (auto cmd : obu_cmd_msg.obu_cmd_list()) {
     // 编码值待定
     if (cmd.code() == 10086) {
-      std::cout << "code : " << cmd.code() << "\n";
+      std::cout << "code : " << cmd.code() << std::endl;
       switch (cmd.val()) {
       case FunctionMode::DEACTIVATE_BOTH:
         // 全部去激活
@@ -317,7 +318,7 @@ void LidarGroundSegmentation::HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg o
   }
 }
 
-void LidarGroundSegmentation::HandlePointCloudInput(const Eigen::MatrixXf& cloud) {
+void LidarGroundSegmentation::HandlePointCloudInput(legion::interface::PointCloud cloud) {
   if (is_init_ == false) {
     return;
   }
@@ -328,18 +329,21 @@ void LidarGroundSegmentation::HandlePointCloudInput(const Eigen::MatrixXf& cloud
     return;
   }
 
+  const auto &cloud_mat = patchworkpp_ros::utils::PointCloud2ToEigenMat(cloud);
   // 调用patchworkpp进行地面分割
-  patchworkpp_->estimateGround(cloud);
+  patchworkpp_->estimateGround(cloud_mat);
 
   // 获取地面点和非地面点
   Eigen::MatrixX3f ground_points = patchworkpp_->getGround();
   Eigen::MatrixX3f nonground_points = patchworkpp_->getNonground();
 
+  legion::interface::PointCloud legion_ground_points = patchworkpp_ros::utils::EigenMatToPointCloud2(ground_points, cloud.header());
+  legion::interface::PointCloud legion_nonground_points = patchworkpp_ros::utils::EigenMatToPointCloud2(nonground_points, cloud.header());
   // 发布地面点和非地面点
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    PublishGroundPoints(ground_points);
-    PublishNoGroundPoints(nonground_points);
+    PublishGroundPoints(legion_ground_points);
+    PublishNoGroundPoints(legion_nonground_points);
   }
 }
 
@@ -367,13 +371,13 @@ void LidarGroundSegmentation::MessagesInit() {
   if (lidar_ground_segmentation_conf_ == nullptr)
     return;
 
-  std::map<std::string, legionclaw::common::Message>::iterator iter;
+  std::map<std::string, legion::common::Message>::iterator iter;
   for (auto& iter : lidar_ground_segmentation_conf_->messages()) {
     auto message = iter.second;
 
     switch (message.type) {
 #if LCM_ENABLE
-    case legionclaw::common::MessageType::LCM: {
+    case legion::common::MessageType::LCM: {
       AINFO << "message type:LCM";
 
       lcm_message_manager_ =
@@ -384,7 +388,7 @@ void LidarGroundSegmentation::MessagesInit() {
     } break;
 #endif
 #if DDS_ENABLE
-    case legionclaw::common::MessageType::DDS: {
+    case legion::common::MessageType::DDS: {
       AINFO << "message type:DDS";
 
       dds_message_manager_ =
@@ -395,7 +399,7 @@ void LidarGroundSegmentation::MessagesInit() {
     } break;
 #endif
 #if ROS_ENABLE
-    case legionclaw::common::MessageType::ROS: {
+    case legion::common::MessageType::ROS: {
       AINFO << "message type:ROS";
 
       ros_message_manager_ =
@@ -405,7 +409,7 @@ void LidarGroundSegmentation::MessagesInit() {
     } break;
 #endif
 #if ROS2_ENABLE
-    case legionclaw::common::MessageType::ROS2: {
+    case legion::common::MessageType::ROS2: {
       AINFO << "message type:ROS2";
 
       ros2_message_manager_ =
@@ -417,7 +421,7 @@ void LidarGroundSegmentation::MessagesInit() {
 #endif
 
 #if ADSFI_ENABLE
-    case legionclaw::common::MessageType::ADSFI: {
+    case legion::common::MessageType::ADSFI: {
       AINFO << "message type:ADSFI";
 
       adsfi_message_manager_ =
@@ -435,9 +439,9 @@ void LidarGroundSegmentation::MessagesInit() {
 }
 
 void LidarGroundSegmentation::FaultMonitorInit() {
-  legionclaw::interface::FaultCodeCallback sendheart_callback_func =
+  legion::interface::FaultCodeCallback sendheart_callback_func =
       std::bind(&LidarGroundSegmentation::PublishFaults, this);
-  legionclaw::interface::FaultCodeCallback fault_callback_func = nullptr;
+  legion::interface::FaultCodeCallback fault_callback_func = nullptr;
   FAULTCODE_INIT("../../../../common/data/faults/faults.json",
                  "lidar_ground_segmentation", faultcodeset_, sendheart_callback_func,
                  fault_callback_func)
@@ -477,4 +481,4 @@ void LidarGroundSegmentation::Spin() {
 
 } // namespace lidar
 } // namespace perception
-} // namespace legionclaw
+} // namespace legion
