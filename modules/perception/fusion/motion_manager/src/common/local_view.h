@@ -21,8 +21,8 @@ namespace legion {
 namespace perception {
 namespace fusion {
 struct LocalView {
-  legion::interface::Location location_;
-  legion::interface::ObstacleList obstacle_list_input_;
+  legionclaw::interface::Location location_;
+  legionclaw::interface::ObstacleList obstacle_list_input_;
 };
 } // namespace fusion
 } // namespace perception

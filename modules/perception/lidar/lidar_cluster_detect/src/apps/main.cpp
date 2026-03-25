@@ -27,7 +27,7 @@
 #endif
 
 using namespace std;
-using namespace legion::perception::lidar;
+using namespace legionclaw::perception::lidar;
 
 int main(int argc, char** argv) {
   std::string file_path =

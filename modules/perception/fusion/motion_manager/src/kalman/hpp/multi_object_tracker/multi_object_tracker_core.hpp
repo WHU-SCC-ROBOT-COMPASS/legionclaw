@@ -74,7 +74,7 @@ public:
   MultiObjectTracker(){};
   void parseConfig(std::string config_path);
   ~MultiObjectTracker()=default;
-  motion_manager::interface::TrackedObjects onMeasurement(const std::shared_ptr<motion_manager::interface::DetectedObjects> input_objects_msg,legion::interface::Location location);
+  motion_manager::interface::TrackedObjects onMeasurement(const std::shared_ptr<motion_manager::interface::DetectedObjects> input_objects_msg,legionclaw::interface::Location location);
 private:
   // ros::NodeHandle nh_;
   // ros::Publisher tracked_objects_pub_;

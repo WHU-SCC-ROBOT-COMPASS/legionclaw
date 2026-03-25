@@ -36,10 +36,10 @@ double getMahalanobisDistance(
 {
   Eigen::Vector2d measurement_point;
   measurement_point << measurement.x, measurement.y;
-  std::cout << "point : " << measurement.x  << "  " << measurement.y <<std::endl;
+  std::cout << "point : " << measurement.x  << "  " << measurement.y <<"\n";
   Eigen::Vector2d tracker_point;
   tracker_point << tracker.x, tracker.y;
-  std::cout << "point_ : " << tracker.x  << "  " << tracker.y <<std::endl;
+  std::cout << "point_ : " << tracker.x  << "  " << tracker.y <<"\n";
   Eigen::MatrixXd mahalanobis_squared = (measurement_point - tracker_point).transpose() *
                                         covariance.inverse() * (measurement_point - tracker_point);
   return std::sqrt(mahalanobis_squared(0));
@@ -172,7 +172,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
         // std::cout << "measurement_label: "<<measurement_label 
         //         <<"x " << measurement_object.kinematics.pose_with_covariance.pose.position.x
         //         <<"y " << measurement_object.kinematics.pose_with_covariance.pose.position.y
-        //         << std::endl;
+        //         << "\n";
 
       double score = 0.0;
       if (can_assign_matrix_(tracker_label, measurement_label)) {
@@ -184,7 +184,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
         std::string object_id = utils::toHexString(tracked_object.object_id());
         int decimalNumber = std::stoi(object_id, nullptr, 16);
 
-        // std::cout << "object_id: " << decimalNumber << std::endl;
+        // std::cout << "object_id: " << decimalNumber << "\n";
 
         const double max_dist = max_dist_matrix_(tracker_label, measurement_label);
         tf2_geometry_msgs::Point measurement_object_point, tracked_object_point;
@@ -206,7 +206,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
           if (max_dist < dist){
             passed_gate = false;
           }
-          // std::cout << "dist: " << dist << "max_dist " << max_dist << passed_gate << std::endl;
+          // std::cout << "dist: " << dist << "max_dist " << max_dist << passed_gate << "\n";
         }
         
         // area gate
@@ -215,7 +215,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
           const double min_area = min_area_matrix_(tracker_label, measurement_label);
           const double area = utils::getArea(measurement_object.shape());
           if (area < min_area || max_area < area) passed_gate = false;
-          // std::cout << "area: " << area << "min_area " << min_area <<  "max_area " << max_area << passed_gate << std::endl;
+          // std::cout << "area: " << area << "min_area " << min_area <<  "max_area " << max_area << passed_gate << "\n";
         }
         // angle gate
         if (passed_gate) {
@@ -240,7 +240,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
           // double angle = 0.0;
           if (std::fabs(max_rad) < M_PI && std::fabs(max_rad) < std::fabs(angle))
             passed_gate = false;
-            // std::cout << "angle: " << angle << "max_rad " << max_rad << passed_gate << std::endl;
+            // std::cout << "angle: " << angle << "max_rad " << max_rad << passed_gate << "\n";
         }
         // mahalanobis dist gate
         // if (passed_gate) {
@@ -249,7 +249,7 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
         //     tracked_object.kinematics.pose_with_covariance.pose.position,
         //     getXYCovariance(tracked_object.kinematics.pose_with_covariance));
         //   if (3.035 /*99%*/ <= mahalanobis_dist) passed_gate = false;
-        //   std::cout << "mahalanobis_dist: " << mahalanobis_dist << passed_gate << std::endl;
+        //   std::cout << "mahalanobis_dist: " << mahalanobis_dist << passed_gate << "\n";
         // }
         // 2d iou gate
         if (passed_gate) {
@@ -258,13 +258,13 @@ Eigen::MatrixXd DataAssociation::calcScoreMatrix(
           const double iou = object_recognition_utils::get2dIoU(
             measurement_object, tracked_object, min_union_iou_area);
           if (iou < min_iou) passed_gate = false;
-          // std::cout << "iou: " << iou << "min_iou " << min_iou <<passed_gate << std::endl;
+          // std::cout << "iou: " << iou << "min_iou " << min_iou <<passed_gate << "\n";
         }
         passed_gate = true;
         // all gate is passed
         if (passed_gate) {
           score = (max_dist - std::min(dist, max_dist)) / max_dist;
-          // std::cout << "score: " << score << std::endl;
+          // std::cout << "score: " << score << "\n";
           if (score < score_threshold_) score = 0.0;
         }
       }

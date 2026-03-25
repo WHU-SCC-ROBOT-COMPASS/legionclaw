@@ -35,7 +35,7 @@ namespace legion
             {
             }
             // done
-            static void merge_offset(legion::interface::Point3D *point, double x_offset = 0.0, double y_offset = 0.0, double z_offset = 0.0, double angle_offset = 0.0)
+            static void merge_offset(legionclaw::interface::Point3D *point, double x_offset = 0.0, double y_offset = 0.0, double z_offset = 0.0, double angle_offset = 0.0)
             {
                 double x = point->x() + x_offset;
                 double y = point->y() + y_offset;
@@ -47,16 +47,16 @@ namespace legion
             }
 
             // done
-            static void obstacle_append(legion::interface::ObstacleList *to, legion::interface::ObstacleList *from)
+            static void obstacle_append(legionclaw::interface::ObstacleList *to, legionclaw::interface::ObstacleList *from)
             {
-                std::vector<legion::interface::Obstacle> from_fused_object_array;
-                std::vector<legion::interface::Obstacle> to_fused_object_array;
+                std::vector<legionclaw::interface::Obstacle> from_fused_object_array;
+                std::vector<legionclaw::interface::Obstacle> to_fused_object_array;
                 from->obstacle(from_fused_object_array);
                 to->obstacle(to_fused_object_array);
                 size_t obj_size = from_fused_object_array.size();
                 for (size_t i = 0; i < obj_size; i++)
                 {
-                    if (from_fused_object_array[i].fusion_type() != interface::Obstacle::FusionType::FUSION_TYPE_UNKNOWN)
+                    if (from_fused_object_array[i].fusion_type() != legionclaw::interface::Obstacle::FusionType::FUSION_TYPE_UNKNOWN)
                     {
                         to_fused_object_array.push_back(from_fused_object_array[i]);
                         // std::cout<<"vel_x:"<<from_fused_object_array[i].velocity_abs().x()<<std::endl;
@@ -69,15 +69,15 @@ namespace legion
                 to->clear_obstacle();
                 to->set_obstacle(&to_fused_object_array);
 
-                // legion::interface::Header header = from->header();
+                // legionclaw::interface::Header header = from->header();
                 // to->set_header(header);
             }
             // done
             //lxprocess_wheel_points
-            static void obstacle_append_camera(legion::interface::ObstacleList *to, legion::interface::ObstacleList *from)
+            static void obstacle_append_camera(legionclaw::interface::ObstacleList *to, legionclaw::interface::ObstacleList *from)
             {   
-                std::vector<legion::interface::Obstacle> from_fused_object_array;
-                std::vector<legion::interface::Obstacle> to_fused_object_array;
+                std::vector<legionclaw::interface::Obstacle> from_fused_object_array;
+                std::vector<legionclaw::interface::Obstacle> to_fused_object_array;
                 from->obstacle(from_fused_object_array);
                 to->obstacle(to_fused_object_array);
                 int sensor_id_from = from->sensor_id();
@@ -90,7 +90,7 @@ namespace legion
                 }
                 for (auto ob_from:from_fused_object_array)
                 {
-                    if (ob_from.fusion_type() != interface::Obstacle::FusionType::FUSION_TYPE_UNKNOWN)
+                    if (ob_from.fusion_type() != legionclaw::interface::Obstacle::FusionType::FUSION_TYPE_UNKNOWN)
                     {   
                         //将ob执行append操作后会丢失sensor_id信息
                         // AINFO<<"ob.id(): "<<ob_from.id();
@@ -111,7 +111,7 @@ namespace legion
 
 
 
-            static void convert_point(legion::interface::Point3D *point, legion::interface::Location *location)
+            static void convert_point(legionclaw::interface::Point3D *point, legionclaw::interface::Location *location)
             {
                 std::vector<double> values = legion::preprocessor::coordinate::convert_point(location->utm_position().x(),
                                                                                              location->utm_position().y(),
@@ -127,16 +127,16 @@ namespace legion
                 point->set_y(values[1]);
                 point->set_z(values[2]);
             }
-            static void obstacle_to_world(legion::interface::ObstacleList *data,
-                                          legion::interface::Location *location)
+            static void obstacle_to_world(legionclaw::interface::ObstacleList *data,
+                                          legionclaw::interface::Location *location)
             {
-                std::vector<legion::interface::Obstacle> data_fused_object_array;
+                std::vector<legionclaw::interface::Obstacle> data_fused_object_array;
                 data->obstacle(data_fused_object_array);
                 size_t obj_size = data_fused_object_array.size();
 
                 for (size_t obj_index = 0; obj_index < obj_size; obj_index++) // obstacle copy
                 {
-                    legion::interface::Point3D to_pos = data_fused_object_array[obj_index].center_pos_vehicle();
+                    legionclaw::interface::Point3D to_pos = data_fused_object_array[obj_index].center_pos_vehicle();
                     convert_point(&to_pos, location);
                     data_fused_object_array[obj_index].set_center_pos_abs(to_pos);
 
@@ -150,8 +150,8 @@ namespace legion
 
                     data_fused_object_array[obj_index].set_theta_abs(theta_abs);
                     
-                    legion::interface::Point3D vel;
-                    if(data_fused_object_array[obj_index].fusion_type()==legion::interface::Obstacle::FusionType::LIDAR)
+                    legionclaw::interface::Point3D vel;
+                    if(data_fused_object_array[obj_index].fusion_type()==legionclaw::interface::Obstacle::FusionType::LIDAR)
                     {
                         vel = data_fused_object_array[obj_index].velocity_vehicle();
                         legion::preprocessor::coordinate::convert_velocity(&vel, location);
@@ -159,22 +159,22 @@ namespace legion
                     data_fused_object_array[obj_index].set_velocity_abs(vel);
 
                     
-                    std::vector<legion::interface::Point3D> from_polygon;
+                    std::vector<legionclaw::interface::Point3D> from_polygon;
                     data_fused_object_array[obj_index].polygon_point_vehicle(from_polygon);
 
                     size_t polygon_point_size = from_polygon.size();
-                    std::vector<legion::interface::Point3D> to_polygon;
+                    std::vector<legionclaw::interface::Point3D> to_polygon;
                     to_polygon.resize(polygon_point_size);
                     for (size_t polygon_point_index = 0; polygon_point_index < polygon_point_size; polygon_point_index++) // polygon_point copy
                     {
-                        legion::interface::Point3D pt = from_polygon[polygon_point_index];
+                        legionclaw::interface::Point3D pt = from_polygon[polygon_point_index];
                         convert_point(&pt, location);
                         to_polygon[polygon_point_index] = pt;
                     }
                     data_fused_object_array[obj_index].clear_polygon_point_abs();
                     data_fused_object_array[obj_index].set_polygon_point_abs(&to_polygon);
 
-                    legion::interface::Point3D anchor_point = data_fused_object_array[obj_index].anchor_point_vehicle();
+                    legionclaw::interface::Point3D anchor_point = data_fused_object_array[obj_index].anchor_point_vehicle();
                     convert_point(&anchor_point, location);
                     data_fused_object_array[obj_index].set_anchor_point_abs(anchor_point);
                 }

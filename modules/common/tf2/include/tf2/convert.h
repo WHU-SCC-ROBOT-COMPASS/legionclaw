@@ -40,6 +40,31 @@
 
 namespace tf2 {
 
+// fromMsg implementations for tf2_geometry_msgs types
+inline void fromMsg(const tf2_geometry_msgs::Quaternion& a, Quaternion& b) {
+  b.setX(a.x);
+  b.setY(a.y);
+  b.setZ(a.z);
+  b.setW(a.w);
+}
+
+inline tf2_geometry_msgs::Quaternion toMsg(const Quaternion& a) {
+  tf2_geometry_msgs::Quaternion b;
+  b.x = a.x();
+  b.y = a.y();
+  b.z = a.z();
+  b.w = a.w();
+  return b;
+}
+
+template <typename B>
+void fromMsg(const Quaternion& a, B& b) {
+  b.x = a.x();
+  b.y = a.y();
+  b.z = a.z();
+  b.w = a.w();
+}
+
 /**\brief The templated function expected to be able to do a transform
  *
  * This is the method which tf2 will use to try to apply a transform for any

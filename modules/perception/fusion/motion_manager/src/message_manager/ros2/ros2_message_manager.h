@@ -49,7 +49,7 @@ public:
    * @param[in] obstacle_list.
    * @return    void.
    */
-  void PublishObstacleListOutput(legion::interface::ObstacleList msg) override;
+  void PublishObstacleListOutput(legionclaw::interface::ObstacleList msg) override;
 
   bool Activate() override;
   bool DeActivate() override;

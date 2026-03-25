@@ -25,11 +25,11 @@
 #include "message_manager/message_manager.h"
 
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
 /**
@@ -53,7 +53,7 @@ public:
    * @param[in] obstacle_list.
    * @return    void.
    */
-  void PublishObstacleList(legion::interface::ObstacleList msg) override;
+  void PublishObstacleList(legionclaw::interface::ObstacleList msg) override;
 
 protected:
   T *instance_;
@@ -83,6 +83,6 @@ protected:
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #include "ros_message_manager.hpp"
 #endif // ROS_ENABLE

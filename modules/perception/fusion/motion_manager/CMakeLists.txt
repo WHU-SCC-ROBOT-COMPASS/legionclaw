@@ -53,9 +53,11 @@ elseif(GLOG_ENABLE)
 endif()
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -Wno-error -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
-    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -Wno-error -O3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+else()
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -Wno-error -O2 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
 endif()
 
 add_compile_options(${DEFAULT_COMPILE})

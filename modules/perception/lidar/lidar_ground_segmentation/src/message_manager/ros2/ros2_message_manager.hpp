@@ -15,14 +15,14 @@
 
 #if ROS2_ENABLE
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
-using namespace legion::common;
+using namespace legionclaw::common;
 
 using ::ros2_interface::msg::Faults;
 using ::ros2_interface::msg::PointCloud;
@@ -131,15 +131,15 @@ template <typename T> void Ros2MessageManager<T>::TaskStop() {
 
 template <typename T>
 void Ros2MessageManager<T>::PublishGroundPoints(
-    const legion::interface::PointCloud& msg) {
+    const legionclaw::interface::PointCloud& msg) {
   if (is_active_ == false)
     return;
 
-  // Convert legion::interface::PointCloud to sensor_msgs::msg::PointCloud2
+  // Convert legionclaw::interface::PointCloud to sensor_msgs::msg::PointCloud2
   sensor_msgs::msg::PointCloud2 cloud_msg;
   MESSAGE_HEADER_ROS2_ASSIGN(std_msgs::msg, cloud_msg)
   // Get point data
-  std::vector<legion::interface::PointXYZIRT> legion_point;
+  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
 
   uint32_t width  = msg.width();
@@ -221,16 +221,16 @@ void Ros2MessageManager<T>::PublishGroundPoints(
 
 template <typename T>
 void Ros2MessageManager<T>::PublishNoGroundPoints(
-    const legion::interface::PointCloud& msg) {
+    const legionclaw::interface::PointCloud& msg) {
   if (is_active_ == false)
     return;
 
-  // Convert legion::interface::PointCloud to sensor_msgs::msg::PointCloud2
+  // Convert legionclaw::interface::PointCloud to sensor_msgs::msg::PointCloud2
   sensor_msgs::msg::PointCloud2 cloud_msg;
 
   MESSAGE_HEADER_ROS2_ASSIGN(std_msgs::msg, cloud_msg)
   
-  std::vector<legion::interface::PointXYZIRT> legion_point;
+  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
 
   uint32_t width  = msg.width();
@@ -311,7 +311,7 @@ void Ros2MessageManager<T>::PublishNoGroundPoints(
 
 
 template <typename T>
-void Ros2MessageManager<T>::PublishFaults(legion::interface::Faults msg) {
+void Ros2MessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
   if (is_init_ == false)
     return;
   ::ros2_interface::msg::Faults faults;
@@ -329,13 +329,13 @@ void Ros2MessageManager<T>::HandleObuCmdMsgMessage(
   std::shared_ptr<ros2_interface::msg::ObuCmdMsg> msg =
       std::const_pointer_cast<ros2_interface::msg::ObuCmdMsg>(msg_obj_ptr);
 
-  legion::interface::ObuCmdMsg obu_cmd_msg;
+  legionclaw::interface::ObuCmdMsg obu_cmd_msg;
   MESSAGE_HEADER_ROS2_PARSER(obu_cmd_msg)
   obu_cmd_msg.set_id(msg->id);
   obu_cmd_msg.set_name(msg->name);
-  std::vector<legion::interface::ObuCmd> obu_cmd_list;
+  std::vector<legionclaw::interface::ObuCmd> obu_cmd_list;
   for (auto it_obu_cmd_list : msg->obu_cmd_list) {
-    legion::interface::ObuCmd obu_cmd_msg_obu_cmd;
+    legionclaw::interface::ObuCmd obu_cmd_msg_obu_cmd;
     obu_cmd_msg_obu_cmd.set_code(it_obu_cmd_list.code);
     obu_cmd_msg_obu_cmd.set_val(it_obu_cmd_list.val);
     obu_cmd_list.emplace_back(obu_cmd_msg_obu_cmd);
@@ -350,7 +350,7 @@ void Ros2MessageManager<T>::HandlePointCloudInputMessage(
     const sensor_msgs::msg::PointCloud2::ConstSharedPtr &msg) {
   if (is_active_ == false)
     return;
-  legion::interface::PointCloud point_cloud;
+  legionclaw::interface::PointCloud point_cloud;
   MESSAGE_HEADER_ROS2_PARSER(point_cloud)
   point_cloud.set_frame_id(msg->header.frame_id);
   point_cloud.set_is_dense(msg->is_dense);
@@ -384,14 +384,14 @@ void Ros2MessageManager<T>::HandlePointCloudInputMessage(
   }
 
   // Convert point cloud data
-  std::vector<legion::interface::PointXYZIRT> point;
+  std::vector<legionclaw::interface::PointXYZIRT> point;
   const uint8_t* data_ptr = msg->data.data();
   size_t point_count = msg->width * msg->height;
   
   for (size_t i = 0; i < point_count; ++i) {
     const uint8_t* point_data = data_ptr + i * msg->point_step;
     
-    legion::interface::PointXYZIRT point_xyzirt;
+    legionclaw::interface::PointXYZIRT point_xyzirt;
     
     // Extract x, y, z (required)
     float x = *reinterpret_cast<const float*>(point_data + x_offset);
@@ -478,5 +478,5 @@ template <typename T> void Ros2MessageManager<T>::Stop() {
 }
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #endif

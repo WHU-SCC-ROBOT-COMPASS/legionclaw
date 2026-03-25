@@ -38,14 +38,14 @@
 
 #include "conf/lidar_cluster_detect_conf.hpp"
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
-using namespace legion::common;
+using namespace legionclaw::common;
 using json = nlohmann::json;
 /**
  * @class LidarClusterDetect
@@ -159,7 +159,7 @@ protected:
   int max_polygon_points_;  // 外包围框最大点数限制
 
   // Clustering helper functions
-  CellMatrixPtr BuildCellMap(const legion::interface::PointCloud& point_cloud, 
+  CellMatrixPtr BuildCellMap(const legionclaw::interface::PointCloud& point_cloud, 
                              int col_size, int row_size);
   void ClusterConnectedPoints(CellMatrixPtr& cell_matrix_ptr,
                               ClusterVectorPtr& cluster_vector_ptr);
@@ -167,10 +167,10 @@ protected:
              Cluster& clusteri);
   void BuildCluster(ClusterVectorPtr& cluster_vector_ptr,
                     ClusterVectorPtr& filter_cluster_vector_ptr,
-                    const legion::interface::Header& header);
+                    const legionclaw::interface::Header& header);
   void ConvertClustersToObstacleList(ClusterVectorPtr& filter_cluster_vector_ptr,
-                                     const legion::interface::Header& header,
-                                     legion::interface::ObstacleList& obstacle_list);
+                                     const legionclaw::interface::Header& header,
+                                     legionclaw::interface::ObstacleList& obstacle_list);
 
 protected:
   /**
@@ -231,7 +231,7 @@ protected:
    * @brief
    * @param  obstacle_list
    */
-  void PublishObstacleList(legion::interface::ObstacleList obstacle_list);
+  void PublishObstacleList(legionclaw::interface::ObstacleList obstacle_list);
 
   /**
    * @brief
@@ -246,7 +246,7 @@ protected:
    * @return    void.
    */
   void PublishClusterPointCloud(ClusterVectorPtr& filter_cluster_vector_ptr,
-                                const legion::interface::Header& header);
+                                const legionclaw::interface::Header& header);
 
   /**
    * @brief     打印调试.
@@ -266,14 +266,14 @@ public:
    * @param[in] obu_cmd_msg .
    * @return    void.
    */
-  void HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg);
+  void HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cmd_msg);
 
   /**
    * @brief     PointCloud消息接收.
    * @param[in] no_ground_points .
    * @return    void.
    */
-  void HandlePointCloud(legion::interface::PointCloud point_cloud);
+  void HandlePointCloud(legionclaw::interface::PointCloud point_cloud);
 
   /**
    * @brief     计算算法输出.
@@ -296,12 +296,12 @@ public:
   void StatusDetectOnTimer();
 
 protected:
-  legion::interface::PointCloud point_cloud_;
-  legion::interface::ObstacleList obstacle_list_;
-  legion::interface::ObuCmdMsg obu_cmd_msg_;
-  legion::interface::Faults faults_;
+  legionclaw::interface::PointCloud point_cloud_;
+  legionclaw::interface::ObstacleList obstacle_list_;
+  legionclaw::interface::ObuCmdMsg obu_cmd_msg_;
+  legionclaw::interface::Faults faults_;
 
-  legion::interface::FaultCodeSet* faultcodeset_;
+  legionclaw::interface::FaultCodeSet* faultcodeset_;
   //控制命令生产周期
   int32_t produce_lidar_cluster_detect_command_duration_;
   //控制命令发送周期
@@ -311,7 +311,7 @@ protected:
   // 功能激活状态,激活为true，未激活为false
   bool function_activation_;
   //消息状态
-  std::map<std::string, legion::common::MessageStatus> message_status_;
+  std::map<std::string, legionclaw::common::MessageStatus> message_status_;
   // task线程
   std::unique_ptr<std::thread> task_thread_;
 
@@ -332,4 +332,4 @@ protected:
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw

@@ -44,6 +44,16 @@ typename std::enable_if<!HasShutdown<T>::value>::type CallShutdown(
   Logging::Init(logging_conf);
 
 //感知模块使用的双参数版本
+#define LOGGING_INIT(conf_ptr, json_ptr)                                     \
+  LoggingConf logging_conf;                                                 \
+  logging_conf.app_name = json_ptr["app_name"];                             \
+  logging_conf.description = json_ptr["description"];                       \
+  logging_conf.file_path = json_ptr["log_file_path"];                       \
+  logging_conf.log_level = (legionclaw::common::LogLevel)json_ptr["log_level"]; \
+  logging_conf.logging_data_enable = json_ptr["logging_data_enable"];       \
+  Logging::Init(logging_conf);
+
+//感知模块使用的双参数版本
 #define LOGGING_INIT2(conf_ptr, json_ptr)                                     \
   LoggingConf logging_conf;                                                 \
   logging_conf.app_name = json_ptr["app_name"];                             \
@@ -65,7 +75,7 @@ typename std::enable_if<!HasShutdown<T>::value>::type CallShutdown(
   MessagesInit();
 
 //感知模块使用的双参数版本
-#define MESSAGE_INIT2(conf_ptr, json_ptr)                               \
+#define MESSAGE_INIT(conf_ptr, json_ptr)                               \
   MessagesInit();
 
 #define MODULE(k) fault_json["modules"][k]

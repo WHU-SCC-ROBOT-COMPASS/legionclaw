@@ -55,8 +55,8 @@ if(DDS_ENABLE)
 	)
 endif()
 
-option(MDCLOG_ENABLE "option for dds enable" OFF)
-option(GLOG_ENABLE "option for dds enable" OFF)
+option(MDCLOG_ENABLE "option for mdc log enable" OFF)
+option(GLOG_ENABLE "option for glog enable" ON)
 if(MDCLOG_ENABLE)
 	add_definitions(-DMDCLOG_ENABLE)
 elseif(GLOG_ENABLE)
@@ -92,6 +92,8 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/../..
     ${PROJECT_SOURCE_DIR}/../../..
     ${PROJECT_SOURCE_DIR}/../../../..
+    ${PROJECT_SOURCE_DIR}/../../../../..
+    ${PROJECT_SOURCE_DIR}/../../../../../..
 )
 
 include_directories(

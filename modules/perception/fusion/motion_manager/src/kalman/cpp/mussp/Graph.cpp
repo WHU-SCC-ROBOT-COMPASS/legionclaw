@@ -77,7 +77,7 @@ void Graph::add_edge(int tail_id, int head_id, int edge_id, double weight) {
         edge_org_weights.push_back(weight);
 
         if (static_cast<int>(edge_weights.size()) - 1 != edge_id)
-            std::cout << "we got wrong edge number" << std::endl;
+            std::cout << "we got wrong edge number" << "\n";
     }
 }
 
@@ -112,7 +112,7 @@ void Graph::invalid_edge_rm(){
             }
         }
     }
-    // std::cout << "# of dummy edges : " << rm_cnt << std::endl;
+    // std::cout << "# of dummy edges : " << rm_cnt << "\n";
 }
 /*******
  * A recursive function used by shortestPath. See below link for details
@@ -249,7 +249,7 @@ void Graph::update_allgraph_weights() {
 //            }
 //        }
 //        t_sub_tree = ancestors_descendants[ancestor_node_id[num_nodes_ - 1]].size();
-//        cout << "Size of largest sub-tree and sub-tree containing t: " << largest_subtree << " " << t_sub_tree << std::endl;
+//        cout << "Size of largest sub-tree and sub-tree containing t: " << largest_subtree << " " << t_sub_tree << "\n";
 //    }
     ////after updating all shortest distance are 0
     memset(&distance2src[0], 0, distance2src.size() * sizeof(distance2src[0]));

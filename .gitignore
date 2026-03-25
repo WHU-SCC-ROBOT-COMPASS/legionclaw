@@ -72,6 +72,35 @@ CMakeLists.txt.user
 *.pb.py
 
 # Binary files
+# All build output directories
 bin/
 *.bin
 
+# Model files (TensorRT plans, ONNX models)
+*.plan
+*.onnx
+
+# Compiled libraries
+*.so
+
+
+# Motion manager config files in bin
+modules/perception/fusion/motion_manager/bin/
+
+# Lidar cluster detect config files
+modules/perception/lidar/lidar_cluster_detect/bin/
+
+# Generated executables
+*.a
+
+# Ignore all bin directories
+**/bin/
+
+# Ignore executables
+**/bin/*.exe
+**/bin/motion_manager
+**/bin/lidar_*
+
+# Message build artifacts
+modules/message/install/
+modules/message/log/

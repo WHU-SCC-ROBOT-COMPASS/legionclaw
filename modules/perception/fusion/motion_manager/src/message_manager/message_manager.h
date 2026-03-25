@@ -22,7 +22,7 @@
 namespace legion {
 namespace perception {
 namespace fusion {
-using namespace legion::common;
+
 template <typename T> class MessageManager {
 public:
   MessageManager() = default;
@@ -30,9 +30,9 @@ public:
 
   virtual void Init(T *t) = 0;
   virtual void
-  PublishObstacleListOutput(legion::interface::ObstacleList msg) = 0;
-  virtual bool Activate() = 0;
-  virtual bool DeActivate() = 0;
+  PublishObstacleListOutput(legionclaw::interface::ObstacleList msg) = 0;
+  virtual bool Activate() { return true; }
+  virtual bool DeActivate() { return true; }
 };
 } // namespace fusion
 } // namespace perception

@@ -95,7 +95,7 @@ inline bool isLargeVehicle(const std::vector<ObjectClassification> & object_clas
   return isLargeVehicle(highest_prob_label);
 }
 
-inline uint8_t toLabel(const std::string & class_name)
+inline motion_manager::common::DetectedObjectLabel toLabel(const std::string & class_name)
 {
   if (class_name == "UNKNOWN") {
     return motion_manager::common::DetectedObjectLabel::DO_UNKNOWN;

@@ -23,11 +23,11 @@
 #include "message_manager/message_manager.h"
 
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
 /**
@@ -52,14 +52,14 @@ public:
    * @param[in] obstacle_list.
    * @return    void.
    */
-  void PublishObstacleList(legion::interface::ObstacleList msg) override;
+  void PublishObstacleList(legionclaw::interface::ObstacleList msg) override;
 
   /**
    * @brief     Faults消息发布.
    * @param[in] faults.
    * @return    void.
    */
-  void PublishFaults(legion::interface::Faults msg) override;
+  void PublishFaults(legionclaw::interface::Faults msg) override;
 
   /**
    * @brief     发布聚类点云.
@@ -68,7 +68,7 @@ public:
    * @return    void.
    */
   void PublishClusterPointCloud(
-      const legion::interface::PointCloud& point_cloud);
+      const legionclaw::interface::PointCloud& point_cloud);
 
   bool Activate() override;
   bool DeActivate() override;
@@ -129,6 +129,6 @@ protected:
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #include "ros2_message_manager.hpp"
 #endif // ROS2_ENABLE

@@ -78,8 +78,8 @@ namespace legion
                                   mat);
             }
 
-            static void convert_velocity(legion::interface::Point3D *vel_vehicle,
-                                         legion::interface::Location *location)
+            static void convert_velocity(legionclaw::interface::Point3D *vel_vehicle,
+                                         legionclaw::interface::Location *location)
             {
                 //20231123 针对值为128的相对速度，绝对速度赋0
                 if(vel_vehicle->x() == 128 && vel_vehicle->y() == 128)
@@ -105,8 +105,8 @@ namespace legion
                     vel_vehicle->set_y(y1 + y2);
                 }     
             }
-            static void convert_acc(legion::interface::Point3D *vel_vehicle,
-                                         legion::interface::Location *location)
+            static void convert_acc(legionclaw::interface::Point3D *vel_vehicle,
+                                         legionclaw::interface::Location *location)
             {
                 double vehicle_acc = std::hypot(location->linear_acceleration().x(), location->linear_acceleration().y());
                 double vel_x = vel_vehicle->x() + vehicle_acc;

@@ -16,25 +16,25 @@
 #include "modules/common/interface/obstacle_list.hpp"
 
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
-using namespace legion::common;
+using namespace legionclaw::common;
 template <typename T> class MessageManager {
 public:
   MessageManager() = default;
   virtual ~MessageManager() = default;
 
   virtual void Init(T* t) = 0;
-  virtual void PublishObstacleList(legion::interface::ObstacleList msg) = 0;
-  virtual void PublishFaults(legion::interface::Faults msg) = 0;
+  virtual void PublishObstacleList(legionclaw::interface::ObstacleList msg) = 0;
+  virtual void PublishFaults(legionclaw::interface::Faults msg) = 0;
   virtual bool Activate() = 0;
   virtual bool DeActivate() = 0;
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw

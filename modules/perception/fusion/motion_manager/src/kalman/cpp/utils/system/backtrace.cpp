@@ -40,9 +40,9 @@ void print_backtrace()
   char ** symbol_list = backtrace_symbols(addrlist, addrlen);
 
   std::stringstream ss;
-  ss << "\n   @   ********** back trace **********" << std::endl;
+  ss << "\n   @   ********** back trace **********" << "\n";
   for (int i = 1; i < addrlen; i++) {
-    ss << "   @   " << symbol_list[i] << std::endl;
+    ss << "   @   " << symbol_list[i] << "\n";
   }
   // RCLCPP_DEBUG_STREAM(rclcpp::get_logger("utils"), ss.str());
   // ROS_DEBUG_STREAM(ss.str());

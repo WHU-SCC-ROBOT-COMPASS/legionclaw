@@ -1,7 +1,7 @@
 // NOTE:
 // This utility header has been refactored to remove direct ROS2 dependencies.
 // It now provides helpers to convert between Eigen matrices and the common
-// interface point cloud type `legion::interface::PointCloud`.
+// interface point cloud type `legionclaw::interface::PointCloud`.
 
 #include <algorithm>
 #include <cstddef>
@@ -17,8 +17,8 @@ namespace patchworkpp_ros::utils {
 
 // 将通用 PointCloud 转为 Eigen::MatrixXf（列: x, y, z, intensity）
 inline Eigen::MatrixXf PointCloud2ToEigenMat(
-    const legion::interface::PointCloud &cloud) {
-  std::vector<legion::interface::PointXYZIRT> points_vec;
+    const legionclaw::interface::PointCloud &cloud) {
+  std::vector<legionclaw::interface::PointXYZIRT> points_vec;
   cloud.point(points_vec);
 
   const std::size_t num_points = points_vec.size();
@@ -40,10 +40,10 @@ inline Eigen::MatrixXf PointCloud2ToEigenMat(
 }
 
 // 将 Eigen::MatrixX3f 转为通用 PointCloud
-inline legion::interface::PointCloud EigenMatToPointCloud2(
+inline legionclaw::interface::PointCloud EigenMatToPointCloud2(
     const Eigen::MatrixX3f &points,
-    const legion::interface::Header &header) {
-  legion::interface::PointCloud cloud;
+    const legionclaw::interface::Header &header) {
+  legionclaw::interface::PointCloud cloud;
   cloud.set_header(header);
   cloud.set_frame_id(header.frame_id());
   cloud.set_is_dense(true);
@@ -51,11 +51,11 @@ inline legion::interface::PointCloud EigenMatToPointCloud2(
   const std::size_t num_points =
       static_cast<std::size_t>(points.rows());
 
-  std::vector<legion::interface::PointXYZIRT> pts;
+  std::vector<legionclaw::interface::PointXYZIRT> pts;
   pts.reserve(num_points);
 
   for (std::size_t i = 0; i < num_points; ++i) {
-    legion::interface::PointXYZIRT p;
+    legionclaw::interface::PointXYZIRT p;
     p.set_x(points(static_cast<Eigen::Index>(i), 0));
     p.set_y(points(static_cast<Eigen::Index>(i), 1));
     p.set_z(points(static_cast<Eigen::Index>(i), 2));

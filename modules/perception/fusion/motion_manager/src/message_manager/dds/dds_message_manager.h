@@ -70,7 +70,7 @@ public:
    * @param[in] obstacle_list
    * @return    void.
    */
-  void PublishObstacleListOutput(legion::interface::ObstacleList msg) override;
+  void PublishObstacleListOutput(legionclaw::interface::ObstacleList msg) override;
 
 protected:
   T *instance_;
@@ -94,6 +94,16 @@ protected:
    * @return    void.
    */
   void Stop();
+
+  /**
+   * @brief     激活函数.
+   * @return    bool.
+   */
+
+  /**
+   * @brief     停用函数.
+   * @return    bool.
+   */
 
   void HandleLocationMessage(const ros2_interface::msg::Location *msg);
 

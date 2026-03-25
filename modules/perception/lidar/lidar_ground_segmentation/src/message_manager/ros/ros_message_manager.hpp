@@ -13,14 +13,14 @@
 
 #if ROS_ENABLE
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
-using namespace legion::common;
+using namespace legionclaw::common;
 template <typename T> void RosMessageManager<T>::Init(T* t) {
   is_init_ = false;
   is_active_ = false;
@@ -105,7 +105,7 @@ template <typename T> void RosMessageManager<T>::TaskStop() {
 }
 template <typename T>
 void RosMessageManager<T>::PublishGroundPoints(
-    legion::interface::PointCloud msg) {
+    legionclaw::interface::PointCloud msg) {
   if (is_init_ == false)
     return;
   ::ros_interface::PointCloud point_cloud;
@@ -113,7 +113,7 @@ void RosMessageManager<T>::PublishGroundPoints(
   point_cloud.frame_id = msg.frame_id();
   point_cloud.is_dense = msg.is_dense();
   std::vector<ros_interface::PointXYZIRT> ros_point;
-  std::vector<legion::interface::PointXYZIRT> legion_point;
+  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
   for (auto it_point : legion_point) {
     ::ros_interface::PointXYZIRT point_cloud_point_xyzirt;
@@ -135,7 +135,7 @@ void RosMessageManager<T>::PublishGroundPoints(
 
 template <typename T>
 void RosMessageManager<T>::PublishNoGroundPoints(
-    legion::interface::PointCloud msg) {
+    legionclaw::interface::PointCloud msg) {
   if (is_init_ == false)
     return;
   ::ros_interface::PointCloud point_cloud;
@@ -143,7 +143,7 @@ void RosMessageManager<T>::PublishNoGroundPoints(
   point_cloud.frame_id = msg.frame_id();
   point_cloud.is_dense = msg.is_dense();
   std::vector<ros_interface::PointXYZIRT> ros_point;
-  std::vector<legion::interface::PointXYZIRT> legion_point;
+  std::vector<legionclaw::interface::PointXYZIRT> legion_point;
   msg.point(legion_point);
   for (auto it_point : legion_point) {
     ::ros_interface::PointXYZIRT point_cloud_point_xyzirt;
@@ -164,7 +164,7 @@ void RosMessageManager<T>::PublishNoGroundPoints(
 }
 
 template <typename T>
-void RosMessageManager<T>::PublishFaults(legion::interface::Faults msg) {
+void RosMessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
   if (is_init_ == false)
     return;
   ::ros_interface::Faults faults;
@@ -183,13 +183,13 @@ void RosMessageManager<T>::HandlePointCloudInputMessage(
   ros_interface::PointCloud* msg =
       const_cast<ros_interface::PointCloud*>(msg_obj_ptr);
 
-  legion::interface::PointCloud point_cloud;
+  legionclaw::interface::PointCloud point_cloud;
   MESSAGE_HEADER_ROS2_PARSER(point_cloud)
   point_cloud.set_frame_id(msg->frame_id);
   point_cloud.set_is_dense(msg->is_dense);
-  std::vector<legion::interface::PointXYZIRT> point;
+  std::vector<legionclaw::interface::PointXYZIRT> point;
   for (auto it_point : msg->point) {
-    legion::interface::PointXYZIRT point_cloud_point_xyzirt;
+    legionclaw::interface::PointXYZIRT point_cloud_point_xyzirt;
     point_cloud_point_xyzirt.set_x(it_point.x);
     point_cloud_point_xyzirt.set_y(it_point.y);
     point_cloud_point_xyzirt.set_z(it_point.z);
@@ -245,5 +245,5 @@ template <typename T> void RosMessageManager<T>::Stop() {
 }
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #endif

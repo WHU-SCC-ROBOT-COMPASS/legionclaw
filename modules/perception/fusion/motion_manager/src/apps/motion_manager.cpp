@@ -20,7 +20,6 @@
 #include <chrono>
 #include <fstream>
 #include <ctime>
-#include <limits>
 
 /**
  * @namespace legion::perception::fusion
@@ -30,7 +29,7 @@
 using Label = motion_manager::interface::ObjectClassification;
 
 // 对比函数
-bool cmp(legion::interface::Obstacle &a, legion::interface::Obstacle &b)
+bool cmp(legionclaw::interface::Obstacle &a, legionclaw::interface::Obstacle &b)
 {
   return a.id() < b.id();
 }
@@ -57,7 +56,7 @@ void MotionManager::Init()
     in >> motion_manager_json_;
     if (motion_manager_json_.is_null())
     {
-      std::cout << "motion_manager_json_ is null" << std::endl;
+      std::cout << "motion_manager_json_ is null" << "\n";
       return;
     }
   }
@@ -193,7 +192,7 @@ void MotionManager::ResigerMessageManager(
 void MotionManager::Task10ms(void *param) {}
 
 void MotionManager::PublishObstacleListOutput(
-    legion::interface::ObstacleList obstacle_list_output)
+    legionclaw::interface::ObstacleList obstacle_list_output)
 {
 
 
@@ -210,7 +209,7 @@ void MotionManager::PublishObstacleListOutput(
 #endif
 
 #if ROS2_ENABLE
-std::cout << "PublishObstacleListOutput ROS2" << std::endl;
+std::cout << "PublishObstacleListOutput ROS2" << "\n";
   message_manager_["ROS2"]->PublishObstacleListOutput(obstacle_list_output);
 #endif
 }
@@ -220,7 +219,7 @@ std::shared_ptr<MotionManagerConf> MotionManager::GetConf() const
   return motion_manager_conf_;
 }
 
-void MotionManager::HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg)
+void MotionManager::HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cmd_msg)
 {
   if (is_init_ == false)
   {
@@ -230,8 +229,8 @@ void MotionManager::HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg)
     std::lock_guard<std::mutex> lock(mutex_);
     if (motion_manager_conf_->use_system_timestamp() == true)
     {
-      legion::interface::Header header = obu_cmd_msg.header();
-      header.set_stamp(TimeTool::Now2TmeStruct());
+      legionclaw::interface::Header header = obu_cmd_msg.header();
+      header.set_stamp(legionclaw::common::TimeTool::Now2TmeStruct());
       obu_cmd_msg.set_header(header);
     }
     obu_cmd_msg_ = obu_cmd_msg;
@@ -241,7 +240,7 @@ void MotionManager::HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg)
     // 编码值待定
     if (cmd.code() == 10086)
     {
-      std::cout << "code : " << cmd.code() << std::endl;
+      std::cout << "code : " << cmd.code() << "\n";
       switch (cmd.val())
       {
       case FunctionMode::DEACTIVATE_BOTH:
@@ -271,7 +270,7 @@ void MotionManager::HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg)
   }
 }
 
-void MotionManager::HandleLocation(legion::interface::Location location)
+void MotionManager::HandleLocation(legionclaw::interface::Location location)
 {
   if (is_init_ == false)
   {
@@ -281,8 +280,8 @@ void MotionManager::HandleLocation(legion::interface::Location location)
     std::lock_guard<std::mutex> lock(mutex_);
     if (motion_manager_conf_->use_system_timestamp() == true)
     {
-      legion::interface::Header header = location.header();
-      header.set_stamp(TimeTool::Now2TmeStruct());
+      legionclaw::interface::Header header = location.header();
+      header.set_stamp(legionclaw::common::TimeTool::Now2TmeStruct());
       location.set_header(header);
     }
     location_ = location;
@@ -294,7 +293,7 @@ void MotionManager::HandleLocation(legion::interface::Location location)
 }
 
 void MotionManager::HandleObstacleListInput(
-    legion::interface::ObstacleList obstacle_list_input)
+    legionclaw::interface::ObstacleList obstacle_list_input)
 {
   if (is_init_ == false)
   {
@@ -304,23 +303,24 @@ void MotionManager::HandleObstacleListInput(
     std::lock_guard<std::mutex> lock(mutex_);
     if (motion_manager_conf_->use_system_timestamp() == true)
     {
-      legion::interface::Header header = obstacle_list_input.header();
-      header.set_stamp(TimeTool::Now2TmeStruct());
+      legionclaw::interface::Header header = obstacle_list_input.header();
+      header.set_stamp(legionclaw::common::TimeTool::Now2TmeStruct());
       obstacle_list_input.set_header(header);
     }
     obstacle_list_input_ = obstacle_list_input;
-    for (auto &ob : obstacle_list_input_.obstacle())
+    auto mutable_obstacles = obstacle_list_input_.mutable_obstacle();
+    for (auto &ob : *mutable_obstacles)
     {
       ob.set_id(-1);
     }
     // 更新最后接收时间
-    last_obstacle_list_input_time_ms_ = legion::common::TimeTool::Now2Ms();
+    last_obstacle_list_input_time_ms_ = legionclaw::common::TimeTool::Now2Ms();
     AINFO << "=====================receive obstacles=====================";
   }
 }
 
 void MotionManager::HandleLCDObstacleList(
-    legion::interface::ObstacleList lcd_obstacle_list)
+    legionclaw::interface::ObstacleList lcd_obstacle_list)
 {
   if (is_init_ == false)
   {
@@ -330,8 +330,8 @@ void MotionManager::HandleLCDObstacleList(
     std::lock_guard<std::mutex> lock(mutex_);
     if (motion_manager_conf_->use_system_timestamp() == true)
     {
-      legion::interface::Header header = lcd_obstacle_list.header();
-      header.set_stamp(TimeTool::Now2TmeStruct());
+      legionclaw::interface::Header header = lcd_obstacle_list.header();
+      header.set_stamp(legionclaw::common::TimeTool::Now2TmeStruct());
       lcd_obstacle_list.set_header(header);
     }
     // 将 LCDObstacleList 存储到单独的变量中
@@ -342,7 +342,7 @@ void MotionManager::HandleLCDObstacleList(
       lcd_obstacle_list_input_.set_header(lcd_obstacle_list.header());
     }
     // 更新最后接收时间
-    last_lcd_obstacle_list_input_time_ms_ = legion::common::TimeTool::Now2Ms();
+    last_lcd_obstacle_list_input_time_ms_ = legionclaw::common::TimeTool::Now2Ms();
     // for (auto &ob : lcd_obstacle_list_input_.obstacle())
     // {
     //   ob.set_id(-1);
@@ -380,10 +380,10 @@ Status MotionManager::CheckInput(LocalView *local_view)
 
 void MotionManager::MotionManagerRun()
 {
-  legion::interface::Location location = local_view_.location_;
-  legion::interface::ObstacleList obstacle_list_input = local_view_.obstacle_list_input_;
+  legionclaw::interface::Location location = local_view_.location_;
+  legionclaw::interface::ObstacleList obstacle_list_input = local_view_.obstacle_list_input_;
 
-  double time_begin = legion::common::TimeTool::Now2Ms();
+  double time_begin = legionclaw::common::TimeTool::Now2Ms();
 
   // 检查是否有输入数据（obstacle_list_input 或 lcd_obstacle_list_input_）
   bool has_lcd_only = false;
@@ -402,7 +402,7 @@ void MotionManager::MotionManagerRun()
         double del_time = time_curr - time_last;
         if (abs(del_time) <= duplicate_frame_threshold)
         {
-          std::cout << std::to_string(del_time) << std::endl;
+          std::cout << std::to_string(del_time) << "\n";
           AINFO << "Recieve repeated LCD obstacle message";
           return;
         }
@@ -438,13 +438,13 @@ void MotionManager::MotionManagerRun()
         UpdateObstacleHistory(fusion_obstacle_list_);
         
         // 在发布前打印所有障碍物的ID
-        std::cout << "=== Publish Obstacle IDs (LCD only) ===" << std::endl;
+        std::cout << "=== Publish Obstacle IDs (LCD only) ===" << "\n";
         for (const auto &ob : fusion_obstacle_list_.obstacle())
         {
-          std::cout << "Obstacle ID: " << ob.id() << std::endl;
+          std::cout << "Obstacle ID: " << ob.id() << "\n";
         }
-        std::cout << "Total obstacles: " << fusion_obstacle_list_.obstacle_size() << std::endl;
-        std::cout << "=======================================" << std::endl;
+        std::cout << "Total obstacles: " << fusion_obstacle_list_.obstacle_size() << "\n";
+        std::cout << "=======================================" << "\n";
         
         PublishObstacleListOutput(fusion_obstacle_list_);
 
@@ -452,8 +452,8 @@ void MotionManager::MotionManagerRun()
       last_frame_obs_ = fusion_obstacle_list_;
     }
 
-    double time_end = legion::common::TimeTool::Now2Ms();
-    std::cout << "Run time : " << time_end - time_begin << " ms " << std::endl;
+    double time_end = legionclaw::common::TimeTool::Now2Ms();
+    std::cout << "Run time : " << time_end - time_begin << " ms " << "\n";
     cout << "Publish obstacle size (LCD only): " << fusion_obstacle_list_.obstacle_size();
     cout << "***************" << endl;
     return;
@@ -474,7 +474,7 @@ void MotionManager::MotionManagerRun()
     double del_time = time_curr - time_last;
     if (abs(del_time) <= 0.01)
     {
-      std::cout << std::to_string(del_time) << std::endl;
+      std::cout << std::to_string(del_time) << "\n";
       AINFO << "Recieve repeated obstacle message";
       return;
     }
@@ -494,7 +494,7 @@ void MotionManager::MotionManagerRun()
 
   GetPolygon(obstacle_list_input);
 
-  VehicleToWorld(obstacle_list_input, location_current);
+  VehicleToWorld(obstacle_list_input, location);
 
   motion_manager::interface::DetectedObjects objects;
   TransObstacle(objects, obstacle_list_input);
@@ -512,8 +512,9 @@ void MotionManager::MotionManagerRun()
 
   TransObstacle(obstacle_list_output_, output_msg);
 
-  legion::interface::Header header = obstacle_list_output_.header();
-  for (auto &ob : obstacle_list_output_.obstacle())
+  legionclaw::interface::Header header = obstacle_list_output_.header();
+  auto* mutable_output_obstacles = obstacle_list_output_.mutable_obstacle();
+  for (auto &ob : *mutable_output_obstacles)
   {
     ob.set_timestamp(header.stamp());
   }
@@ -543,22 +544,22 @@ void MotionManager::MotionManagerRun()
   }
 
   // 在发布前打印所有障碍物的ID
-  std::cout << "=== Publish Obstacle IDs ===" << std::endl;
+  std::cout << "=== Publish Obstacle IDs ===" << "\n";
   for (const auto &ob : fusion_obstacle_list_.obstacle())
   {
-    std::cout << "Obstacle ID: " << ob.id() << std::endl;
+    std::cout << "Obstacle ID: " << ob.id() << "\n";
   }
-  std::cout << "Total obstacles: " << fusion_obstacle_list_.obstacle_size() << std::endl;
-  std::cout << "===========================" << std::endl;
+  std::cout << "Total obstacles: " << fusion_obstacle_list_.obstacle_size() << "\n";
+  std::cout << "===========================" << "\n";
   
   PublishObstacleListOutput(fusion_obstacle_list_);
 
   is_first_frame_ = 0;
   last_frame_obs_ = fusion_obstacle_list_;
 
-  double time_end = legion::common::TimeTool::Now2Ms();
+  double time_end = legionclaw::common::TimeTool::Now2Ms();
 
-  std::cout << "Run time : " << time_end - time_begin << " ms " << std::endl;
+  std::cout << "Run time : " << time_end - time_begin << " ms " << "\n";
   cout << "Publish obstacle size: " << fusion_obstacle_list_.obstacle_size();
   cout << "***************" << endl;
 }
@@ -568,7 +569,7 @@ void MotionManager::MessagesInit()
   if (motion_manager_conf_ == nullptr)
     return;
 
-  std::map<std::string, legion::common::Message>::iterator iter;
+  std::map<std::string, legionclaw::common::Message>::iterator iter;
   for (auto &iter : motion_manager_conf_->messages())
   {
     auto message = iter.second;
@@ -576,7 +577,7 @@ void MotionManager::MessagesInit()
     switch (message.type)
     {
 #if LCM_ENABLE
-    case legion::common::MessageType::LCM:
+    case legionclaw::common::MessageType::LCM:
     {
       AINFO << "message type:LCM";
 
@@ -589,7 +590,7 @@ void MotionManager::MessagesInit()
     break;
 #endif
 #if DDS_ENABLE
-    case legion::common::MessageType::DDS:
+    case legionclaw::common::MessageType::DDS:
     {
       AINFO << "message type:DDS";
 
@@ -602,7 +603,7 @@ void MotionManager::MessagesInit()
     break;
 #endif
 #if ROS_ENABLE
-    case legion::common::MessageType::ROS:
+    case legionclaw::common::MessageType::ROS:
     {
       AINFO << "message type:ROS";
 
@@ -614,7 +615,7 @@ void MotionManager::MessagesInit()
     break;
 #endif
 #if ROS2_ENABLE
-    case legion::common::MessageType::ROS2:
+    case legionclaw::common::MessageType::ROS2:
     {
       AINFO << "message type:ROS2";
 
@@ -628,7 +629,7 @@ void MotionManager::MessagesInit()
 #endif
 
 #if ADSFI_ENABLE
-    case legion::common::MessageType::ADSFI:
+    case legionclaw::common::MessageType::ADSFI:
     {
       AINFO << "message type:ADSFI";
 
@@ -649,14 +650,15 @@ void MotionManager::MessagesInit()
   }
 }
 
-void MotionManager::FilterVel(legion::interface::ObstacleList &obstacle_list_output_)
+void MotionManager::FilterVel(legionclaw::interface::ObstacleList &obstacle_list_output_)
 {
-  for (auto &ob : obstacle_list_output_.obstacle())
+  auto* mutable_obstacles = obstacle_list_output_.mutable_obstacle();
+  for (auto &ob : *mutable_obstacles)
   {
     double vel = sqrt(pow(ob.velocity_abs().x(), 2) + pow(ob.velocity_abs().y(), 2));
     if (ob.sub_type() == 10 && vel > 3)
     {
-      legion::interface::Point3D temp_vel;
+      legionclaw::interface::Point3D temp_vel;
       temp_vel.set_x(0);
       temp_vel.set_y(0);
       temp_vel.set_z(0);
@@ -665,11 +667,12 @@ void MotionManager::FilterVel(legion::interface::ObstacleList &obstacle_list_out
   }
 }
 
-void MotionManager::ResetId(legion::interface::ObstacleList &obstacle_list_output_)
+void MotionManager::ResetId(legionclaw::interface::ObstacleList &obstacle_list_output_)
 {
   if (is_first_frame_)
   {
-    for (auto &ob : obstacle_list_output_.obstacle())
+    auto* mutable_obstacles = obstacle_list_output_.mutable_obstacle();
+    for (auto &ob : *mutable_obstacles)
     {
       int ori_id = ob.id();
       ob.set_id(global_idx);
@@ -684,7 +687,8 @@ void MotionManager::ResetId(legion::interface::ObstacleList &obstacle_list_outpu
     id_set.insert(ob.id());
   }
 
-  for (auto &ob : obstacle_list_output_.obstacle())
+  auto* mutable_obstacles2 = obstacle_list_output_.mutable_obstacle();
+  for (auto &ob : *mutable_obstacles2)
   {
     int ori_id = ob.id();
     auto it = id_convert_map_.find(ori_id);
@@ -719,48 +723,48 @@ void MotionManager::ResetId(legion::interface::ObstacleList &obstacle_list_outpu
   }
 }
 
-void MotionManager::Settype(legion::interface::Obstacle &ob, motion_manager::interface::ObjectClassification &cls)
+void MotionManager::Settype(legionclaw::interface::Obstacle &ob, motion_manager::interface::ObjectClassification &cls)
 {
   if (cls.label() == motion_manager::common::DetectedObjectLabel::DO_CAR)
   {
-    ob.set_sub_type(legion::common::ObstacleSubType::ST_CAR);
+    ob.set_sub_type(legionclaw::common::ObstacleSubType::ST_CAR);
   }
   else if (cls.label() == motion_manager::common::DetectedObjectLabel::DO_TRUCK)
   {
-    ob.set_sub_type(legion::common::ObstacleSubType::ST_TRUCK);
+    ob.set_sub_type(legionclaw::common::ObstacleSubType::ST_TRUCK);
   }
   else if (cls.label() == motion_manager::common::DetectedObjectLabel::DO_BUS)
   {
-    ob.set_sub_type(legion::common::ObstacleSubType::ST_BUS);
+    ob.set_sub_type(legionclaw::common::ObstacleSubType::ST_BUS);
   }
   else if (cls.label() == motion_manager::common::DetectedObjectLabel::DO_MOTORCYCLE)
   {
-    ob.set_sub_type(legion::common::ObstacleSubType::ST_MOTORCYCLIST);
+    ob.set_sub_type(legionclaw::common::ObstacleSubType::ST_MOTORCYCLIST);
   }
   else if (cls.label() == motion_manager::common::DetectedObjectLabel::DO_BICYCLE)
   {
-    ob.set_sub_type(legion::common::ObstacleSubType::ST_CYCLIST);
+    ob.set_sub_type(legionclaw::common::ObstacleSubType::ST_CYCLIST);
   }
   else if (cls.label() == motion_manager::common::DetectedObjectLabel::DO_PEDESTRIAN)
   {
-    ob.set_sub_type(legion::common::ObstacleSubType::ST_PEDESTRIAN);
+    ob.set_sub_type(legionclaw::common::ObstacleSubType::ST_PEDESTRIAN);
   }
   else if (cls.label() == motion_manager::common::DetectedObjectLabel::DO_UNKNOWN)
   {
-    ob.set_sub_type(legion::common::ObstacleSubType::ST_UNKNOWN);
+    ob.set_sub_type(legionclaw::common::ObstacleSubType::ST_UNKNOWN);
   }
 }
 
-void MotionManager::TransObstacle(motion_manager::interface::DetectedObjects &objects, legion::interface::ObstacleList &ob_list)
+void MotionManager::TransObstacle(motion_manager::interface::DetectedObjects &objects, legionclaw::interface::ObstacleList &ob_list)
 {
-  // Convert Header from legion::interface to motion_manager::interface
+  // Convert Header from legionclaw::interface to motion_manager::interface
   motion_manager::interface::Header header;
-  const legion::interface::Header &legion_header = ob_list.header();
+  const legionclaw::interface::Header &legion_header = ob_list.header();
   header.set_seq(legion_header.seq());
   header.set_frame_id(legion_header.frame_id());
   // Convert Time if needed
   motion_manager::interface::Time stamp;
-  const legion::interface::Time &legion_stamp = legion_header.stamp();
+  const legionclaw::interface::Time &legion_stamp = legion_header.stamp();
   stamp.set_sec(legion_stamp.sec());
   stamp.set_nsec(legion_stamp.nsec());
   header.set_stamp(stamp);
@@ -783,28 +787,28 @@ void MotionManager::TransObstacle(motion_manager::interface::DetectedObjects &ob
     object.set_shape(shape);
 
     motion_manager::interface::ObjectClassification cls;
-    if (obstacle.sub_type() == legion::common::ObstacleSubType::ST_CAR)
+    if (obstacle.sub_type() == legionclaw::common::ObstacleSubType::ST_CAR)
     {
       cls.set_label(motion_manager::common::DetectedObjectLabel::DO_CAR);
     }
-    else if (obstacle.sub_type() == legion::common::ObstacleSubType::ST_TRUCK)
+    else if (obstacle.sub_type() == legionclaw::common::ObstacleSubType::ST_TRUCK)
     {
       cls.set_label(motion_manager::common::DetectedObjectLabel::DO_TRUCK);
     }
-    else if (obstacle.sub_type() == legion::common::ObstacleSubType::ST_BUS)
+    else if (obstacle.sub_type() == legionclaw::common::ObstacleSubType::ST_BUS)
     {
       cls.set_label(motion_manager::common::DetectedObjectLabel::DO_BUS);
     }
-    else if (obstacle.sub_type() == legion::common::ObstacleSubType::ST_MOTORCYCLIST ||
-              obstacle.sub_type() == legion::common::ObstacleSubType::ST_TRICYCLIST)
+    else if (obstacle.sub_type() == legionclaw::common::ObstacleSubType::ST_MOTORCYCLIST ||
+              obstacle.sub_type() == legionclaw::common::ObstacleSubType::ST_TRICYCLIST)
     {
       cls.set_label(motion_manager::common::DetectedObjectLabel::DO_MOTORCYCLE);
     }
-    else if (obstacle.sub_type() == legion::common::ObstacleSubType::ST_CYCLIST)
+    else if (obstacle.sub_type() == legionclaw::common::ObstacleSubType::ST_CYCLIST)
     {
       cls.set_label(motion_manager::common::DetectedObjectLabel::DO_BICYCLE);
     }
-    else if (obstacle.sub_type() == legion::common::ObstacleSubType::ST_PEDESTRIAN)
+    else if (obstacle.sub_type() == legionclaw::common::ObstacleSubType::ST_PEDESTRIAN)
     {
       cls.set_label(motion_manager::common::DetectedObjectLabel::DO_PEDESTRIAN);
     }
@@ -863,24 +867,24 @@ void MotionManager::TransObstacle(motion_manager::interface::DetectedObjects &ob
   }
 }
 
-void MotionManager::TransObstacle(legion::interface::ObstacleList &obl_list, motion_manager::interface::TrackedObjects &objects)
+void MotionManager::TransObstacle(legionclaw::interface::ObstacleList &obl_list, motion_manager::interface::TrackedObjects &objects)
 {
-  std::vector<legion::interface::Obstacle> output_obstacles;
+  std::vector<legionclaw::interface::Obstacle> output_obstacles;
   for (auto track : objects.objects())
   {
-    legion::interface::Obstacle ob;
+    legionclaw::interface::Obstacle ob;
 
-    ob.center_pos_abs().set_x(track.kinematics().pose_with_covariance().pose().position().x());
-    ob.center_pos_abs().set_y(track.kinematics().pose_with_covariance().pose().position().y());
-    ob.center_pos_abs().set_z(track.kinematics().pose_with_covariance().pose().position().z());
-    ob.center_pos_vehicle().set_x(track.kinematics().pose_with_covariance_vehicle().pose().position().x());
-    ob.center_pos_vehicle().set_y(track.kinematics().pose_with_covariance_vehicle().pose().position().y());
-    ob.center_pos_vehicle().set_z(track.kinematics().pose_with_covariance_vehicle().pose().position().z());
+    ob.mutable_center_pos_abs()->set_x(track.kinematics().pose_with_covariance().pose().position().x());
+    ob.mutable_center_pos_abs()->set_y(track.kinematics().pose_with_covariance().pose().position().y());
+    ob.mutable_center_pos_abs()->set_z(track.kinematics().pose_with_covariance().pose().position().z());
+    ob.mutable_center_pos_vehicle()->set_x(track.kinematics().pose_with_covariance_vehicle().pose().position().x());
+    ob.mutable_center_pos_vehicle()->set_y(track.kinematics().pose_with_covariance_vehicle().pose().position().y());
+    ob.mutable_center_pos_vehicle()->set_z(track.kinematics().pose_with_covariance_vehicle().pose().position().z());
 
     motion_manager::interface::ObjectClassification cls = track.classification()[0];
     Settype(ob, cls);
 
-    ob.set_lane_position((int)(track.classification()[1].probability() * 1000) - 3);
+    ob.set_lane_position((legionclaw::common::LanePosition)((int)(track.classification()[1].probability() * 1000) - 3));
 
     std::string object_id = utils::toHexString(track.object_id());
     int decimalNumber = std::stoi(object_id, nullptr, 16);
@@ -909,9 +913,9 @@ void MotionManager::TransObstacle(legion::interface::ObstacleList &obl_list, mot
     ob.set_theta_vehicle(heading_vehicle);
     ob.set_theta_abs(heading);
 
-    ob.velocity_abs().set_x(track.kinematics().twist_with_covariance().twist().linear().x());
-    ob.velocity_abs().set_y(track.kinematics().twist_with_covariance().twist().linear().y());
-    ob.velocity_abs().set_z(track.kinematics().twist_with_covariance().twist().linear().z());
+    ob.mutable_velocity_abs()->set_x(track.kinematics().twist_with_covariance().twist().linear().x());
+    ob.mutable_velocity_abs()->set_y(track.kinematics().twist_with_covariance().twist().linear().y());
+    ob.mutable_velocity_abs()->set_z(track.kinematics().twist_with_covariance().twist().linear().z());
 
     // // 速度小的侧方来车速度设为0
     // double vel = pow(pow(ob.velocity_abs().x(), 2) + pow(ob.velocity_abs().y(), 2), 0.5);
@@ -937,7 +941,7 @@ void MotionManager::TransObstacle(legion::interface::ObstacleList &obl_list, mot
   obl_list.set_obstacle(output_obstacles);
 }
 
-void MotionManager::SyncStamp(legion::interface::ObstacleList &obl_list, legion::interface::Location &location)
+void MotionManager::SyncStamp(legionclaw::interface::ObstacleList &obl_list, legionclaw::interface::Location &location)
 {
   if (location_list_.size() > 100)
   {
@@ -983,74 +987,31 @@ void MotionManager::SyncStamp(legion::interface::ObstacleList &obl_list, legion:
   location_list_.push_back(location);
 }
 
-bool MotionManager::FindSynchronizedLocation(const legion::interface::ObstacleList &obl_list,
-                                             const legion::interface::Location &fallback_location,
-                                             legion::interface::Location *synced_location) const
+void MotionManager::VehicleToWorld(legionclaw::interface::ObstacleList &data, legionclaw::interface::Location &location)
 {
-  if (synced_location == nullptr)
-  {
-    return false;
-  }
-
-  *synced_location = fallback_location;
-  if (location_list_.empty())
-  {
-    return false;
-  }
-
-  const double obstacle_time_ms =
-      (obl_list.header().stamp().sec() + obl_list.header().stamp().nsec() * 1e-9) * 1e+3;
-  const double max_diff_ms = (time_sync_max_diff > 0.0 ? time_sync_max_diff : 0.1) * 1e+3;
-
-  size_t min_id = 0;
-  double min_delta_ms = std::numeric_limits<double>::max();
-  for (size_t id = 0; id < location_list_.size(); ++id)
-  {
-    const auto &loca = location_list_[id];
-    const double location_time_ms =
-        (loca.header().stamp().sec() + loca.header().stamp().nsec() * 1e-9) * 1e+3;
-    const double delta_ms = std::abs(obstacle_time_ms - location_time_ms);
-    if (delta_ms < min_delta_ms)
-    {
-      min_delta_ms = delta_ms;
-      min_id = id;
-    }
-  }
-
-  if (min_delta_ms > max_diff_ms)
-  {
-    return false;
-  }
-
-  *synced_location = location_list_[min_id];
-  return true;
-}
-
-void MotionManager::VehicleToWorld(legion::interface::ObstacleList &data, legion::interface::Location &location)
-{
-  legion::interface::Header header;
-  legion::interface::Time stamp;
+  legionclaw::interface::Header header;
+  legionclaw::interface::Time stamp;
   stamp.set_sec(location.header().stamp().sec());
   stamp.set_nsec(location.header().stamp().nsec());
   header.set_stamp(stamp);
-  header.set_frame_id(location.header().frame_id());
+  header.set_frame_id(data.header().frame_id());
   header.set_seq(data.header().seq());
   data.set_header(header);
-  for (auto &ob : data.obstacle())
+  for (auto ob : data.obstacle())
   {
-    legion::interface::Time obstacle_timestamp;
+    legionclaw::interface::Time obstacle_timestamp;
     obstacle_timestamp.set_sec(location.header().stamp().sec());
     obstacle_timestamp.set_nsec(location.header().stamp().nsec());
     ob.set_timestamp(obstacle_timestamp);
   }
 
-  std::vector<legion::interface::Obstacle> data_fused_object_array;
+  std::vector<legionclaw::interface::Obstacle> data_fused_object_array;
   data.obstacle(data_fused_object_array);
   size_t obj_size = data_fused_object_array.size();
 
   for (size_t obj_index = 0; obj_index < obj_size; obj_index++) // obstacle copy
   {
-    legion::interface::Point3D to_pos = data_fused_object_array[obj_index].center_pos_vehicle();
+    legionclaw::interface::Point3D to_pos = data_fused_object_array[obj_index].center_pos_vehicle();
     ConvertPoint(to_pos, location);
     data_fused_object_array[obj_index].set_center_pos_abs(to_pos);
 
@@ -1063,25 +1024,25 @@ void MotionManager::VehicleToWorld(legion::interface::ObstacleList &data, legion
 
     data_fused_object_array[obj_index].set_theta_abs(theta_abs);
 
-    legion::interface::Point3D acc;
+    legionclaw::interface::Point3D acc;
     acc = data_fused_object_array[obj_index].acceleration_vehicle();
     legion::preprocessor::coordinate::convert_acc(&acc, &location);
     data_fused_object_array[obj_index].set_acceleration_abs(acc);
 
-    std::vector<legion::interface::Point3D> from_polygon;
+    std::vector<legionclaw::interface::Point3D> from_polygon;
     data_fused_object_array[obj_index].polygon_point_vehicle(from_polygon);
     size_t polygon_point_size = from_polygon.size();
-    std::vector<legion::interface::Point3D> to_polygon;
+    std::vector<legionclaw::interface::Point3D> to_polygon;
     to_polygon.resize(polygon_point_size);
     for (size_t polygon_point_index = 0; polygon_point_index < polygon_point_size; polygon_point_index++) // polygon_point copy
     {
-      legion::interface::Point3D pt = from_polygon[polygon_point_index];
+      legionclaw::interface::Point3D pt = from_polygon[polygon_point_index];
       ConvertPoint(pt, location);
       to_polygon[polygon_point_index] = pt;
     }
     data_fused_object_array[obj_index].clear_polygon_point_abs();
     data_fused_object_array[obj_index].set_polygon_point_abs(&to_polygon);
-    legion::interface::Point3D anchor_point = data_fused_object_array[obj_index].anchor_point_vehicle();
+    legionclaw::interface::Point3D anchor_point = data_fused_object_array[obj_index].anchor_point_vehicle();
     ConvertPoint(anchor_point, location);
     data_fused_object_array[obj_index].set_anchor_point_abs(anchor_point);
   }
@@ -1089,7 +1050,7 @@ void MotionManager::VehicleToWorld(legion::interface::ObstacleList &data, legion
   data.set_obstacle(data_fused_object_array);
 }
 
-void MotionManager::ConvertPoint(legion::interface::Point3D &point, legion::interface::Location &location)
+void MotionManager::ConvertPoint(legionclaw::interface::Point3D &point, legionclaw::interface::Location &location)
 {
   std::vector<double> values = legion::preprocessor::coordinate::convert_point(location.utm_position().x(),
                                                                                 location.utm_position().y(),
@@ -1106,17 +1067,17 @@ void MotionManager::ConvertPoint(legion::interface::Point3D &point, legion::inte
   point.set_z(values[2]);
 }
 
-void MotionManager::GetPolygon(legion::interface::ObstacleList &result_obstacle_list)
+void MotionManager::GetPolygon(legionclaw::interface::ObstacleList &result_obstacle_list)
 {
   for (auto &ob : result_obstacle_list.obstacle())
   {
-    legion::interface::Point3D center_pos = ob.center_pos_vehicle();
+    legionclaw::interface::Point3D center_pos = ob.center_pos_vehicle();
     double theta = ob.theta_vehicle();
     double wid = ob.width();
     double len = ob.length();
     double hei = ob.height();
-    std::vector<legion::interface::Point3D> poly_list;
-    legion::interface::Point3D point1, point2, point3, point4;
+    std::vector<legionclaw::interface::Point3D> poly_list;
+    legionclaw::interface::Point3D point1, point2, point3, point4;
     point1.set_x(center_pos.x() + len / 2);
     point1.set_y(center_pos.y() - wid / 2);
     point1.set_z(center_pos.z() - hei / 2);
@@ -1135,7 +1096,7 @@ void MotionManager::GetPolygon(legion::interface::ObstacleList &result_obstacle_
     poly_list.push_back(point4);
     ob.set_polygon_point_vehicle(poly_list);
 
-    std::vector<legion::interface::Point3D> new_poly_list;
+    std::vector<legionclaw::interface::Point3D> new_poly_list;
     for (auto poly : ob.polygon_point_vehicle())
     {
       double xx = (poly.x() - center_pos.x()) * cos(theta) - (poly.y() - center_pos.y()) * sin(theta) + center_pos.x();
@@ -1149,10 +1110,10 @@ void MotionManager::GetPolygon(legion::interface::ObstacleList &result_obstacle_
   }
 }
 
-void MotionManager::set_polygon_abs(double len, double wid, double hei, double x, double y, double z, double theta, legion::interface::Obstacle &ob_)
+void MotionManager::set_polygon_abs(double len, double wid, double hei, double x, double y, double z, double theta, legionclaw::interface::Obstacle &ob_)
 {
-  std::vector<legion::interface::Point3D> poly_list;
-  legion::interface::Point3D point1, point2, point3, point4;
+  std::vector<legionclaw::interface::Point3D> poly_list;
+  legionclaw::interface::Point3D point1, point2, point3, point4;
   point1.set_x(x + len / 2);
   point1.set_y(y - wid / 2);
   point1.set_z(z - hei / 2);
@@ -1171,7 +1132,7 @@ void MotionManager::set_polygon_abs(double len, double wid, double hei, double x
   poly_list.push_back(point4);
   ob_.set_polygon_point_abs(poly_list);
 
-  std::vector<legion::interface::Point3D> new_poly_list;
+  std::vector<legionclaw::interface::Point3D> new_poly_list;
   for (auto poly : ob_.polygon_point_abs())
   {
     double xx = (poly.x() - x) * cos(theta) - (poly.y() - y) * sin(theta) + x;
@@ -1229,7 +1190,7 @@ void MotionManager::TaskActivate()
                           &MotionManager::ComputeMotionManagerCommandOnTimer, this);
   // 所有定时器都使用高级定时器，方便激活和去激活。
   std::cout << "===================function activate=================="
-            << std::endl;
+            << "\n";
   function_activation_ = true;
   return;
 }
@@ -1249,7 +1210,7 @@ void MotionManager::TaskStop()
   {
     // 清除所有内部计算的中间结果，保证回到刚init完的状态
   }
-  std::cout << "******************function stop***************" << std::endl;
+  std::cout << "******************function stop***************" << "\n";
   function_activation_ = false;
   return;
 }
@@ -1265,16 +1226,16 @@ void MotionManager::Spin()
   }
 }
 
-void MotionManager::GetObstacleHeader(legion::interface::ObstacleList &obstacle_list)
+void MotionManager::GetObstacleHeader(legionclaw::interface::ObstacleList &obstacle_list)
 {
-  legion::interface::Time time_ = obstacle_list.header().stamp();
+  legionclaw::interface::Time time_ = obstacle_list.header().stamp();
   for (auto &ob : obstacle_list.obstacle())
   {
     ob.set_timestamp(time_);
   }
 }
 
-void MotionManager::Getacc(legion::interface::ObstacleList &obstacle_list_output)
+void MotionManager::Getacc(legionclaw::interface::ObstacleList &obstacle_list_output)
 {
   if (is_first_frame_)
   {
@@ -1285,9 +1246,9 @@ void MotionManager::Getacc(legion::interface::ObstacleList &obstacle_list_output
     auto it = frames_obs_for_acc_.find(ob.id());
     if (it == frames_obs_for_acc_.end()) // 若该id未记录，记录该id
     {
-      vector<legion::interface::Obstacle> temp_ob_l;
+      vector<legionclaw::interface::Obstacle> temp_ob_l;
       temp_ob_l.push_back(ob);
-      frames_obs_for_acc_.insert(pair<int, vector<legion::interface::Obstacle>>(ob.id(), temp_ob_l));
+      frames_obs_for_acc_.insert(pair<int, vector<legionclaw::interface::Obstacle>>(ob.id(), temp_ob_l));
     }
     else // 若该id已记录，判断跟踪是否满5帧
     {
@@ -1314,7 +1275,7 @@ void MotionManager::Getacc(legion::interface::ObstacleList &obstacle_list_output
         double last_v = sqrt(pow(last_vx, 2) + pow(last_vy, 2));
 
         double cal_acc = (this_v - last_v) / delta_time;
-        legion::interface::Point3D acc;
+        legionclaw::interface::Point3D acc;
         acc.set_x(cal_acc);
         acc.set_y(0);
         acc.set_z(0);
@@ -1326,10 +1287,10 @@ void MotionManager::Getacc(legion::interface::ObstacleList &obstacle_list_output
   }
 }
 
-double MotionManager::CalculatePolygonIoU(const legion::interface::Obstacle &ob1, const legion::interface::Obstacle &ob2)
+double MotionManager::CalculatePolygonIoU(const legionclaw::interface::Obstacle &ob1, const legionclaw::interface::Obstacle &ob2)
 {
   // 获取两个障碍物的多边形点
-  std::vector<legion::interface::Point3D> polygon1, polygon2;
+  std::vector<legionclaw::interface::Point3D> polygon1, polygon2;
   ob1.polygon_point_abs(polygon1);
   ob2.polygon_point_abs(polygon2);
   
@@ -1341,8 +1302,8 @@ double MotionManager::CalculatePolygonIoU(const legion::interface::Obstacle &ob1
   // 判断哪个是矩形（4个点），哪个是多边形（很多点）
   bool is_rect1 = (polygon1.size() == 4);
   bool is_rect2 = (polygon2.size() == 4);
-  const std::vector<legion::interface::Point3D> *rect_poly = nullptr;
-  const std::vector<legion::interface::Point3D> *poly_poly = nullptr;
+  const std::vector<legionclaw::interface::Point3D> *rect_poly = nullptr;
+  const std::vector<legionclaw::interface::Point3D> *poly_poly = nullptr;
   
   if (is_rect1 && !is_rect2)
   {
@@ -1362,7 +1323,7 @@ double MotionManager::CalculatePolygonIoU(const legion::interface::Obstacle &ob1
   }
   
   // 计算边界框（用于快速筛选）
-  auto getBoundingBox = [](const std::vector<legion::interface::Point3D> &points) -> std::pair<std::pair<double, double>, std::pair<double, double>> {
+  auto getBoundingBox = [](const std::vector<legionclaw::interface::Point3D> &points) -> std::pair<std::pair<double, double>, std::pair<double, double>> {
     double min_x = points[0].x(), max_x = points[0].x();
     double min_y = points[0].y(), max_y = points[0].y();
     for (const auto &p : points)
@@ -1447,7 +1408,7 @@ double MotionManager::CalculatePolygonIoU(const legion::interface::Obstacle &ob1
     
     // 对于大多边形，先简化（采样）以提高计算效率
     const size_t MAX_POLY_POINTS = 500;  // 最多使用500个点
-    std::vector<legion::interface::Point3D> simplified_poly;
+    std::vector<legionclaw::interface::Point3D> simplified_poly;
     if (poly_poly->size() > MAX_POLY_POINTS)
     {
       size_t step = poly_poly->size() / MAX_POLY_POINTS;
@@ -1468,7 +1429,7 @@ double MotionManager::CalculatePolygonIoU(const legion::interface::Obstacle &ob1
     }
     
     // 判断矩形四个角点是否在多边形内
-    auto isPointInPolygon = [](double px, double py, const std::vector<legion::interface::Point3D> &poly) -> bool {
+    auto isPointInPolygon = [](double px, double py, const std::vector<legionclaw::interface::Point3D> &poly) -> bool {
       int crossings = 0;
       for (size_t i = 0; i < poly.size() - 1; ++i)
       {
@@ -1559,9 +1520,9 @@ double MotionManager::CalculatePolygonIoU(const legion::interface::Obstacle &ob1
   return std::min(1.0, std::max(0.0, iou));
 }
 
-double MotionManager::CalculateObstacleArea(const legion::interface::Obstacle &ob)
+double MotionManager::CalculateObstacleArea(const legionclaw::interface::Obstacle &ob)
 {
-  std::vector<legion::interface::Point3D> polygon;
+  std::vector<legionclaw::interface::Point3D> polygon;
   ob.polygon_point_abs(polygon);
   
   if (polygon.size() < 3)
@@ -1606,7 +1567,7 @@ double MotionManager::CalculateObstacleArea(const legion::interface::Obstacle &o
 
 // 从多边形计算最小矩形框（轴对齐）
 std::tuple<double, double, double, double> MotionManager::GetBoundingBox(
-    const std::vector<legion::interface::Point3D> &polygon)
+    const std::vector<legionclaw::interface::Point3D> &polygon)
 {
   if (polygon.empty())
   {
@@ -1628,10 +1589,10 @@ std::tuple<double, double, double, double> MotionManager::GetBoundingBox(
 }
 
 // 计算两个障碍物基于最小矩形框的IOU
-double MotionManager::CalculateBoundingBoxIoU(const legion::interface::Obstacle &ob1, 
-                                              const legion::interface::Obstacle &ob2)
+double MotionManager::CalculateBoundingBoxIoU(const legionclaw::interface::Obstacle &ob1, 
+                                              const legionclaw::interface::Obstacle &ob2)
 {
-  std::vector<legion::interface::Point3D> polygon1, polygon2;
+  std::vector<legionclaw::interface::Point3D> polygon1, polygon2;
   ob1.polygon_point_abs(polygon1);
   ob2.polygon_point_abs(polygon2);
   
@@ -1687,7 +1648,7 @@ double MotionManager::CalculateBoundingBoxIoU(const legion::interface::Obstacle 
  * 
  * 只匹配Lidar障碍物（ID < lcd_id_offset），优先使用Lidar ID作为稳定ID
  */
-int MotionManager::MatchHistoricalObstacle(const legion::interface::Obstacle &current_ob)
+int MotionManager::MatchHistoricalObstacle(const legionclaw::interface::Obstacle &current_ob)
 {
   int best_match_id = -1;
   double max_iou = 0.0;
@@ -1722,7 +1683,7 @@ int MotionManager::MatchHistoricalObstacle(const legion::interface::Obstacle &cu
       }
       
       // 构建历史障碍物对象用于IOU计算
-      legion::interface::Obstacle hist_ob_for_iou;
+      legionclaw::interface::Obstacle hist_ob_for_iou;
       hist_ob_for_iou.set_center_pos_abs(hist_ob.center_pos);
       hist_ob_for_iou.set_polygon_point_abs(hist_ob.polygon_points);
       
@@ -1757,7 +1718,7 @@ int MotionManager::MatchHistoricalObstacle(const legion::interface::Obstacle &cu
 }
 
 // 更新历史障碍物记录
-void MotionManager::UpdateObstacleHistory(const legion::interface::ObstacleList &current_fusion_list)
+void MotionManager::UpdateObstacleHistory(const legionclaw::interface::ObstacleList &current_fusion_list)
 {
   // 创建当前帧的障碍物映射
   std::map<int, HistoricalObstacle> current_frame_obstacles;
@@ -1793,7 +1754,7 @@ void MotionManager::UpdateObstacleHistory(const legion::interface::ObstacleList 
 }
 
 // 辅助函数：根据障碍物位置生成网格化键值
-MotionManager::PositionKey MotionManager::GetPositionKey(const legion::interface::Obstacle &ob)
+MotionManager::PositionKey MotionManager::GetPositionKey(const legionclaw::interface::Obstacle &ob)
 {
   PositionKey key;
   // 使用配置的网格精度
@@ -1802,8 +1763,8 @@ MotionManager::PositionKey MotionManager::GetPositionKey(const legion::interface
   return key;
 }
 
-void MotionManager::StabilizeFusionIds(legion::interface::ObstacleList &current_fusion_list, 
-                                      const legion::interface::ObstacleList &last_fusion_list)
+void MotionManager::StabilizeFusionIds(legionclaw::interface::ObstacleList &current_fusion_list, 
+                                      const legionclaw::interface::ObstacleList &last_fusion_list)
 {
   // 如果是第一帧，保持原ID并记录Lidar ID到位置映射
   if (is_first_frame_ || last_fusion_list.obstacle_size() == 0)
@@ -1967,7 +1928,7 @@ void MotionManager::StabilizeFusionIds(legion::interface::ObstacleList &current_
           if (it != frame_obstacles.end())
           {
             const HistoricalObstacle &hist_ob = it->second;
-            legion::interface::Obstacle hist_ob_for_iou;
+            legionclaw::interface::Obstacle hist_ob_for_iou;
             hist_ob_for_iou.set_center_pos_abs(hist_ob.center_pos);
             hist_ob_for_iou.set_polygon_point_abs(hist_ob.polygon_points);
             double iou = CalculateBoundingBoxIoU(current_ob, hist_ob_for_iou);
@@ -2044,7 +2005,7 @@ void MotionManager::StabilizeFusionIds(legion::interface::ObstacleList &current_
         if (it != frame_obstacles.end())
         {
           const HistoricalObstacle &hist_ob = it->second;
-          legion::interface::Obstacle hist_ob_for_iou;
+          legionclaw::interface::Obstacle hist_ob_for_iou;
           hist_ob_for_iou.set_center_pos_abs(hist_ob.center_pos);
           hist_ob_for_iou.set_polygon_point_abs(hist_ob.polygon_points);
           double iou = CalculateBoundingBoxIoU(current_ob, hist_ob_for_iou);
@@ -2278,7 +2239,7 @@ void MotionManager::FuseObstacleLists()
   std::lock_guard<std::mutex> lock(mutex_);
   
   // 0. 检查数据源是否超时（数据中断检测）
-  int64_t current_time_ms = legion::common::TimeTool::Now2Ms();
+  int64_t current_time_ms = legionclaw::common::TimeTool::Now2Ms();
   bool obstacle_list_output_valid = true;
   bool lcd_obstacle_list_input_valid = true;
   
@@ -2337,42 +2298,26 @@ void MotionManager::FuseObstacleLists()
     return;
   }
   
-  legion::interface::Location lcd_location = location_;
-  if (use_sync == 1)
-  {
-    FindSynchronizedLocation(lcd_obstacle_list_input_, location_, &lcd_location);
-  }
-
-  if (lcd_obstacle_list_input_.has_header())
-  {
-    auto header = lcd_obstacle_list_input_.header();
-    header.set_stamp(lcd_location.header().stamp());
-    header.set_frame_id(lcd_location.header().frame_id());
-    lcd_obstacle_list_input_.set_header(header);
-  }
-
   // 0. 对 LCDObstacleList 中的障碍物进行坐标转换（从车体坐标系转换为绝对坐标系）
-  std::vector<legion::interface::Obstacle> lcd_obstacles;
+  std::vector<legionclaw::interface::Obstacle> lcd_obstacles;
   lcd_obstacle_list_input_.obstacle(lcd_obstacles);
   for (size_t obj_index = 0; obj_index < lcd_obstacles.size(); obj_index++)
   {
-    lcd_obstacles[obj_index].set_timestamp(lcd_location.header().stamp());
-
     // 转换 center_pos_vehicle 到 center_pos_abs
-    legion::interface::Point3D center_pos = lcd_obstacles[obj_index].center_pos_vehicle();
-    ConvertPoint(center_pos, lcd_location);
+    legionclaw::interface::Point3D center_pos = lcd_obstacles[obj_index].center_pos_vehicle();
+    ConvertPoint(center_pos, location_);
     lcd_obstacles[obj_index].set_center_pos_abs(center_pos);
     
     // 转换 polygon_points_vehicle 到 polygon_point_abs
-    std::vector<legion::interface::Point3D> from_polygon;
+    std::vector<legionclaw::interface::Point3D> from_polygon;
     lcd_obstacles[obj_index].polygon_point_vehicle(from_polygon);
     size_t polygon_point_size = from_polygon.size();
-    std::vector<legion::interface::Point3D> to_polygon;
+    std::vector<legionclaw::interface::Point3D> to_polygon;
     to_polygon.resize(polygon_point_size);
     for (size_t polygon_point_index = 0; polygon_point_index < polygon_point_size; polygon_point_index++)
     {
-      legion::interface::Point3D pt = from_polygon[polygon_point_index];
-      ConvertPoint(pt, lcd_location);
+      legionclaw::interface::Point3D pt = from_polygon[polygon_point_index];
+      ConvertPoint(pt, location_);
       to_polygon[polygon_point_index] = pt;
     }
     lcd_obstacles[obj_index].clear_polygon_point_abs();
@@ -2380,7 +2325,7 @@ void MotionManager::FuseObstacleLists()
     
     // 转换 theta_vehicle 到 theta_abs
     double theta_vehicle = lcd_obstacles[obj_index].theta_vehicle();
-    double theta_abs = theta_vehicle + lcd_location.heading();
+    double theta_abs = theta_vehicle + location_.heading();
     if (theta_abs > M_PI)
       theta_abs -= M_PI * 2.0;
     else if (theta_abs < -M_PI)
@@ -2392,12 +2337,12 @@ void MotionManager::FuseObstacleLists()
   lcd_obstacle_list_input_.set_obstacle(lcd_obstacles);
 
 
-  std::cout<<"lcd_obstacle_list_input_size: "<<lcd_obstacle_list_input_.obstacle_size()<<std::endl;
+  std::cout<<"lcd_obstacle_list_input_size: "<<lcd_obstacle_list_input_.obstacle_size()<<"\n";
 
   for(auto ob:lcd_obstacle_list_input_.obstacle())
   {
     std::cout << "id: " << ob.id() << " theta_vehicle: " << ob.theta_vehicle() <<" theta_abs: " << ob.theta_abs() <<" center_pos_abs: (" << ob.center_pos_abs().x() <<" , "<< ob.center_pos_abs().y() <<"  , "<< ob.center_pos_abs().z() <<")";
-    std::vector<legion::interface::Point3D> poly_vehicle, poly_abs;
+    std::vector<legionclaw::interface::Point3D> poly_vehicle, poly_abs;
     ob.polygon_point_vehicle(poly_vehicle);
     ob.polygon_point_abs(poly_abs);
     if (poly_vehicle.size() > 0)
@@ -2408,14 +2353,14 @@ void MotionManager::FuseObstacleLists()
     {
       std::cout << " polygen_points_abs[0]: (" << poly_abs[0].x() <<" , "<< poly_abs[0].y() <<"  , "<< poly_abs[0].z() <<")";
     }
-    std::cout << std::endl;
+    std::cout << "\n";
   }
-  std::cout<<"--------------------------------"<<std::endl;
-  std::cout<<"obstacle_list_output_size: "<<obstacle_list_output_.obstacle_size()<<std::endl;
+  std::cout<<"--------------------------------"<<"\n";
+  std::cout<<"obstacle_list_output_size: "<<obstacle_list_output_.obstacle_size()<<"\n";
   for(auto ob:obstacle_list_output_.obstacle())
   {
     std::cout << "id: " << ob.id() << " theta_vehicle: " << ob.theta_vehicle() <<" theta_abs: " << ob.theta_abs() <<" center_pos_abs: (" << ob.center_pos_abs().x() <<" , "<< ob.center_pos_abs().y() <<"  , "<< ob.center_pos_abs().z() <<")";
-    std::vector<legion::interface::Point3D> poly_vehicle, poly_abs;
+    std::vector<legionclaw::interface::Point3D> poly_vehicle, poly_abs;
     ob.polygon_point_vehicle(poly_vehicle);
     ob.polygon_point_abs(poly_abs);
     if (poly_vehicle.size() > 0)
@@ -2426,7 +2371,7 @@ void MotionManager::FuseObstacleLists()
     {
       std::cout << " polygen_points_abs[0]: (" << poly_abs[0].x() <<" , "<< poly_abs[0].y() <<"  , "<< poly_abs[0].z() <<")";
     }
-    std::cout << std::endl;
+    std::cout << "\n";
   }
 
   
@@ -2437,18 +2382,20 @@ void MotionManager::FuseObstacleLists()
     if (lcd_obstacle_list_input_.obstacle_size() > 0)
     {
       fusion_obstacle_list_ = lcd_obstacle_list_input_;
-      for (auto &ob : fusion_obstacle_list_.obstacle())
+      auto* mutable_fusion_obstacles = fusion_obstacle_list_.mutable_obstacle();
+      for (auto &ob : *mutable_fusion_obstacles)
       {
         ob.set_id(ob.id() + lcd_id_offset);
-        ob.set_fusion_type(legion::interface::Obstacle::FusionType::LIDAR);
+        ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::LIDAR);
       }
     }
     else if (obstacle_list_output_.obstacle_size() > 0)
     {
       fusion_obstacle_list_ = obstacle_list_output_;
-      for (auto &ob : fusion_obstacle_list_.obstacle())
+      auto* mutable_fusion_obstacles = fusion_obstacle_list_.mutable_obstacle();
+      for (auto &ob : *mutable_fusion_obstacles)
       {
-        ob.set_fusion_type(legion::interface::Obstacle::FusionType::CAMERA);
+        ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::CAMERA);
       }
     }
     else
@@ -2489,7 +2436,7 @@ void MotionManager::FuseObstacleLists()
   // ========== 3. IOU匹配和融合 ==========
   // 使用配置文件中的IOU阈值进行匹配
   
-  std::vector<legion::interface::Obstacle> fused_obstacles;
+  std::vector<legionclaw::interface::Obstacle> fused_obstacles;
   std::vector<bool> lcd_matched(lcd_obstacle_list_input_.obstacle_size(), false);
   std::vector<bool> output_matched(obstacle_list_output_.obstacle_size(), false);
   
@@ -2580,7 +2527,7 @@ void MotionManager::FuseObstacleLists()
       double output_area = CalculateObstacleArea(output_ob);
       double lcd_area = CalculateObstacleArea(lcd_ob);
       
-      legion::interface::Obstacle fused_ob;
+      legionclaw::interface::Obstacle fused_ob;
       if (lcd_area > output_area)
       {
         // LCD障碍物面积更大，保留Lidar障碍物，但使用LCD障碍物的位置和多边形信息
@@ -2591,7 +2538,7 @@ void MotionManager::FuseObstacleLists()
         fused_ob.set_center_pos_vehicle(lcd_ob.center_pos_vehicle());
         
         // 复制多边形点
-        std::vector<legion::interface::Point3D> lcd_polygon_abs, lcd_polygon_vehicle;
+        std::vector<legionclaw::interface::Point3D> lcd_polygon_abs, lcd_polygon_vehicle;
         lcd_ob.polygon_point_abs(lcd_polygon_abs);
         lcd_ob.polygon_point_vehicle(lcd_polygon_vehicle);
         fused_ob.clear_polygon_point_abs();
@@ -2607,13 +2554,13 @@ void MotionManager::FuseObstacleLists()
         fused_ob.set_type(output_ob.type());
         fused_ob.set_sub_type(output_ob.sub_type());
         
-        fused_ob.set_fusion_type(legion::interface::Obstacle::FusionType::FUSED);
+        fused_ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::FUSED);
       }
       else
       {
         // Lidar障碍物面积更大或相等，保留Lidar障碍物（速度、朝向、类别、子类别已包含）
         fused_ob = output_ob;
-        fused_ob.set_fusion_type(legion::interface::Obstacle::FusionType::FUSED);
+        fused_ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::FUSED);
       }
       fused_obstacles.push_back(fused_ob);
       
@@ -2624,8 +2571,8 @@ void MotionManager::FuseObstacleLists()
     {
       // ========== 3.3 无匹配，保留Lidar障碍物 ==========
       // 无匹配，保留 obstacle_list_output_ 中的障碍物，fusion_type 置为 CAMERA
-      legion::interface::Obstacle fused_ob = output_ob;
-      fused_ob.set_fusion_type(legion::interface::Obstacle::FusionType::CAMERA);
+      legionclaw::interface::Obstacle fused_ob = output_ob;
+      fused_ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::CAMERA);
       fused_obstacles.push_back(fused_ob);
       
       output_matched[i] = true;
@@ -2638,7 +2585,7 @@ void MotionManager::FuseObstacleLists()
   {
     if (!lcd_matched[j])
     {
-      legion::interface::Obstacle fused_ob = lcd_obstacle_list_input_.obstacle(j);
+      legionclaw::interface::Obstacle fused_ob = lcd_obstacle_list_input_.obstacle(j);
       
       // 首先尝试从历史帧中匹配Lidar ID，避免因形状变化导致的ID跳变
       int historical_id = MatchHistoricalObstacle(fused_ob);
@@ -2647,7 +2594,7 @@ void MotionManager::FuseObstacleLists()
       {
         // 找到历史Lidar ID，使用它作为稳定ID，不加上10000
         fused_ob.set_id(historical_id);
-        fused_ob.set_fusion_type(legion::interface::Obstacle::FusionType::FUSED);
+        fused_ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::FUSED);
       }
       else
       {
@@ -2683,13 +2630,13 @@ void MotionManager::FuseObstacleLists()
         {
           // 找到附近的历史Lidar ID，使用它作为稳定ID
           fused_ob.set_id(best_lidar_id);
-          fused_ob.set_fusion_type(legion::interface::Obstacle::FusionType::FUSED);
+          fused_ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::FUSED);
         }
         else
         {
           // 未找到历史ID，使用LCD的ID（加上10000）
           fused_ob.set_id(fused_ob.id() + 10000);
-          fused_ob.set_fusion_type(legion::interface::Obstacle::FusionType::LIDAR);
+          fused_ob.set_fusion_type(legionclaw::interface::Obstacle::FusionType::LIDAR);
         }
       }
       
@@ -2718,7 +2665,7 @@ void MotionManager::FuseObstacleLists()
   
   // std::cout << "[MotionManager] FuseObstacleLists: fused " << fused_obstacles.size() 
   //           << " obstacles (LCD: " << lcd_obstacle_list_input_.obstacle_size() 
-  //           << ", Output: " << obstacle_list_output_.obstacle_size() << ")" << std::endl;
+  //           << ", Output: " << obstacle_list_output_.obstacle_size() << ")" << "\n";
 }
 
 } // namespace fusion

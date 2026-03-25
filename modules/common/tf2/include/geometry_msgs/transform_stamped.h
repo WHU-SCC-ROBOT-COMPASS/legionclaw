@@ -40,6 +40,7 @@
 
 #include <iostream>
 #include <stdint.h>
+#include <vector>
 
 namespace tf2_geometry_msgs {
 
@@ -101,6 +102,17 @@ struct PoseWithCovariance {
 struct PoseWithCovarianceStamped {
   Header header;
   PoseWithCovariance pose;
+};
+
+struct Point32 {
+  double x;
+  double y;
+  double z;
+  Point32() : x(0.0), y(0.0), z(0.0) {}
+};
+
+struct Polygon {
+  std::vector<Point32> points;
 };
 
 } // namespace tf2_geometry_msgs

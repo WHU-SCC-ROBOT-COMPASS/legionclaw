@@ -13,11 +13,11 @@
 #include "modules/common/interface/point_cloud.hpp"
 
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
 template <typename T> class MessageManager {
@@ -26,8 +26,8 @@ public:
   virtual ~MessageManager() = default;
 
   virtual void Init(T *t) = 0;
-  virtual void PublishObstacleList(legion::interface::ObstacleList msg) = 0;
+  virtual void PublishObstacleList(legionclaw::interface::ObstacleList msg) = 0;
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw

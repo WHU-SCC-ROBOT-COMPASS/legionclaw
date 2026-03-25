@@ -41,14 +41,14 @@
 #include "message_manager/message_manager.h"
 
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
-using namespace legion::common;
+using namespace legionclaw::common;
 /**
  * @class DdsMessageManager
  * @brief DDS消息管理器.
@@ -75,14 +75,14 @@ public:
    * @param[in] obstacle_list
    * @return    void.
    */
-  void PublishObstacleList(legion::interface::ObstacleList msg) override;
+  void PublishObstacleList(legionclaw::interface::ObstacleList msg) override;
 
   /**
    * @brief     Faults消息发送.
    * @param[in] faults
    * @return    void.
    */
-  void PublishFaults(legion::interface::Faults msg) override;
+  void PublishFaults(legionclaw::interface::Faults msg) override;
 
 protected:
   T* instance_;
@@ -140,6 +140,6 @@ private:
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #include "dds_message_manager.hpp"
 #endif

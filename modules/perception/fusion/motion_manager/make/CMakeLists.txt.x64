@@ -11,6 +11,7 @@ if(ROS2_ENABLE)
     set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../../../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
 	add_definitions(-DROS2_ENABLE)
 	find_package(rclcpp REQUIRED)
+	find_package(tf2_geometry_msgs REQUIRED)
 	find_package(ros2_interface REQUIRED)
 	include_directories(
 	${rclcpp_INCLUDE_DIRS}
@@ -39,7 +40,7 @@ endif()
 option(DDS_ENABLE "option for dds enable" OFF)
 if(DDS_ENABLE)
 	add_definitions(-DDDS_ENABLE)
-		include_directories(
+	include_directories(
 	${PROJECT_SOURCE_DIR}/../../../message/dds/src/legion
 	)
 endif()
@@ -76,12 +77,9 @@ LISTSUBDIR(SOURCE_DIRS src)
 include_directories(${SOURCE_DIRS})
 
 include_directories(
-	#kalman/cpp
-	kalman/hpp
     ${PROJECT_SOURCE_DIR}/..
     ${PROJECT_SOURCE_DIR}/../..
     ${PROJECT_SOURCE_DIR}/../../..
-    ${PROJECT_SOURCE_DIR}/../../../..
 )
 
 include_directories(
@@ -99,7 +97,19 @@ link_directories(
 
 set(BOOST_LINK_LIBS "-lboost_system  -lboost_signals")
 
-file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc kalman/cpp/*.cpp  ../../../common/*.c ../../../common/*.cxx ../../../common/*.cpp ../../../common/*.cc)
+# For ROS2 mode, exclude tf2 source files to avoid conflict with ROS2 tf2
+if(ROS2_ENABLE)
+    file(GLOB_RECURSE COMMON_SOURCE_FILES ../../../common/*.c ../../../common/*.cxx ../../../common/*.cpp ../../../common/*.cc)
+    foreach(src_file ${COMMON_SOURCE_FILES})
+        if("${src_file}" MATCHES "tf2")
+            list(REMOVE_ITEM COMMON_SOURCE_FILES ${src_file})
+        endif()
+    endforeach()
+    file(GLOB_RECURSE MODULE_SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc kalman/cpp/*.cpp)
+    set(SOURCE_FILES ${MODULE_SOURCE_FILES} ${COMMON_SOURCE_FILES})
+else()
+    file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc kalman/cpp/*.cpp  ../../../common/*.c ../../../common/*.cxx ../../../common/*.cpp ../../../common/*.cc)
+endif()
 
 if(DDS_ENABLE)
 find_package(fastcdr HINTS ${THIRD_PATH_HOME_PATH}/x64/lib/cmake/fastcdr)
@@ -108,13 +118,13 @@ file(GLOB_RECURSE DDS_SOURCE_FILES  ../../../message/dds/*.cxx)
 endif()
 add_executable(${APP_NAME}  ${SOURCE_FILES} ${DDS_SOURCE_FILES})
 if(ROS_ENABLE)
-	target_link_libraries(${APP_NAME}  ${roscpp_LIBRARIES} )
+	target_link_libraries(${APP_NAME}  ${roscpp_LIBRARIES})
 endif()
 if(ROS2_ENABLE)
-	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface)
+	ament_target_dependencies(${APP_NAME}  rclcpp tf2_geometry_msgs ros2_interface)
 endif()
 if(LCM_ENABLE)
-	target_link_libraries(${APP_NAME}  lcm glib-2.0 )
+	target_link_libraries(${APP_NAME}  lcm glib-2.0)
 endif()
 if(DDS_ENABLE)
 target_link_libraries(${APP_NAME}  fastrtps fastcdr)

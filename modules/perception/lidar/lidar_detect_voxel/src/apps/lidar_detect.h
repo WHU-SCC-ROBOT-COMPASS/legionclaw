@@ -40,14 +40,14 @@
 
 #include "conf/lidar_detect_conf.hpp"
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
-using namespace legion::common;
+using namespace legionclaw::common;
 using json = nlohmann::json;
 /**
  * @class LidarDetect
@@ -143,7 +143,7 @@ protected:
    * @brief
    * @param  obstacle_list
    */
-  void PublishObstacleList(legion::interface::ObstacleList obstacle_list);
+  void PublishObstacleList(legionclaw::interface::ObstacleList obstacle_list);
 
   /**
    * @brief     打印调试.
@@ -163,7 +163,7 @@ public:
    * @param[in] point_cloud_top .
    * @return    void.
    */
-  void HandlePointCloud(legion::interface::PointCloud point_cloud);
+  void HandlePointCloud(legionclaw::interface::PointCloud point_cloud);
 
   /**
    * @brief     计算算法输出.
@@ -186,8 +186,8 @@ public:
   void StatusDetectOnTimer();
 
 protected:
-  legion::interface::PointCloud point_cloud_;
-  legion::interface::ObstacleList obstacle_list_;
+  legionclaw::interface::PointCloud point_cloud_;
+  legionclaw::interface::ObstacleList obstacle_list_;
 
   //控制命令生产周期
   int32_t produce_lidar_detect_command_duration_;
@@ -196,7 +196,7 @@ protected:
   //状态检测周期
   uint32_t status_detect_duration_;
   //消息状态
-  std::map<std::string, legion::common::MessageStatus> message_status_;
+  std::map<std::string, legionclaw::common::MessageStatus> message_status_;
   // task线程
   std::unique_ptr<std::thread> task_thread_;
 
@@ -227,10 +227,10 @@ public:
   double unknow_threshold;
 
 public:
-  void PointToBuffer(float* points, legion::interface::PointCloud pointcloud);
-  void LidarDetect::BoxesToObstacleList(std::vector<Bndbox> preboxes, legion::interface::ObstacleList &result_obstacle_list);
-  void GetPolygon(legion::interface::ObstacleList &result_obstacle_list);
+  void PointToBuffer(float* points, legionclaw::interface::PointCloud pointcloud);
+  void LidarDetect::BoxesToObstacleList(std::vector<Bndbox> preboxes, legionclaw::interface::ObstacleList &result_obstacle_list);
+  void GetPolygon(legionclaw::interface::ObstacleList &result_obstacle_list);
 };
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw

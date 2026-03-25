@@ -62,7 +62,7 @@
 namespace legion {
 namespace perception {
 namespace fusion {
-using namespace legion::common;
+using namespace legionclaw::common;
 using json = nlohmann::json;
 /**
  * @class MotionManager
@@ -183,7 +183,7 @@ protected:
    * @param  obstacle_list_output
    */
   void PublishObstacleListOutput(
-      legion::interface::ObstacleList obstacle_list_output);
+      legionclaw::interface::ObstacleList obstacle_list_output);
 
   /**
    * @brief     打印调试.
@@ -203,14 +203,14 @@ public:
    * @param[in] obu_cmd_msg .
    * @return    void.
    */
-  void HandleObuCmdMsg(legion::interface::ObuCmdMsg obu_cmd_msg);
+  void HandleObuCmdMsg(legionclaw::interface::ObuCmdMsg obu_cmd_msg);
 
   /**
    * @brief     Location消息接收.
    * @param[in] location .
    * @return    void.
    */
-  void HandleLocation(legion::interface::Location location);
+  void HandleLocation(legionclaw::interface::Location location);
 
   /**
    * @brief     ObstacleList消息接收.
@@ -218,7 +218,7 @@ public:
    * @return    void.
    */
   void
-  HandleObstacleListInput(legion::interface::ObstacleList obstacle_list_input);
+  HandleObstacleListInput(legionclaw::interface::ObstacleList obstacle_list_input);
 
   /**
    * @brief     LCDObstacleList消息接收（来自lidar_cluster_detect）.
@@ -226,7 +226,7 @@ public:
    * @return    void.
    */
   void
-  HandleLCDObstacleList(legion::interface::ObstacleList lcd_obstacle_list);
+  HandleLCDObstacleList(legionclaw::interface::ObstacleList lcd_obstacle_list);
 
   /**
    * @brief     计算算法输出.
@@ -249,12 +249,12 @@ public:
   void StatusDetectOnTimer();
 
 protected:
-  legion::interface::Location location_;
-  legion::interface::ObstacleList obstacle_list_input_;
-  legion::interface::ObstacleList lcd_obstacle_list_input_;
-  legion::interface::ObstacleList obstacle_list_output_;
-  legion::interface::ObstacleList fusion_obstacle_list_;
-  legion::interface::ObuCmdMsg obu_cmd_msg_;
+  legionclaw::interface::Location location_;
+  legionclaw::interface::ObstacleList obstacle_list_input_;
+  legionclaw::interface::ObstacleList lcd_obstacle_list_input_;
+  legionclaw::interface::ObstacleList obstacle_list_output_;
+  legionclaw::interface::ObstacleList fusion_obstacle_list_;
+  legionclaw::interface::ObuCmdMsg obu_cmd_msg_;
 
   //控制命令生产周期
   int32_t produce_motion_manager_command_duration_;
@@ -265,7 +265,7 @@ protected:
   // 功能激活状态,激活为true，未激活为false
   bool function_activation_;
   //消息状态
-  std::map<std::string, legion::common::MessageStatus> message_status_;
+  std::map<std::string, legionclaw::common::MessageStatus> message_status_;
   // task线程
   std::unique_ptr<std::thread> task_thread_;
 
@@ -309,7 +309,7 @@ protected:
   std::string fixed_obstacle;
   std::string config_path;
   json confjson;
-  legion::interface::Time time;
+  legionclaw::interface::Time time;
   
   // 记录每个数据源的最后更新时间（毫秒时间戳）
   int64_t last_obstacle_list_input_time_ms_;
@@ -318,16 +318,16 @@ protected:
   MultiObjectTracker tracker_;
 
   // int use_sync = 1;
-  std::vector<legion::interface::Location> location_list_;
-  legion::interface::Location location_current;
+  std::vector<legionclaw::interface::Location> location_list_;
+  legionclaw::interface::Location location_current;
 
   int is_first_frame_ = 1;
-  legion::interface::ObstacleList last_frame_obs_;
+  legionclaw::interface::ObstacleList last_frame_obs_;
 
   int use_kalman = 0;
 
   //tracking setup(Hungrain)
-  std::vector<legion::interface::Obstacle> last_frame_obs;
+  std::vector<legionclaw::interface::Obstacle> last_frame_obs;
   int global_max_idx = 0;
   int idx = 0;
   std::set<int> global_id_set;
@@ -336,16 +336,16 @@ protected:
   int frame_c_ = 0;
   std::map<int, int> obl_count_map_;
   std::map<int, int>::iterator obl_count_map_iter_;
-  std::vector<legion::interface::Obstacle> obl_out_;
-  std::map<int, std::list<legion::interface::Obstacle>> ob_id_tracker_map_;
-  std::map<int, std::list<legion::interface::Obstacle>>::iterator ob_id_tracker_map_iter_;
-  std::map<int, vector<legion::interface::Point3D>> ob_vel_tracker_map_;
-  std::map<int, vector<legion::interface::Point3D>>::iterator ob_vel_tracker_map_iter_;
+  std::vector<legionclaw::interface::Obstacle> obl_out_;
+  std::map<int, std::list<legionclaw::interface::Obstacle>> ob_id_tracker_map_;
+  std::map<int, std::list<legionclaw::interface::Obstacle>>::iterator ob_id_tracker_map_iter_;
+  std::map<int, vector<legionclaw::interface::Point3D>> ob_vel_tracker_map_;
+  std::map<int, vector<legionclaw::interface::Point3D>>::iterator ob_vel_tracker_map_iter_;
 
   std::map<int,int> frame_interpolation_map_;
 
   //compute acc
-  std::map<int,std::vector<legion::interface::Obstacle>> frames_obs_for_acc_;
+  std::map<int,std::vector<legionclaw::interface::Obstacle>> frames_obs_for_acc_;
 
   std::map<double,double> pos_map_;
 
@@ -373,8 +373,8 @@ protected:
   // 历史障碍物信息结构
   struct HistoricalObstacle {
     int id;  // 障碍物ID
-    legion::interface::Point3D center_pos;  // 中心位置
-    std::vector<legion::interface::Point3D> polygon_points;  // 多边形点
+    legionclaw::interface::Point3D center_pos;  // 中心位置
+    std::vector<legionclaw::interface::Point3D> polygon_points;  // 多边形点
     int frame_age;  // 帧年龄（距离当前帧的帧数，0表示当前帧）
   };
   
@@ -385,18 +385,15 @@ protected:
   
   void MotionManagerRun();
 
-  void SyncStamp(legion::interface::ObstacleList &obl_list, legion::interface::Location &location);
-  bool FindSynchronizedLocation(const legion::interface::ObstacleList &obl_list,
-                                const legion::interface::Location &fallback_location,
-                                legion::interface::Location *synced_location) const;
-  void VehicleToWorld(legion::interface::ObstacleList &data, legion::interface::Location &location);
-  void ConvertPoint(legion::interface::Point3D &point, legion::interface::Location &location);
-  void GetPolygon(legion::interface::ObstacleList &result_obstacle_list);
-  void GetObstacleHeader(legion::interface::ObstacleList &obstacle_list);
+  void SyncStamp(legionclaw::interface::ObstacleList &obl_list, legionclaw::interface::Location &location);
+  void VehicleToWorld(legionclaw::interface::ObstacleList &data, legionclaw::interface::Location &location);
+  void ConvertPoint(legionclaw::interface::Point3D &point, legionclaw::interface::Location &location);
+  void GetPolygon(legionclaw::interface::ObstacleList &result_obstacle_list);
+  void GetObstacleHeader(legionclaw::interface::ObstacleList &obstacle_list);
   double GetAngle(double theta);
-  void set_polygon_abs(double len ,double wid ,double hei,double x ,double y ,double z,double theta ,legion::interface::Obstacle &ob_);
-  void TransObstacle(motion_manager::interface::DetectedObjects &objects , legion::interface::ObstacleList &obl_list);
-  void TransObstacle(legion::interface::ObstacleList &obl_list , motion_manager::interface::TrackedObjects &objects);
+  void set_polygon_abs(double len ,double wid ,double hei,double x ,double y ,double z,double theta ,legionclaw::interface::Obstacle &ob_);
+  void TransObstacle(motion_manager::interface::DetectedObjects &objects , legionclaw::interface::ObstacleList &obl_list);
+  void TransObstacle(legionclaw::interface::ObstacleList &obl_list , motion_manager::interface::TrackedObjects &objects);
   
   /**
    * @brief 融合 lcd_obstacle_list_input_ 和 obstacle_list_output_
@@ -410,29 +407,29 @@ protected:
    * @param ob2 障碍物2
    * @return IOU 值 (0.0 ~ 1.0)
    */
-  double CalculatePolygonIoU(const legion::interface::Obstacle &ob1, const legion::interface::Obstacle &ob2);
+  double CalculatePolygonIoU(const legionclaw::interface::Obstacle &ob1, const legionclaw::interface::Obstacle &ob2);
   
   /**
    * @brief 计算障碍物多边形的面积
    * @param ob 障碍物
    * @return 面积值
    */
-  double CalculateObstacleArea(const legion::interface::Obstacle &ob);
+  double CalculateObstacleArea(const legionclaw::interface::Obstacle &ob);
   
   /**
    * @brief 稳定化融合后的障碍物ID，通过IOU匹配上一帧来保持ID一致性
    * @param current_fusion_list 当前帧的融合结果
    * @param last_fusion_list 上一帧的融合结果
    */
-  void StabilizeFusionIds(legion::interface::ObstacleList &current_fusion_list, 
-                          const legion::interface::ObstacleList &last_fusion_list);
+  void StabilizeFusionIds(legionclaw::interface::ObstacleList &current_fusion_list, 
+                          const legionclaw::interface::ObstacleList &last_fusion_list);
   
   /**
    * @brief 根据障碍物位置生成网格化键值
    * @param ob 障碍物
    * @return 位置键值
    */
-  PositionKey GetPositionKey(const legion::interface::Obstacle &ob);
+  PositionKey GetPositionKey(const legionclaw::interface::Obstacle &ob);
   
   /**
    * @brief 计算两个障碍物基于最小矩形框的IOU
@@ -440,8 +437,8 @@ protected:
    * @param ob2 障碍物2
    * @return IOU值 (0.0 ~ 1.0)
    */
-  double CalculateBoundingBoxIoU(const legion::interface::Obstacle &ob1, 
-                                  const legion::interface::Obstacle &ob2);
+  double CalculateBoundingBoxIoU(const legionclaw::interface::Obstacle &ob1, 
+                                  const legionclaw::interface::Obstacle &ob2);
   
   /**
    * @brief 从多边形计算最小矩形框（轴对齐）
@@ -449,25 +446,25 @@ protected:
    * @return 矩形框 (min_x, min_y, max_x, max_y)
    */
   std::tuple<double, double, double, double> GetBoundingBox(
-      const std::vector<legion::interface::Point3D> &polygon);
+      const std::vector<legionclaw::interface::Point3D> &polygon);
   
   /**
    * @brief 更新历史障碍物记录
    * @param current_fusion_list 当前帧的融合结果
    */
-  void UpdateObstacleHistory(const legion::interface::ObstacleList &current_fusion_list);
+  void UpdateObstacleHistory(const legionclaw::interface::ObstacleList &current_fusion_list);
   
   /**
    * @brief 从历史帧中匹配障碍物ID
    * @param current_ob 当前障碍物
    * @return 匹配到的历史ID，如果没有匹配返回-1
    */
-  int MatchHistoricalObstacle(const legion::interface::Obstacle &current_ob);
+  int MatchHistoricalObstacle(const legionclaw::interface::Obstacle &current_ob);
 
-  void Getacc(legion::interface::ObstacleList &obstacle_list_output);
-  void Settype(legion::interface::Obstacle &ob, motion_manager::interface::ObjectClassification &cls);
-  void ResetId(legion::interface::ObstacleList &obstacle_list_output_);
-  void FilterVel(legion::interface::ObstacleList &obstacle_list_output_);
+  void Getacc(legionclaw::interface::ObstacleList &obstacle_list_output);
+  void Settype(legionclaw::interface::Obstacle &ob, motion_manager::interface::ObjectClassification &cls);
+  void ResetId(legionclaw::interface::ObstacleList &obstacle_list_output_);
+  void FilterVel(legionclaw::interface::ObstacleList &obstacle_list_output_);
 };
 } // namespace fusion
 } // namespace perception

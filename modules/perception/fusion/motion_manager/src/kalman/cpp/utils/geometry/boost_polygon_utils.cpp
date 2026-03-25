@@ -289,7 +289,7 @@ double getArea(const motion_manager::interface::Shape & shape)
     for (auto p:shape.footprint().points())
     {
       // boost::geometry::append(poly_tmp.outer(),bg::model::point<double, 2, bg::cs::cartesian>(p.x(),p.y()),p.z());
-      tf2_geometry_msgs::Point this_p;
+      tf2_geometry_msgs::Point32 this_p;
       this_p.x = p.x();
       this_p.y = p.y();
       this_p.z = p.z();

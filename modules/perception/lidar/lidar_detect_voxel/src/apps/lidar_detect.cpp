@@ -19,11 +19,11 @@
 #include "modules/common/time/time_tool.h"
 
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
 
@@ -44,10 +44,10 @@ void LidarDetect::Init() {
     }
   }
   // step4 日志初始化
-  {LOGGING_INIT(lidar_detect_conf_, lidar_detect_json_)}
+  {LOGGING_INIT2(lidar_detect_conf_, lidar_detect_json_)}
 
   // step4 IPC初始化
-  {MESSAGE_INIT(lidar_detect_conf_, lidar_detect_json_)}
+  {MESSAGE_INIT2(lidar_detect_conf_, lidar_detect_json_)}
 
   // step5 读取配置文件
   {
@@ -142,7 +142,7 @@ void LidarDetect::ResigerMessageManager(
 void LidarDetect::Task10ms(void *param) {}
 
 void LidarDetect::PublishObstacleList(
-    legion::interface::ObstacleList obstacle_list) {
+    legionclaw::interface::ObstacleList obstacle_list) {
 #if LCM_ENABLE
   message_manager_["LCM"]->PublishObstacleList(obstacle_list);
 #endif
@@ -164,14 +164,14 @@ std::shared_ptr<LidarDetectConf> LidarDetect::GetConf() const {
   return lidar_detect_conf_;
 }
 
-void LidarDetect::HandlePointCloud(legion::interface::PointCloud point_cloud) {
+void LidarDetect::HandlePointCloud(legionclaw::interface::PointCloud point_cloud) {
   if (is_init_ == false) {
     return;
   }
   {
     std::lock_guard<std::mutex> lock(mutex_);
     if (lidar_detect_conf_->use_system_timestamp() == true) {
-      legion::interface::Header header = point_cloud.header();
+      legionclaw::interface::Header header = point_cloud.header();
       header.set_stamp(TimeTool::Now2TmeStruct());
       point_cloud.set_header(header);
     }
@@ -210,13 +210,13 @@ void LidarDetect::ComputeLidarDetectCommandOnTimer() {
       std::cout<<"Num of objects: " << (*centerpoint).nms_pred_.size() << std::endl;
     }
 
-    legion::interface::ObstacleList result_obstacle_list;
+    legionclaw::interface::ObstacleList result_obstacle_list;
     result_obstacle_list.header().set_stamp(local_view_.point_cloud_.header().stamp());
 
     BoxesToObstacleList((*centerpoint).nms_pred_, result_obstacle_list);
     GetPolygon(result_obstacle_list);
 
-    // vector<legion::interface::Obstacle> temp_obl;
+    // vector<legionclaw::interface::Obstacle> temp_obl;
     // for(auto &ob:result_obstacle_list.obstacle())
     // {
     //   if((ob.sub_type() == 5 || ob.sub_type() == 6) &&
@@ -243,7 +243,7 @@ void LidarDetect::ComputeLidarDetectCommandOnTimer() {
     for(auto &ob:result_obstacle_list.obstacle())
     {
       ob.set_tracking_time(perception_time);
-      legion::interface::Point3D temp_pos;
+      legionclaw::interface::Point3D temp_pos;
     }
     PublishObstacleList(result_obstacle_list);
   }
@@ -256,13 +256,13 @@ void LidarDetect::MessagesInit() {
   if (lidar_detect_conf_ == nullptr)
     return;
 
-  std::map<std::string, legion::common::Message>::iterator iter;
+  std::map<std::string, legionclaw::common::Message>::iterator iter;
   for (auto &iter : lidar_detect_conf_->messages()) {
     auto message = iter.second;
 
     switch (message.type) {
 #if LCM_ENABLE
-    case legion::common::MessageType::LCM: {
+    case legionclaw::common::MessageType::LCM: {
       AINFO << "message type:LCM";
 
       lcm_message_manager_ = std::make_shared<LcmMessageManager<LidarDetect>>();
@@ -272,7 +272,7 @@ void LidarDetect::MessagesInit() {
     } break;
 #endif
 #if DDS_ENABLE
-    case legion::common::MessageType::DDS: {
+    case legionclaw::common::MessageType::DDS: {
       AINFO << "message type:DDS";
 
       dds_message_manager_ = std::make_shared<DdsMessageManager<LidarDetect>>();
@@ -282,7 +282,7 @@ void LidarDetect::MessagesInit() {
     } break;
 #endif
 #if ROS_ENABLE
-    case legion::common::MessageType::ROS: {
+    case legionclaw::common::MessageType::ROS: {
       AINFO << "message type:ROS";
 
       ros_message_manager_ = std::make_shared<RosMessageManager<LidarDetect>>();
@@ -291,7 +291,7 @@ void LidarDetect::MessagesInit() {
     } break;
 #endif
 #if ROS2_ENABLE
-    case legion::common::MessageType::ROS2: {
+    case legionclaw::common::MessageType::ROS2: {
       AINFO << "message type:ROS2";
 
       ros2_message_manager_ =
@@ -303,7 +303,7 @@ void LidarDetect::MessagesInit() {
 #endif
 
 #if ADSFI_ENABLE
-    case legion::common::MessageType::ADSFI: {
+    case legionclaw::common::MessageType::ADSFI: {
       AINFO << "message type:ADSFI";
 
       adsfi_message_manager_ =
@@ -330,10 +330,10 @@ void LidarDetect::Spin() {
     usleep(1000);
   }
 }
-void LidarDetect::PointToBuffer(float* points, legion::interface::PointCloud pointcloud)
+void LidarDetect::PointToBuffer(float* points, legionclaw::interface::PointCloud pointcloud)
 {
   float* p = points;
-  for(legion::interface::PointXYZIRT it_point : pointcloud.point())
+  for(legionclaw::interface::PointXYZIRT it_point : pointcloud.point())
   {
     float x = it_point.x();
     float y = it_point.y();
@@ -353,15 +353,15 @@ void LidarDetect::PointToBuffer(float* points, legion::interface::PointCloud poi
   p=nullptr;
 }
 
-void LidarDetect::BoxesToObstacleList(std::vector<Bndbox> preboxes, legion::interface::ObstacleList &result_obstacle_list)
+void LidarDetect::BoxesToObstacleList(std::vector<Bndbox> preboxes, legionclaw::interface::ObstacleList &result_obstacle_list)
 {
-  std::vector<legion::interface::Obstacle> obstacle_list;
+  std::vector<legionclaw::interface::Obstacle> obstacle_list;
   for(auto box : preboxes)
   {
-    legion::interface::Obstacle obstacle;
+    legionclaw::interface::Obstacle obstacle;
     obstacle.set_id(-1);
     obstacle.set_timestamp(point_cloud_.header().stamp());
-    legion::interface::Point3D obstacle_center;
+    legionclaw::interface::Point3D obstacle_center;
     obstacle_center.set_x(box.x);
     obstacle_center.set_y(box.y);
     obstacle_center.set_z(box.z);
@@ -369,14 +369,14 @@ void LidarDetect::BoxesToObstacleList(std::vector<Bndbox> preboxes, legion::inte
     obstacle.set_length(box.l);
     obstacle.set_width(box.w);
     obstacle.set_height(box.h);
-    legion::interface::Point3D obstacle_vel;
+    legionclaw::interface::Point3D obstacle_vel;
     obstacle_vel.set_x(box.vx);
     obstacle_vel.set_y(box.vy);
     obstacle_vel.set_z(0);
     obstacle.set_velocity_vehicle(obstacle_vel);
     obstacle.set_confidence(box.score);
-    obstacle.set_confidence_type(legion::interface::Obstacle::ConfidenceType::CONFIDENCE_CNN);
-    obstacle.set_fusion_type(legion::interface::Obstacle::FusionType::LIDAR);
+    obstacle.set_confidence_type(legionclaw::interface::Obstacle::ConfidenceType::CONFIDENCE_CNN);
+    obstacle.set_fusion_type(legionclaw::interface::Obstacle::FusionType::LIDAR);
     if(box.id == 5 || box.id == 9)
     {
       obstacle.set_theta_vehicle(0);
@@ -386,8 +386,8 @@ void LidarDetect::BoxesToObstacleList(std::vector<Bndbox> preboxes, legion::inte
       obstacle.set_theta_vehicle(-box.rt-3.1415926535*0.5);
     }
 
-    vector<legion::common::ObstacleType> Type{OBSTACLE_UNKNOWN, OBSTACLE_UNKNOWN_MOVABLE, OBSTACLE_UNKNOWN_UNMOVABLE, OBSTACLE_PEDESTRIAN, OBSTACLE_BICYCLE, OBSTACLE_VEHICLE};
-    vector<legion::common::ObstacleSubType> Sub_Type{ST_CAR,ST_TRUCK,ST_TRUCK,ST_BUS,ST_TRUCK,ST_UNKNOWN_UNMOVABLE,ST_MOTORCYCLIST,ST_CYCLIST,ST_PEDESTRIAN,ST_TRAFFICCONE};
+    vector<legionclaw::common::ObstacleType> Type{OBSTACLE_UNKNOWN, OBSTACLE_UNKNOWN_MOVABLE, OBSTACLE_UNKNOWN_UNMOVABLE, OBSTACLE_PEDESTRIAN, OBSTACLE_BICYCLE, OBSTACLE_VEHICLE};
+    vector<legionclaw::common::ObstacleSubType> Sub_Type{ST_CAR,ST_TRUCK,ST_TRUCK,ST_BUS,ST_TRUCK,ST_UNKNOWN_UNMOVABLE,ST_MOTORCYCLIST,ST_CYCLIST,ST_PEDESTRIAN,ST_TRAFFICCONE};
     switch(box.id)
     {
       case 0:obstacle.set_type(Type[5]);
@@ -408,17 +408,17 @@ void LidarDetect::BoxesToObstacleList(std::vector<Bndbox> preboxes, legion::inte
   result_obstacle_list.set_obstacle(obstacle_list);
 }
 
-void LidarDetect::GetPolygon(legion::interface::ObstacleList &result_obstacle_list)
+void LidarDetect::GetPolygon(legionclaw::interface::ObstacleList &result_obstacle_list)
 {
   for(auto &ob:result_obstacle_list.obstacle())
   {
-    legion::interface::Point3D center_pos = ob.center_pos_vehicle();
+    legionclaw::interface::Point3D center_pos = ob.center_pos_vehicle();
     double theta = ob.theta_vehicle();
     double wid = ob.width();
     double len = ob.length();
     double hei = ob.height();
-    std::vector<legion::interface::Point3D> poly_list;
-    legion::interface::Point3D point1,point2,point3,point4;
+    std::vector<legionclaw::interface::Point3D> poly_list;
+    legionclaw::interface::Point3D point1,point2,point3,point4;
     point1.set_x(center_pos.x() + len/2);
     point1.set_y(center_pos.y() - wid/2);
     point1.set_z(center_pos.z() - hei/2);
@@ -437,7 +437,7 @@ void LidarDetect::GetPolygon(legion::interface::ObstacleList &result_obstacle_li
     poly_list.push_back(point4);
     ob.set_polygon_point_vehicle(poly_list);
   
-    std::vector<legion::interface::Point3D> new_poly_list;
+    std::vector<legionclaw::interface::Point3D> new_poly_list;
     for(auto poly : ob.polygon_point_vehicle())
     {
       double xx = (poly.x() - center_pos.x())*cos(theta)-(poly.y() - center_pos.y())*sin(theta) + center_pos.x();
@@ -453,4 +453,4 @@ void LidarDetect::GetPolygon(legion::interface::ObstacleList &result_obstacle_li
 
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw

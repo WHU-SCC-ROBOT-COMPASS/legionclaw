@@ -15,19 +15,19 @@
 
 #if LCM_ENABLE
 /**
- * @namespace legion::perception::lidar
- * @brief legion::perception::lidar
+ * @namespace legionclaw::perception::lidar
+ * @brief legionclaw::perception::lidar
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace lidar {
-using namespace legion::common;
+using namespace legionclaw::common;
 template <typename T> void LcmMessageManager<T>::Init(T* t) {
   is_init_ = false;
   is_active_ = false;
   instance_ = t;
-  std::map<std::string, legion::common::Message> messages =
+  std::map<std::string, legionclaw::common::Message> messages =
       instance_->GetConf()->messages();
   lcm_ = std::make_shared<lcm::LCM>(messages["LCM"].url);
 
@@ -74,14 +74,14 @@ template <typename T> bool LcmMessageManager<T>::DeActivate() {
 
 template <typename T>
 void LcmMessageManager<T>::PublishObstacleList(
-    legion::interface::ObstacleList msg) {
+    legionclaw::interface::ObstacleList msg) {
   if (is_init_ == false)
     return;
   lcm_interface::ObstacleList obstacle_list;
   MESSAGE_HEADER_ASSIGN(lcm_interface, obstacle_list)
   obstacle_list.sensor_id = msg.sensor_id();
   std::vector<lcm_interface::Obstacle> lcm_obstacle;
-  std::vector<legion::interface::Obstacle> legion_obstacle;
+  std::vector<legionclaw::interface::Obstacle> legion_obstacle;
   msg.obstacle(legion_obstacle);
   for (auto it_obstacle : legion_obstacle) {
     lcm_interface::Obstacle obstacle_list_obstacle;
@@ -137,7 +137,7 @@ void LcmMessageManager<T>::PublishObstacleList(
     obstacle_list_obstacle.width = it_obstacle.width();
     obstacle_list_obstacle.height = it_obstacle.height();
     std::vector<lcm_interface::ImageKeyPoint> lcm_image_key_points;
-    std::vector<legion::interface::ImageKeyPoint> legion_image_key_points;
+    std::vector<legionclaw::interface::ImageKeyPoint> legion_image_key_points;
     it_obstacle.image_key_points(legion_image_key_points);
     for (auto it_image_key_points : legion_image_key_points) {
       lcm_interface::ImageKeyPoint obstacle_list_obstacle_image_key_point;
@@ -150,7 +150,7 @@ void LcmMessageManager<T>::PublishObstacleList(
     obstacle_list_obstacle.image_key_points_size = lcm_image_key_points.size();
     obstacle_list_obstacle.image_key_points = lcm_image_key_points;
     std::vector<lcm_interface::Point3D> lcm_polygon_point_abs;
-    std::vector<legion::interface::Point3D> legion_polygon_point_abs;
+    std::vector<legionclaw::interface::Point3D> legion_polygon_point_abs;
     it_obstacle.polygon_point_abs(legion_polygon_point_abs);
     for (auto it_polygon_point_abs : legion_polygon_point_abs) {
       lcm_interface::Point3D obstacle_list_obstacle_point_3d;
@@ -163,7 +163,7 @@ void LcmMessageManager<T>::PublishObstacleList(
         lcm_polygon_point_abs.size();
     obstacle_list_obstacle.polygon_point_abs = lcm_polygon_point_abs;
     std::vector<lcm_interface::Point3D> lcm_polygon_point_vehicle;
-    std::vector<legion::interface::Point3D> legion_polygon_point_vehicle;
+    std::vector<legionclaw::interface::Point3D> legion_polygon_point_vehicle;
     it_obstacle.polygon_point_vehicle(legion_polygon_point_vehicle);
     for (auto it_polygon_point_vehicle : legion_polygon_point_vehicle) {
       lcm_interface::Point3D obstacle_list_obstacle_point_3d;
@@ -180,7 +180,7 @@ void LcmMessageManager<T>::PublishObstacleList(
     obstacle_list_obstacle.confidence = it_obstacle.confidence();
     obstacle_list_obstacle.confidence_type = it_obstacle.confidence_type();
     std::vector<lcm_interface::Point3D> lcm_drops;
-    std::vector<legion::interface::Point3D> legion_drops;
+    std::vector<legionclaw::interface::Point3D> legion_drops;
     it_obstacle.drops(legion_drops);
     for (auto it_drops : legion_drops) {
       lcm_interface::Point3D obstacle_list_obstacle_point_3d;
@@ -327,7 +327,7 @@ void LcmMessageManager<T>::PublishObstacleList(
 }
 
 template <typename T>
-void LcmMessageManager<T>::PublishFaults(legion::interface::Faults msg) {
+void LcmMessageManager<T>::PublishFaults(legionclaw::interface::Faults msg) {
   if (is_init_ == false)
     return;
   lcm_interface::Faults faults;
@@ -345,13 +345,13 @@ void LcmMessageManager<T>::HandlePointCloudMessage(
   if (is_active_ == false)
     return;
 
-  legion::interface::PointCloud point_cloud;
+  legionclaw::interface::PointCloud point_cloud;
   MESSAGE_HEADER_PARSER(point_cloud)
   point_cloud.set_frame_id(msg->frame_id);
   point_cloud.set_is_dense(msg->is_dense);
-  std::vector<legion::interface::PointXYZIRT> point;
+  std::vector<legionclaw::interface::PointXYZIRT> point;
   for (auto it_point : msg->point) {
-    legion::interface::PointXYZIRT point_cloud_point_xyzirt;
+    legionclaw::interface::PointXYZIRT point_cloud_point_xyzirt;
     point_cloud_point_xyzirt.set_x(it_point.x);
     point_cloud_point_xyzirt.set_y(it_point.y);
     point_cloud_point_xyzirt.set_z(it_point.z);
@@ -382,5 +382,5 @@ template <typename T> void LcmMessageManager<T>::Stop() {
 }
 } // namespace lidar
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #endif
