@@ -24,7 +24,7 @@
  * @brief legion::perception::fusion
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace fusion {
 /**

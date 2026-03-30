@@ -109,16 +109,18 @@ link_directories(
 	${THIRD_PATH_HOME_PATH}/arm64/lib/protobuf
 )
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  pcl_ros
-  geometry_msgs
-  tf
-)
+if(ROS_ENABLE)
+  find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    pcl_ros
+    geometry_msgs
+    tf
+  )
 
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
+  include_directories(
+    ${catkin_INCLUDE_DIRS}
+  )
+endif()
 
 set(BOOST_LINK_LIBS "-lboost_system  -lboost_signals")
 

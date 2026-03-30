@@ -29,7 +29,7 @@ void LidarGroundSegmentation::Init() {
   // step1 初始化状态设置为false
   {
     is_init_ = false;
-    function_activation_ == false;
+    function_activation_ = false;
   }
 
   // step2 变量初始化
@@ -45,10 +45,10 @@ void LidarGroundSegmentation::Init() {
     }
   }
   // step4 日志初始化
-  {LOGGING_INIT2(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
+  {LOGGING_INIT(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
 
   // step4 IPC初始化
-  {MESSAGE_INIT2(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
+  {MESSAGE_INIT(lidar_ground_segmentation_conf_, lidar_ground_segmentation_json_)}
 
   // step5 读取配置文件
   {

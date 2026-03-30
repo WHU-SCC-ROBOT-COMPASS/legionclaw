@@ -20,9 +20,12 @@ if(ROS2_ENABLE)
     set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
 	add_definitions(-DROS2_ENABLE)
 	find_package(rclcpp REQUIRED)
+	find_package(sensor_msgs REQUIRED)
 	find_package(ros2_interface REQUIRED)
 	include_directories(
 	${rclcpp_INCLUDE_DIRS}
+	/opt/ros/$ENV{ROS_DISTRO}/include
+	/opt/ros/$ENV{ROS_DISTRO}/include/sensor_msgs
 	${PROJECT_SOURCE_DIR}/../../../message/ros2/install/ros2_interface/include
 	)
 endif()
@@ -61,10 +64,15 @@ elseif(GLOG_ENABLE)
 	add_definitions(-DGLOG_ENABLE)
 endif()
 
+set(CPP_STANDARD_FLAG -std=c++14)
+if(ROS2_ENABLE)
+  set(CPP_STANDARD_FLAG -std=c++17)
+endif()
+
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    set(DEFAULT_COMPILE -std=c++14 -fpermissive -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+    set(DEFAULT_COMPILE ${CPP_STANDARD_FLAG} -fpermissive -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
-    set(DEFAULT_COMPILE -std=c++14 -fpermissive -O3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+    set(DEFAULT_COMPILE ${CPP_STANDARD_FLAG} -fpermissive -O3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
 endif()
 
 add_compile_options(${DEFAULT_COMPILE})
@@ -121,7 +129,7 @@ if(ROS_ENABLE)
 	target_link_libraries(${APP_NAME}  ${roscpp_LIBRARIES})
 endif()
 if(ROS2_ENABLE)
-	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface)
+	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface sensor_msgs)
 endif()
 if(LCM_ENABLE)
 	target_link_libraries(${APP_NAME}  lcm glib-2.0)

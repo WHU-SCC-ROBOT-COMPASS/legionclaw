@@ -44,10 +44,10 @@ void LidarDetect::Init() {
     }
   }
   // step4 日志初始化
-  {LOGGING_INIT2(lidar_detect_conf_, lidar_detect_json_)}
+  {LOGGING_INIT(lidar_detect_conf_, lidar_detect_json_)}
 
   // step4 IPC初始化
-  {MESSAGE_INIT2(lidar_detect_conf_, lidar_detect_json_)}
+  {MESSAGE_INIT(lidar_detect_conf_, lidar_detect_json_)}
 
   // step5 读取配置文件
   {
