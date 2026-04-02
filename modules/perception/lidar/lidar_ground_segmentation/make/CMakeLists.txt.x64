@@ -9,6 +9,7 @@ set(LEGION_ALGORITHM_PATH_HOME_PATH /usr/local/legion/legion_algorithm)
 option(ROS2_ENABLE "option for ros2 enable" OFF)
 if(ROS2_ENABLE)
     set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
+    set(ROS2_INTERFACE_LIB_DIR ${PROJECT_SOURCE_DIR}/../../../message/ros2/install/ros2_interface/lib)
 	add_definitions(-DROS2_ENABLE)
 	find_package(rclcpp REQUIRED)
 	find_package(ros2_interface REQUIRED)
@@ -115,6 +116,13 @@ if(ROS_ENABLE)
 endif()
 if(ROS2_ENABLE)
 	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface sensor_msgs)
+  # Use RPATH (not RUNPATH) so rcutils dlopen can resolve ros2_interface type-support libs
+  # even when LD_LIBRARY_PATH is not sourced from workspace setup.bash.
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
+  set_target_properties(${APP_NAME} PROPERTIES
+    BUILD_RPATH "${ROS2_INTERFACE_LIB_DIR};/opt/ros/$ENV{ROS_DISTRO}/lib;/opt/ros/$ENV{ROS_DISTRO}/lib/x86_64-linux-gnu"
+    INSTALL_RPATH "${ROS2_INTERFACE_LIB_DIR};/opt/ros/$ENV{ROS_DISTRO}/lib;/opt/ros/$ENV{ROS_DISTRO}/lib/x86_64-linux-gnu"
+  )
 endif()
 if(LCM_ENABLE)
 	target_link_libraries(${APP_NAME}  lcm glib-2.0)

@@ -569,12 +569,46 @@ void MotionManager::MessagesInit()
   if (motion_manager_conf_ == nullptr)
     return;
 
-  std::map<std::string, legionclaw::common::Message>::iterator iter;
-  for (auto &iter : motion_manager_conf_->messages())
-  {
-    auto message = iter.second;
+  if (motion_manager_json_.find("message") == motion_manager_json_.end() ||
+      !motion_manager_json_["message"].is_object()) {
+    AERROR << "config missing message section";
+    return;
+  }
+  const auto &message_cfg = motion_manager_json_["message"];
+  if (message_cfg.find("active_message") == message_cfg.end() ||
+      !message_cfg["active_message"].is_array() ||
+      message_cfg.find("message_info") == message_cfg.end() ||
+      !message_cfg["message_info"].is_array()) {
+    AERROR << "config message.active_message or message.message_info invalid";
+    return;
+  }
 
-    switch (message.type)
+  const auto &active_message = message_cfg["active_message"];
+  const auto &message_info = message_cfg["message_info"];
+
+  for (const auto &active_item : active_message) {
+    if (!active_item.is_number_integer()) {
+      continue;
+    }
+    int idx = active_item.get<int>();
+    if (idx < 0 || idx >= static_cast<int>(message_info.size())) {
+      AERROR << "active_message index out of range: " << idx;
+      continue;
+    }
+
+    const auto &message = message_info[idx];
+    if (!message.is_object()) {
+      continue;
+    }
+
+    int type = message.value("type", -1);
+    std::string name = message.value("name", "");
+    if (name.empty()) {
+      AERROR << "message_info[" << idx << "] name is empty";
+      continue;
+    }
+
+    switch (type)
     {
 #if LCM_ENABLE
     case legionclaw::common::MessageType::LCM:
@@ -583,7 +617,7 @@ void MotionManager::MessagesInit()
 
       lcm_message_manager_ =
           std::make_shared<LcmMessageManager<MotionManager>>();
-      ResigerMessageManager(message.name, lcm_message_manager_);
+      ResigerMessageManager(name, lcm_message_manager_);
 
       lcm_message_manager_->Init(this);
     }
@@ -596,7 +630,7 @@ void MotionManager::MessagesInit()
 
       dds_message_manager_ =
           std::make_shared<DdsMessageManager<MotionManager>>();
-      ResigerMessageManager(message.name, dds_message_manager_);
+      ResigerMessageManager(name, dds_message_manager_);
 
       dds_message_manager_->Init(this);
     }
@@ -609,7 +643,7 @@ void MotionManager::MessagesInit()
 
       ros_message_manager_ =
           std::make_shared<RosMessageManager<MotionManager>>();
-      ResigerMessageManager(message.name, ros_message_manager_);
+      ResigerMessageManager(name, ros_message_manager_);
       ros_message_manager_->Init(this);
     }
     break;
@@ -621,7 +655,7 @@ void MotionManager::MessagesInit()
 
       ros2_message_manager_ =
           std::make_shared<Ros2MessageManager<MotionManager>>();
-      ResigerMessageManager(message.name, ros2_message_manager_);
+      ResigerMessageManager(name, ros2_message_manager_);
 
       ros2_message_manager_->Init(this);
     }
@@ -635,7 +669,7 @@ void MotionManager::MessagesInit()
 
       adsfi_message_manager_ =
           std::make_shared<AdsfiMessageManager<MotionManager>>();
-      ResigerMessageManager(message.name, adsfi_message_manager_);
+      ResigerMessageManager(name, adsfi_message_manager_);
 
       adsfi_message_manager_->Init(this);
     }
@@ -1182,6 +1216,9 @@ void MotionManager::TaskActivate()
   }
   // IPC激活
   MessagesActivate();
+  if (message_manager_.empty()) {
+    AERROR << "No message manager configured. Check message.active_message in config.";
+  }
   if (function_activation_)
   {
     return;

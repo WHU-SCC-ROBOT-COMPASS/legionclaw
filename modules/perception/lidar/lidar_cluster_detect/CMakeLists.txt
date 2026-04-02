@@ -1,15 +1,6 @@
-#指定 cmake 的最小版本
 cmake_minimum_required(VERSION 3.5)
 
-#设置项目名称
 project(lidar_cluster_detect)
-
-#设置环境变量编译器类型，编译用到的源文件全部都要放到这里
-set(CMAKE_SYSTEM_NAME Linux)
-set(CMAKE_C_COMPILER /usr/bin/aarch64-linux-gnu-gcc)
-set(CMAKE_CXX_COMPILER /usr/bin/aarch64-linux-gnu-g++)
-
-set(CMAKE_CROSSCOMPILING TRUE)
 
 set(APP_NAME lidar_cluster_detect)
 set(THIRD_PATH_HOME_PATH /usr/local/legion/third_party)
@@ -18,14 +9,13 @@ set(LEGION_ALGORITHM_PATH_HOME_PATH /usr/local/legion/legion_algorithm)
 option(ROS2_ENABLE "option for ros2 enable" OFF)
 if(ROS2_ENABLE)
     set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
+    set(ROS2_INTERFACE_LIB_DIR ${PROJECT_SOURCE_DIR}/../../../message/ros2/install/ros2_interface/lib)
 	add_definitions(-DROS2_ENABLE)
 	find_package(rclcpp REQUIRED)
-	find_package(sensor_msgs REQUIRED)
 	find_package(ros2_interface REQUIRED)
+	find_package(sensor_msgs REQUIRED)
 	include_directories(
 	${rclcpp_INCLUDE_DIRS}
-	/opt/ros/$ENV{ROS_DISTRO}/include
-	/opt/ros/$ENV{ROS_DISTRO}/include/sensor_msgs
 	${PROJECT_SOURCE_DIR}/../../../message/ros2/install/ros2_interface/include
 	)
 endif()
@@ -64,15 +54,10 @@ elseif(GLOG_ENABLE)
 	add_definitions(-DGLOG_ENABLE)
 endif()
 
-set(CPP_STANDARD_FLAG -std=c++14)
-if(ROS2_ENABLE)
-  set(CPP_STANDARD_FLAG -std=c++17)
-endif()
-
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    set(DEFAULT_COMPILE ${CPP_STANDARD_FLAG} -fpermissive -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O0 -g3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
-    set(DEFAULT_COMPILE ${CPP_STANDARD_FLAG} -fpermissive -O3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
+    set(DEFAULT_COMPILE -std=c++17 -fpermissive -O3 -Wall -c -fmessage-length=0 -fPIC -fPIE -pie -fstack-protector-all -Wtrampolines)
 endif()
 
 add_compile_options(${DEFAULT_COMPILE})
@@ -100,31 +85,31 @@ include_directories(
 )
 
 include_directories(
-	${THIRD_PATH_HOME_PATH}/arm64/include
-	${THIRD_PATH_HOME_PATH}/arm64/include/eigen3
-	${THIRD_PATH_HOME_PATH}/arm64/include/glib
-	${THIRD_PATH_HOME_PATH}/arm64/include/opencv4
+	${THIRD_PATH_HOME_PATH}/x64/include
+	${THIRD_PATH_HOME_PATH}/x64/include/eigen3
+	${THIRD_PATH_HOME_PATH}/x64/include/opencv4
 	)
 
 link_directories(
-	${THIRD_PATH_HOME_PATH}/arm64/lib/boost
-	${THIRD_PATH_HOME_PATH}/arm64/lib/glib
-	${THIRD_PATH_HOME_PATH}/arm64/lib/lcm
-	${THIRD_PATH_HOME_PATH}/arm64/lib/glog
-	${THIRD_PATH_HOME_PATH}/arm64/lib/gflags
-	${THIRD_PATH_HOME_PATH}/arm64/lib/zlib
-	${THIRD_PATH_HOME_PATH}/arm64/lib/protobuf
-	${THIRD_PATH_HOME_PATH}/arm64/lib/opencv4
+	${THIRD_PATH_HOME_PATH}/x64/lib/boost
+	${THIRD_PATH_HOME_PATH}/x64/lib/lcm
+	${THIRD_PATH_HOME_PATH}/x64/lib/glog
+	${THIRD_PATH_HOME_PATH}/x64/lib/gflags
+	${THIRD_PATH_HOME_PATH}/x64/lib/zlib
+	${THIRD_PATH_HOME_PATH}/x64/lib/zip
+	${THIRD_PATH_HOME_PATH}/x64/lib/protobuf
+	${THIRD_PATH_HOME_PATH}/x64/lib/opencv4
 )
 
 set(BOOST_LINK_LIBS "-lboost_system  -lboost_signals")
-set(OpenCV_LIBRARIES "-lopencv_core  -lopencv_imgproc")
+set(OpenCV_LIBRARIES "-Wl,--no-as-needed -lopencv_core -lopencv_imgproc -Wl,--as-needed")
+set(OPENCV_LIB_DIR ${THIRD_PATH_HOME_PATH}/x64/lib/opencv4)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc  ../../../common/*.c ../../../common/*.cxx ../../../common/*.cpp ../../../common/*.cc)
 
 if(DDS_ENABLE)
-find_package(fastcdr HINTS ${THIRD_PATH_HOME_PATH}/arm64/lib/cmake/fastcdr)
-find_package(fastrtps REQUIRED HINTS ${THIRD_PATH_HOME_PATH}/arm64/lib/cmake/fastrtps)
+find_package(fastcdr HINTS ${THIRD_PATH_HOME_PATH}/x64/lib/cmake/fastcdr)
+find_package(fastrtps REQUIRED HINTS ${THIRD_PATH_HOME_PATH}/x64/lib/cmake/fastrtps)
 file(GLOB_RECURSE DDS_SOURCE_FILES  ../../../message/dds/*.cxx)
 endif()
 add_executable(${APP_NAME}  ${SOURCE_FILES} ${DDS_SOURCE_FILES})
@@ -133,6 +118,13 @@ if(ROS_ENABLE)
 endif()
 if(ROS2_ENABLE)
 	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface sensor_msgs)
+  # Use RPATH (not RUNPATH), so transitive dependencies like
+  # libopencv_imgproc.so -> libopencv_core.so can be resolved from third_party path.
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--disable-new-dtags")
+  set_target_properties(${APP_NAME} PROPERTIES
+    BUILD_RPATH "${OPENCV_LIB_DIR};${ROS2_INTERFACE_LIB_DIR};/opt/ros/$ENV{ROS_DISTRO}/lib;/opt/ros/$ENV{ROS_DISTRO}/lib/x86_64-linux-gnu"
+    INSTALL_RPATH "${OPENCV_LIB_DIR};${ROS2_INTERFACE_LIB_DIR};/opt/ros/$ENV{ROS_DISTRO}/lib;/opt/ros/$ENV{ROS_DISTRO}/lib/x86_64-linux-gnu"
+  )
 endif()
 if(LCM_ENABLE)
 	target_link_libraries(${APP_NAME}  lcm glib-2.0)
