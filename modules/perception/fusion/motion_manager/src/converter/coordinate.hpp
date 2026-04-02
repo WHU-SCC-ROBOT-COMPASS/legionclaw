@@ -8,7 +8,7 @@
 #include "modules/common/interface/point_3d.hpp"
 #include "modules/common/interface/location.hpp"
 
-namespace legion
+namespace legionclaw
 {
     namespace preprocessor
     {
@@ -170,5 +170,5 @@ namespace legion
         };
 
     } // namespace preprocessor
-} // namespace legion
+} // namespace legionclaw
 #endif

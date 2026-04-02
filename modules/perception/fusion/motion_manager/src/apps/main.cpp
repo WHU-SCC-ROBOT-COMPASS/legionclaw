@@ -27,7 +27,7 @@
 #endif
 
 using namespace std;
-using namespace legion::perception::fusion;
+using namespace legionclaw::perception::fusion;
 
 int main(int argc, char **argv) {
   std::string file_path =

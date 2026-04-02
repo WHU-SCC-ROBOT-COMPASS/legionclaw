@@ -22,8 +22,8 @@
 #include <ctime>
 
 /**
- * @namespace legion::perception::fusion
- * @brief legion::perception::fusion
+ * @namespace legionclaw::perception::fusion
+ * @brief legionclaw::perception::fusion
  */
 
 using Label = motion_manager::interface::ObjectClassification;
@@ -34,7 +34,7 @@ bool cmp(legionclaw::interface::Obstacle &a, legionclaw::interface::Obstacle &b)
   return a.id() < b.id();
 }
 
-namespace legion{
+namespace legionclaw{
 namespace perception{
 namespace fusion{
 
@@ -654,6 +654,7 @@ void MotionManager::MessagesInit()
       AINFO << "message type:ROS2";
 
       ros2_message_manager_ =
+          // std::make_shared<legionclaw::perception::fusion::Ros2MessageManager<MotionManager>>();
           std::make_shared<Ros2MessageManager<MotionManager>>();
       ResigerMessageManager(name, ros2_message_manager_);
 
@@ -1060,7 +1061,7 @@ void MotionManager::VehicleToWorld(legionclaw::interface::ObstacleList &data, le
 
     legionclaw::interface::Point3D acc;
     acc = data_fused_object_array[obj_index].acceleration_vehicle();
-    legion::preprocessor::coordinate::convert_acc(&acc, &location);
+    legionclaw::preprocessor::coordinate::convert_acc(&acc, &location);
     data_fused_object_array[obj_index].set_acceleration_abs(acc);
 
     std::vector<legionclaw::interface::Point3D> from_polygon;
@@ -1086,7 +1087,7 @@ void MotionManager::VehicleToWorld(legionclaw::interface::ObstacleList &data, le
 
 void MotionManager::ConvertPoint(legionclaw::interface::Point3D &point, legionclaw::interface::Location &location)
 {
-  std::vector<double> values = legion::preprocessor::coordinate::convert_point(location.utm_position().x(),
+  std::vector<double> values = legionclaw::preprocessor::coordinate::convert_point(location.utm_position().x(),
                                                                                 location.utm_position().y(),
                                                                                 location.utm_position().z(),
                                                                                 location.roll(),
@@ -2707,4 +2708,4 @@ void MotionManager::FuseObstacleLists()
 
 } // namespace fusion
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw

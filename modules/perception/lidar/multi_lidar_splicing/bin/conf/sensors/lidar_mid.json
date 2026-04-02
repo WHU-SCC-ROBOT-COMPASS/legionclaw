@@ -1,16 +1,29 @@
 {
-    "channel": "/sensor/lidar/mid/PointCloud2",
+    "channel": "/livox/lidar",
     "distortion": [],
-    "image_size": [0, 0],
+    "image_size": [
+        0,
+        0
+    ],
     "intrinsic": [],
     "modality": "lidar",
     "rotation": [
-        1, 0, 0,
-        0, 1, 0,
-        0, 0, 1
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
     ],
     "target": "asensing",
-    "translation": [2.0442, 0, 0.9382],
+    "translation": [
+        1.3,
+        0.0,
+        1.44
+    ],
     "undistort_distortion": [],
     "undistort_intrinsic": []
 }

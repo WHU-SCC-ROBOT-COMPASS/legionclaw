@@ -55,11 +55,11 @@
 
 #include "conf/motion_manager_conf.hpp"
 /**
- * @namespace legion::perception::fusion
- * @brief legion::perception::fusion
+ * @namespace legionclaw::perception::fusion
+ * @brief legionclaw::perception::fusion
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace fusion {
 using namespace legionclaw::common;
@@ -116,6 +116,7 @@ protected:
   std::shared_ptr<RosMessageManager<MotionManager>> ros_message_manager_;
 #endif
 #if ROS2_ENABLE
+  // std::shared_ptr<legionclaw::perception::fusion::Ros2MessageManager<MotionManager>> ros2_message_manager_;
   std::shared_ptr<Ros2MessageManager<MotionManager>> ros2_message_manager_;
 #endif
 #if ADSFI_ENABLE
@@ -468,4 +469,4 @@ protected:
 };
 } // namespace fusion
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw

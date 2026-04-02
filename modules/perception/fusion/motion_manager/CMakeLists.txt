@@ -1,15 +1,6 @@
-#指定 cmake 的最小版本
 cmake_minimum_required(VERSION 3.5)
 
-#设置项目名称
 project(motion_manager)
-
-#设置环境变量编译器类型，编译用到的源文件全部都要放到这里
-#set(CMAKE_SYSTEM_NAME Linux)
-#set(CMAKE_C_COMPILER /usr/bin/aarch64-linux-gnu-gcc)
-#set(CMAKE_CXX_COMPILER /usr/bin/aarch64-linux-gnu-g++)
-#set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_CROSSCOMPILING TRUE)
 
 set(APP_NAME motion_manager)
 set(THIRD_PATH_HOME_PATH /usr/local/legion/third_party)
@@ -17,9 +8,10 @@ set(LEGION_ALGORITHM_PATH_HOME_PATH /usr/local/legion/legion_algorithm)
 
 option(ROS2_ENABLE "option for ros2 enable" OFF)
 if(ROS2_ENABLE)
-    set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
+    set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../../../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
 	add_definitions(-DROS2_ENABLE)
 	find_package(rclcpp REQUIRED)
+	find_package(tf2_geometry_msgs REQUIRED)
 	find_package(ros2_interface REQUIRED)
 	include_directories(
 	${rclcpp_INCLUDE_DIRS}
@@ -48,7 +40,7 @@ endif()
 option(DDS_ENABLE "option for dds enable" OFF)
 if(DDS_ENABLE)
 	add_definitions(-DDDS_ENABLE)
-		include_directories(
+	include_directories(
 	${PROJECT_SOURCE_DIR}/../../../message/dds/src/legion
 	)
 endif()
@@ -69,7 +61,6 @@ endif()
 
 add_compile_options(${DEFAULT_COMPILE})
 
-
 macro(LISTSUBDIR result currentdir)
 file(GLOB_RECURSE children LIST_DIRECTORIES true  ${currentdir}/*)
 set(dirlist ${currentdir})
@@ -86,7 +77,6 @@ LISTSUBDIR(SOURCE_DIRS src)
 include_directories(${SOURCE_DIRS})
 
 include_directories(
-	kalman/hpp
     ${PROJECT_SOURCE_DIR}/..
     ${PROJECT_SOURCE_DIR}/../..
     ${PROJECT_SOURCE_DIR}/../../..
@@ -94,41 +84,37 @@ include_directories(
 )
 
 include_directories(
-	${THIRD_PATH_HOME_PATH}/arm64/include
-	${THIRD_PATH_HOME_PATH}/arm64/include/eigen3
-	# ${THIRD_PATH_HOME_PATH}/arm64/include/glib
-	${THIRD_PATH_HOME_PATH}/arm64/include/opencv4
+	${THIRD_PATH_HOME_PATH}/x64/include
+	${THIRD_PATH_HOME_PATH}/x64/include/eigen3
 	)
 
 link_directories(
-	${THIRD_PATH_HOME_PATH}/arm64/lib/boost
-	# ${THIRD_PATH_HOME_PATH}/arm64/lib/glib
-    ${THIRD_PATH_HOME_PATH}/arm64/lib/lcm
-	${THIRD_PATH_HOME_PATH}/arm64/lib/glog
-	${THIRD_PATH_HOME_PATH}/arm64/lib/gflags
-	${THIRD_PATH_HOME_PATH}/arm64/lib/protobuf
+	${THIRD_PATH_HOME_PATH}/x64/lib/boost
+    ${THIRD_PATH_HOME_PATH}/x64/lib/lcm
+	${THIRD_PATH_HOME_PATH}/x64/lib/glog
+	${THIRD_PATH_HOME_PATH}/x64/lib/gflags
+	${THIRD_PATH_HOME_PATH}/x64/lib/protobuf
 )
-
-if(ROS_ENABLE)
-  find_package(catkin REQUIRED COMPONENTS
-    roscpp
-    pcl_ros
-    geometry_msgs
-    tf
-  )
-
-  include_directories(
-    ${catkin_INCLUDE_DIRS}
-  )
-endif()
 
 set(BOOST_LINK_LIBS "-lboost_system  -lboost_signals")
 
-file(GLOB_RECURSE SOURCE_FILES kalman/cpp/*.cpp src/*.c src/*.cxx src/*.cpp src/*.cc  ../../../common/*.c ../../../common/*.cxx ../../../common/*.cpp ../../../common/*.cc)
+# For ROS2 mode, exclude tf2 source files to avoid conflict with ROS2 tf2
+if(ROS2_ENABLE)
+    file(GLOB_RECURSE COMMON_SOURCE_FILES ../../../common/*.c ../../../common/*.cxx ../../../common/*.cpp ../../../common/*.cc)
+    foreach(src_file ${COMMON_SOURCE_FILES})
+        if("${src_file}" MATCHES "tf2")
+            list(REMOVE_ITEM COMMON_SOURCE_FILES ${src_file})
+        endif()
+    endforeach()
+    file(GLOB_RECURSE MODULE_SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc kalman/cpp/*.cpp)
+    set(SOURCE_FILES ${MODULE_SOURCE_FILES} ${COMMON_SOURCE_FILES})
+else()
+    file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc kalman/cpp/*.cpp  ../../../common/*.c ../../../common/*.cxx ../../../common/*.cpp ../../../common/*.cc)
+endif()
 
 if(DDS_ENABLE)
-find_package(fastcdr HINTS ${THIRD_PATH_HOME_PATH}/arm64/lib/cmake/fastcdr)
-find_package(fastrtps REQUIRED HINTS ${THIRD_PATH_HOME_PATH}/arm64/lib/cmake/fastrtps)
+find_package(fastcdr HINTS ${THIRD_PATH_HOME_PATH}/x64/lib/cmake/fastcdr)
+find_package(fastrtps REQUIRED HINTS ${THIRD_PATH_HOME_PATH}/x64/lib/cmake/fastrtps)
 file(GLOB_RECURSE DDS_SOURCE_FILES  ../../../message/dds/*.cxx)
 endif()
 add_executable(${APP_NAME}  ${SOURCE_FILES} ${DDS_SOURCE_FILES})
@@ -136,7 +122,7 @@ if(ROS_ENABLE)
 	target_link_libraries(${APP_NAME}  ${roscpp_LIBRARIES})
 endif()
 if(ROS2_ENABLE)
-	ament_target_dependencies(${APP_NAME}  rclcpp ros2_interface)
+	ament_target_dependencies(${APP_NAME}  rclcpp tf2_geometry_msgs ros2_interface)
 endif()
 if(LCM_ENABLE)
 	target_link_libraries(${APP_NAME}  lcm glib-2.0)
@@ -144,5 +130,5 @@ endif()
 if(DDS_ENABLE)
 target_link_libraries(${APP_NAME}  fastrtps fastcdr)
 endif()
-target_link_libraries(${APP_NAME}  pthread gflags glog protobuf dl ${BOOST_LINK_LIBS} ${catkin_LIBRARIES})
+target_link_libraries(${APP_NAME}  pthread gflags glog protobuf dl ${BOOST_LINK_LIBS} )
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

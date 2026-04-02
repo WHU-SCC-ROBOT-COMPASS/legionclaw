@@ -1,6 +1,6 @@
 /**
  * @file    polygon.hpp
- * @author  dabai-legion
+ * @author  dabai-legionclaw
  * @date    2024-01-04
  * @version 1.0.0
  * @par     Copyright(c)
@@ -112,4 +112,4 @@ protected:
     std::vector<motion_manager::interface::Point32> points_;
 };
 } // namespace interface
-} // namespace legion
+} // namespace legionclaw

@@ -1,6 +1,6 @@
 /**
  * @file    enum.h
- * @author  dabai-legion
+ * @author  dabai-legionclaw
  * @date    2024-01-04
  * @version 1.0.0
  * @par     Copyright(c)
@@ -31,4 +31,4 @@ namespace common
         S_POLYGON = 2,
     };
 } // namespace common
-} // namespace legion
+} // namespace legionclaw

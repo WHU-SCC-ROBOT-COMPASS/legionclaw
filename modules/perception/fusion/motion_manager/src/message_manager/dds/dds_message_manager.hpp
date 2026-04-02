@@ -14,11 +14,11 @@
 
 #if DDS_ENABLE
 /**
- * @namespace legion::perception::fusion
- * @brief legion::perception::fusion
+ * @namespace legionclaw::perception::fusion
+ * @brief legionclaw::perception::fusion
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace fusion {
 using namespace legionclaw::common;
@@ -772,5 +772,5 @@ template <typename T> void DdsMessageManager<T>::Stop() {}
 
 } // namespace fusion
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #endif

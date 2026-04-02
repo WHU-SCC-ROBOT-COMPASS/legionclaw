@@ -20,11 +20,11 @@
 #include "message_manager/message_manager.h"
 
 /**
- * @namespace legion::perception::fusion
- * @brief legion::perception::fusion
+ * @namespace legionclaw::perception::fusion
+ * @brief legionclaw::perception::fusion
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace fusion {
 /**
@@ -82,6 +82,6 @@ protected:
 };
 } // namespace fusion
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #include "lcm_message_manager.hpp"
 #endif

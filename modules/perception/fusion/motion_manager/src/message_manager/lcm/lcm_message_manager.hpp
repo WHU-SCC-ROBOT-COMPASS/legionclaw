@@ -16,11 +16,11 @@
 
 // #if LCM_ENABLE
 /**
- * @namespace legion::perception::fusion
+ * @namespace legionclaw::perception::fusion
  * @brief legionclaw::perception::fusion
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace fusion {
 
@@ -679,5 +679,5 @@ template <typename T> void LcmMessageManager<T>::Stop() {
 }
 } // namespace fusion
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 // #endif

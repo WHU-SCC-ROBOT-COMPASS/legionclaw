@@ -20,8 +20,8 @@
 #include "message_manager/message_manager.h"
 
 /**
- * @namespace legion::perception::fusion
- * @brief legion::perception::fusion
+ * @namespace legionclaw::perception::fusion
+ * @brief legionclaw::perception::fusion
  */
 
 namespace legionclaw {
@@ -117,6 +117,6 @@ protected:
 };
 } // namespace fusion
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
 #include "ros2_message_manager.hpp"
 #endif // ROS2_ENABLE

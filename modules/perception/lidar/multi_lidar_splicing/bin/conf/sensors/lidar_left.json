@@ -1,16 +1,29 @@
 {
-    "channel": "/sensor/lidar/left/PointCloud2",
+    "channel": "/d1/front_left/point_cloud",
     "distortion": [],
-    "image_size": [0, 0],
+    "image_size": [
+        0,
+        0
+    ],
     "intrinsic": [],
     "modality": "lidar",
     "rotation": [
-        -0.015118624, -0.999303936, 0.034108895,
-         0.999869011, -0.014911419, 0.006321053,
-        -0.005808046,  0.034199985, 0.999398133
+        -0.809016994,
+        -0.587785252,
+        0.0,
+        0.587785252,
+        -0.809016994,
+        0.0,
+        0.0,
+        0.0,
+        1.0
     ],
     "target": "asensing",
-    "translation": [0.725670000, 0.534594000, 0.558674000],
+    "translation": [
+        1.67,
+        0.55,
+        0.44
+    ],
     "undistort_distortion": [],
     "undistort_intrinsic": []
 }

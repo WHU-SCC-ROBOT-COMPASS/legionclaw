@@ -2,7 +2,7 @@
  * @Date         : 2022-02-20 12:45:44
  * @LastEditors  : lx <m335800283@outlook.com>
  * @LastEditTime : 2022-03-03 19:58:02
- * @FilePath     : /new_1228/legion-framework_1223/modules/perception/fusion/preprocessor/src/converter/convert.hpp
+ * @FilePath     : /new_1228/legionclaw-framework_1223/modules/perception/fusion/preprocessor/src/converter/convert.hpp
  **/
 #ifndef __CONVERT_HPP__
 #define __CONVERT_HPP__
@@ -18,7 +18,7 @@
 #include "modules/common/enum/enum.h"
 #include "coordinate.hpp"
 
-namespace legion
+namespace legionclaw
 {
     namespace preprocessor
     {
@@ -113,7 +113,7 @@ namespace legion
 
             static void convert_point(legionclaw::interface::Point3D *point, legionclaw::interface::Location *location)
             {
-                std::vector<double> values = legion::preprocessor::coordinate::convert_point(location->utm_position().x(),
+                std::vector<double> values = legionclaw::preprocessor::coordinate::convert_point(location->utm_position().x(),
                                                                                              location->utm_position().y(),
                                                                                              location->utm_position().z(),
                                                                                              location->roll(),
@@ -154,7 +154,7 @@ namespace legion
                     if(data_fused_object_array[obj_index].fusion_type()==legionclaw::interface::Obstacle::FusionType::LIDAR)
                     {
                         vel = data_fused_object_array[obj_index].velocity_vehicle();
-                        legion::preprocessor::coordinate::convert_velocity(&vel, location);
+                        legionclaw::preprocessor::coordinate::convert_velocity(&vel, location);
                     }
                     data_fused_object_array[obj_index].set_velocity_abs(vel);
 
@@ -183,6 +183,6 @@ namespace legion
             }
         };
     } // namespace preprocessor
-} // namespace legion
+} // namespace legionclaw
 
 #endif

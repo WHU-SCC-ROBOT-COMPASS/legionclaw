@@ -15,14 +15,14 @@
 #include "modules/common/interface/obu_cmd_msg.hpp"
 
 /**
- * @namespace legion::perception::fusion
- * @brief legion::perception::fusion
+ * @namespace legionclaw::perception::fusion
+ * @brief legionclaw::perception::fusion
  */
 
-namespace legion {
+namespace legionclaw {
 namespace perception {
 namespace fusion {
-
+using namespace legionclaw::common;
 template <typename T> class MessageManager {
 public:
   MessageManager() = default;
@@ -36,4 +36,4 @@ public:
 };
 } // namespace fusion
 } // namespace perception
-} // namespace legion
+} // namespace legionclaw
