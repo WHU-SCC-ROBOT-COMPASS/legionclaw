@@ -6,5 +6,14 @@
         "lidar_back": "./conf/sensors/lidar_back.json"
     },
     "frame_id": "map",
-    "publish_topic": "/rslidar_points"
+    "publish_topic": "/rslidar_points",
+    "filter_region": {
+        "enable": true,
+        "x_min": -0.99,
+        "x_max": 1.8,
+        "y_min": -0.7,
+        "y_max": 0.7,
+        "z_min": -0.1,
+        "z_max": 1.6
+    }
 }

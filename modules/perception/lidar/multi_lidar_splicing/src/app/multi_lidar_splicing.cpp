@@ -102,10 +102,8 @@ T readValue(const uint8_t* data_ptr, int offset, int datatype, bool is_bigendian
     return value;
 }
 
-// 与ROS1一致：自定义 fromROSMsg，确保 intensity 正确
 static void fromROSMsg(const sensor_msgs::msg::PointCloud2& cloud_msg, pcl::PointCloud<pcl::PointXYZI>& cloud) {
-    // 基本信息
-    cloud.header.stamp    = rclcpp::Time(cloud_msg.header.stamp).nanoseconds() / 1000; // microseconds
+    cloud.header.stamp    = rclcpp::Time(cloud_msg.header.stamp).nanoseconds() / 1000;
     cloud.header.frame_id = cloud_msg.header.frame_id;
     cloud.width  = cloud_msg.width;
     cloud.height = cloud_msg.height;
@@ -142,86 +140,150 @@ static void fromROSMsg(const sensor_msgs::msg::PointCloud2& cloud_msg, pcl::Poin
     }
 }
 
+struct BufferedMessage {
+    size_t lidar_index;
+    sensor_msgs::msg::PointCloud2::ConstSharedPtr msg;
+    rclcpp::Time timestamp;
+    BufferedMessage(size_t idx, sensor_msgs::msg::PointCloud2::ConstSharedPtr m, rclcpp::Time t)
+        : lidar_index(idx), msg(std::move(m)), timestamp(t) {}
+};
 
-MultiLidarSplicing::MultiLidarSplicing(std::string lidar_front,
-                                       std::string lidar_mid,
-                                       std::string lidar_left,
-                                       std::string lidar_right,
-                                       std::string lidar_back,
-                                       std::string frame_id,
-                                       std::string publish_topic)
+static std::mutex g_msg_mutex;
+static std::vector<BufferedMessage> g_msg_buffer;
+static constexpr double SYNC_TIME_TOLERANCE = 0.05;
+
+MultiLidarSplicing::MultiLidarSplicing(const std::vector<LidarConfig> &lidar_configs,
+                                       const std::string &frame_id,
+                                       const std::string &publish_topic,
+                                       const FilterRegion &filter_region)
 : rclcpp::Node("MultiLidarSplicing"),
-  lidar_front_(std::move(lidar_front)),
-  lidar_mid_(std::move(lidar_mid)),
-  lidar_left_(std::move(lidar_left)),
-  lidar_right_(std::move(lidar_right)),
-  lidar_back_(std::move(lidar_back)),
   frame_id_(std::move(frame_id)),
-  publish_topic_(std::move(publish_topic))
+  publish_topic_(std::move(publish_topic)),
+  filter_region_(filter_region),
+  lidar_count_(static_cast<int>(lidar_configs.size()))
 {
-    // 读取use_sim_time参数（不声明，因为它是全局参数，可能已通过命令行设置）
-    // 如果通过命令行设置了use_sim_time，则使用命令行值；否则默认为false
+    for (size_t i = 0; i < lidar_configs.size(); ++i) {
+        lidars_.push_back(Lidar(lidar_configs[i].path));
+        lidar_name_to_index_[lidar_configs[i].name] = i;
+    }
+
     bool use_sim_time = false;
     try {
-        // 尝试获取use_sim_time参数（可能已通过命令行设置）
         if (this->has_parameter("use_sim_time")) {
             use_sim_time = this->get_parameter("use_sim_time").as_bool();
         }
     } catch (const std::exception& e) {
-        // 如果获取失败，使用默认值false
         use_sim_time = false;
     }
     
     if (use_sim_time) {
         RCLCPP_INFO(this->get_logger(), "使用仿真时间 (use_sim_time=true)");
-        // 在ROS2中，设置use_sim_time参数后，节点会自动使用/clock话题的时间
-        // 这需要ros2 run时传递参数：--ros-args -p use_sim_time:=true
     } else {
         RCLCPP_INFO(this->get_logger(), "使用系统时间 (use_sim_time=false)");
     }
     
-    // 使用与订阅者兼容的QoS策略（与sensor_data profile兼容）
-    // 基于sensor_data profile，但增加队列大小到100，避免消息堆积导致卡顿
-    // 必须使用reliable策略，否则与使用sensor_data QoS的订阅者不兼容
     rclcpp::QoS qos = rclcpp::QoS(rclcpp::KeepLast(100));
-    qos.reliability(rclcpp::ReliabilityPolicy::Reliable);  // 与sensor_data兼容
+    qos.reliability(rclcpp::ReliabilityPolicy::Reliable);
     qos.durability(rclcpp::DurabilityPolicy::Volatile);
     point_cloud_publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(publish_topic_, qos);
+
+    last_publish_time_ = std::chrono::high_resolution_clock::now();
+
+    RCLCPP_INFO(this->get_logger(), "MultiLidarSplicing initialized with %d lidars", lidar_count_);
+
+    if (filter_region_.enable) {
+        RCLCPP_INFO(this->get_logger(),
+            "Filter region enabled: x[%.2f, %.2f], y[%.2f, %.2f], z[%.2f, %.2f]",
+            filter_region_.x_min, filter_region_.x_max,
+            filter_region_.y_min, filter_region_.y_max,
+            filter_region_.z_min, filter_region_.z_max);
+    }
 }
 
 MultiLidarSplicing::~MultiLidarSplicing() = default;
 
 void MultiLidarSplicing::run()
 {
-    // 使用可靠QoS避免单点云丢包导致整帧同步失败
     rmw_qos_profile_t reliable_sensor_qos = rmw_qos_profile_sensor_data;
     reliable_sensor_qos.reliability = RMW_QOS_POLICY_RELIABILITY_RELIABLE;
     reliable_sensor_qos.depth = 100;
 
-    sub_front_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>>(this, lidar_front_.getChannel(), reliable_sensor_qos);
-    sub_mid_  = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>>(this, lidar_mid_.getChannel(),  reliable_sensor_qos);
-    sub_left_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>>(this, lidar_left_.getChannel(), reliable_sensor_qos);
-    sub_right_  = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>>(this, lidar_right_.getChannel(),  reliable_sensor_qos);
-    sub_back_  = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>>(this, lidar_back_.getChannel(),  reliable_sensor_qos);
+    for (size_t i = 0; i < lidars_.size(); ++i) {
+        std::string topic = lidars_[i].getChannel();
+        auto sub = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>>(
+            this, topic, reliable_sensor_qos);
+        subscribers_[topic] = sub;
+        
+        size_t lidar_idx = i;
+        sub->registerCallback([this, lidar_idx](const sensor_msgs::msg::PointCloud2::ConstSharedPtr& msg) {
+            this->onLidarMessage(lidar_idx, msg);
+        });
+    }
 
-    // 优化同步策略：
-    // 1. 队列大小设置为50，兼顾缓冲与延迟（可根据场景再调大）
-    // 2. 对于10Hz的激光雷达，ApproximateTime策略会自动处理时间同步
-    //    队列越大，能容忍的时间差越大，不会因为时间差稍大就丢弃消息
-    sync_ = std::make_shared<message_filters::Synchronizer<SyncPolicy>>(
-        SyncPolicy(50), *sub_front_, *sub_mid_, *sub_left_, *sub_right_, *sub_back_);
-    
-    // 初始化性能监控
-    last_publish_time_ = std::chrono::high_resolution_clock::now();
-
-
-    sync_->registerCallback(
-        std::bind(&MultiLidarSplicing::callback, this,
-                  std::placeholders::_1, std::placeholders::_2,
-                  std::placeholders::_3, std::placeholders::_4,
-                  std::placeholders::_5));
+    RCLCPP_INFO(this->get_logger(), "Subscribed to %zu lidar topics", subscribers_.size());
 
     rclcpp::spin(shared_from_this());
+}
+
+void MultiLidarSplicing::onLidarMessage(size_t lidar_index, const sensor_msgs::msg::PointCloud2::ConstSharedPtr& msg)
+{
+    rclcpp::Time msg_time(msg->header.stamp);
+    
+    std::vector<sensor_msgs::msg::PointCloud2::ConstSharedPtr> synchronized_msgs;
+    
+    {
+        std::lock_guard<std::mutex> lock(g_msg_mutex);
+        
+        g_msg_buffer.emplace_back(lidar_index, msg, msg_time);
+        
+        auto now = this->now();
+        g_msg_buffer.erase(
+            std::remove_if(g_msg_buffer.begin(), g_msg_buffer.end(),
+                [now](const BufferedMessage& m) {
+                    return (now - m.timestamp).seconds() > 1.0;
+                }),
+            g_msg_buffer.end());
+        
+        if (g_msg_buffer.size() >= static_cast<size_t>(lidar_count_)) {
+            rclcpp::Time sync_time(0, 0, RCL_ROS_TIME);
+            for (const auto& m : g_msg_buffer) {
+                if (m.timestamp > sync_time) {
+                    sync_time = m.timestamp;
+                }
+            }
+            
+            synchronized_msgs.resize(lidar_count_, nullptr);
+            std::vector<BufferedMessage> remaining;
+            
+            for (auto& buffered : g_msg_buffer) {
+                if (std::abs((buffered.timestamp - sync_time).seconds()) < SYNC_TIME_TOLERANCE) {
+                    if (buffered.lidar_index < synchronized_msgs.size() && synchronized_msgs[buffered.lidar_index] == nullptr) {
+                        synchronized_msgs[buffered.lidar_index] = buffered.msg;
+                    }
+                } else {
+                    remaining.push_back(std::move(buffered));
+                }
+            }
+            
+            bool all_received = true;
+            for (const auto& msg_ptr : synchronized_msgs) {
+                if (msg_ptr == nullptr) {
+                    all_received = false;
+                    break;
+                }
+            }
+            
+            if (all_received) {
+                g_msg_buffer = std::move(remaining);
+            } else {
+                synchronized_msgs.clear();
+            }
+        }
+    }
+    
+    if (!synchronized_msgs.empty()) {
+        callback(synchronized_msgs);
+    }
 }
 
 pcl::PointCloud<pcl::PointXYZI>::Ptr MultiLidarSplicing::processLidarCloud(
@@ -234,67 +296,93 @@ pcl::PointCloud<pcl::PointXYZI>::Ptr MultiLidarSplicing::processLidarCloud(
     return cloud;
 }
 
-void MultiLidarSplicing::callback(const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_front_msg,
-                                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_mid_msg,
-                                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_left_msg,
-                                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_right_msg,
-                                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_back_msg)
+pcl::PointCloud<pcl::PointXYZI>::Ptr MultiLidarSplicing::mergeClouds(
+    const std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> &clouds)
 {
+    size_t total_points = 0;
+    bool is_dense = true;
+
+    for (const auto& cloud : clouds) {
+        total_points += cloud->size();
+        is_dense = is_dense && cloud->is_dense;
+    }
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr result(new pcl::PointCloud<pcl::PointXYZI>);
+    result->points.reserve(total_points);
+    result->width = total_points;
+    result->height = 1;
+    result->is_dense = is_dense;
+
+    for (const auto& cloud : clouds) {
+        result->points.insert(result->points.end(), cloud->points.begin(), cloud->points.end());
+    }
+
+    return result;
+}
+
+pcl::PointCloud<pcl::PointXYZI>::Ptr MultiLidarSplicing::filterCloud(
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud)
+{
+    if (!filter_region_.enable) {
+        return cloud;
+    }
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr filtered(new pcl::PointCloud<pcl::PointXYZI>);
+    filtered->reserve(cloud->size());
+    filtered->header = cloud->header;
+    filtered->width = cloud->width;
+    filtered->height = cloud->height;
+    filtered->is_dense = false;
+
+    for (const auto& point : cloud->points) {
+        if (point.x < filter_region_.x_min || point.x > filter_region_.x_max ||
+            point.y < filter_region_.y_min || point.y > filter_region_.y_max ||
+            point.z < filter_region_.z_min || point.z > filter_region_.z_max)
+        {
+            filtered->points.push_back(point);
+        }
+    }
+
+    filtered->width = static_cast<uint32_t>(filtered->points.size());
+    filtered->height = 1;
+    filtered->is_dense = true;
+
+    return filtered;
+}
+
+void MultiLidarSplicing::callback(const std::vector<sensor_msgs::msg::PointCloud2::ConstSharedPtr> &msgs)
+{
+    if (msgs.size() != static_cast<size_t>(lidar_count_)) {
+        RCLCPP_WARN(this->get_logger(), "Received %zu messages but expected %d", msgs.size(), lidar_count_);
+        return;
+    }
+
     auto startTime = std::chrono::high_resolution_clock::now();
     total_frames_++;
 
-    // 顺序处理，避免每帧创建/销毁线程带来的抖动
-    auto lidar_front_cloud = processLidarCloud(lidar_front_msg, lidar_front_);
-    auto lidar_mid_cloud   = processLidarCloud(lidar_mid_msg,  lidar_mid_);
-    auto lidar_left_cloud  = processLidarCloud(lidar_left_msg, lidar_left_);
-    auto lidar_right_cloud = processLidarCloud(lidar_right_msg, lidar_right_);
-    auto lidar_back_cloud  = processLidarCloud(lidar_back_msg,  lidar_back_);
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> processed_clouds;
+    for (size_t i = 0; i < msgs.size(); ++i) {
+        processed_clouds.push_back(processLidarCloud(msgs[i], lidars_[i]));
+    }
 
-    // 优化点云合并：预先计算总点数，一次性分配内存
-    size_t total_points = lidar_front_cloud->size() + lidar_mid_cloud->size() + 
-                          lidar_left_cloud->size() + lidar_right_cloud->size() + 
-                          lidar_back_cloud->size();
-    
-    pcl::PointCloud<pcl::PointXYZI>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZI>);
-    point_cloud->points.reserve(total_points);
-    point_cloud->width = total_points;
-    point_cloud->height = 1;
-    point_cloud->is_dense = lidar_front_cloud->is_dense && lidar_mid_cloud->is_dense && 
-                           lidar_left_cloud->is_dense && lidar_right_cloud->is_dense && 
-                           lidar_back_cloud->is_dense;
+    auto merged_cloud = mergeClouds(processed_clouds);
 
-    // 使用insert而不是+=，减少内存重新分配
-    point_cloud->points.insert(point_cloud->points.end(), lidar_front_cloud->points.begin(), lidar_front_cloud->points.end());
-    point_cloud->points.insert(point_cloud->points.end(), lidar_mid_cloud->points.begin(), lidar_mid_cloud->points.end());
-    point_cloud->points.insert(point_cloud->points.end(), lidar_left_cloud->points.begin(), lidar_left_cloud->points.end());
-    point_cloud->points.insert(point_cloud->points.end(), lidar_right_cloud->points.begin(), lidar_right_cloud->points.end());
-    point_cloud->points.insert(point_cloud->points.end(), lidar_back_cloud->points.begin(), lidar_back_cloud->points.end());
+    auto filtered_cloud = filterCloud(merged_cloud);
 
     auto after_merge = std::chrono::high_resolution_clock::now();
-    // 优化：直接构建ROS消息，避免pcl::toROSMsg的额外开销
+
     sensor_msgs::msg::PointCloud2 point_cloud_msg;
-    pcl::toROSMsg(*point_cloud, point_cloud_msg);
-    point_cloud_msg.header = lidar_front_msg->header;
+    pcl::toROSMsg(*filtered_cloud, point_cloud_msg);
+    point_cloud_msg.header = msgs[0]->header;
     point_cloud_msg.header.frame_id = frame_id_;
     
-    // 发布消息
     point_cloud_publisher_->publish(point_cloud_msg);
     last_publish_time_ = std::chrono::high_resolution_clock::now();
 
     auto endTime = std::chrono::high_resolution_clock::now();
     double sec = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count() / 1e9;
     double merge_sec = std::chrono::duration_cast<std::chrono::nanoseconds>(after_merge - startTime).count() / 1e9;
-    double fps = 1.0 / sec;
     
-    // 每10帧输出一次性能信息，减少日志开销
-    // if (total_frames_ % 10 == 0) {
-    //     double drop_rate = total_frames_ > 0 ? dropped_frames_ * 100.0 / total_frames_ : 0;
-    //     RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 2000,
-    //         "[帧 %zu] 处理: %.2fms | 理论FPS: %.1f | 点云: %zu | 丢弃: %zu (%.1f%%)",
-    //         total_frames_, sec * 1000, fps, total_points, dropped_frames_, drop_rate);
-    // }
-    
-    // 警告：如果处理时间超过100ms（10Hz周期），输出警告，并指明主要耗时段
     if (sec > 0.1) {
         RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
             "处理时间 %.2fms (拼接 %.2fms) 超过10Hz周期(100ms)！", sec * 1000, merge_sec * 1000);

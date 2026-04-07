@@ -4,6 +4,12 @@ cmake_minimum_required(VERSION 3.5)
 #设置项目名称
 project(multi_lidar_splicing)
 
+#设置环境变量编译器类型
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_C_COMPILER /usr/bin/aarch64-linux-gnu-gcc)
+set(CMAKE_CXX_COMPILER /usr/bin/aarch64-linux-gnu-g++)
+set(CMAKE_CROSSCOMPILING TRUE)
+
 set(APP_NAME multi_lidar_splicing)
 set(THIRD_PATH_HOME_PATH /usr/local/legion/third_party)
 
@@ -18,6 +24,7 @@ if(NOT ROS2_ENABLE)
   return()
 endif()
 
+set(ros2_interface_DIR ${PROJECT_SOURCE_DIR}/../../../message/ros2/install/ros2_interface/share/ros2_interface/cmake)
 add_definitions(-DROS2_ENABLE)
 
 find_package(rclcpp REQUIRED)
@@ -68,8 +75,8 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../..
   ${PROJECT_SOURCE_DIR}/../../..
   ${PROJECT_SOURCE_DIR}/../../../..
-  ${THIRD_PATH_HOME_PATH}/x64/include
-  ${THIRD_PATH_HOME_PATH}/x64/include/eigen3
+  ${THIRD_PATH_HOME_PATH}/arm64/include
+  ${THIRD_PATH_HOME_PATH}/arm64/include/eigen3
   ${rclcpp_INCLUDE_DIRS}
   /opt/ros/$ENV{ROS_DISTRO}/include
   /opt/ros/$ENV{ROS_DISTRO}/include/sensor_msgs
@@ -84,9 +91,9 @@ if(pcl_ros_FOUND)
 endif()
 
 link_directories(
-  ${THIRD_PATH_HOME_PATH}/x64/lib/glog
-  ${THIRD_PATH_HOME_PATH}/x64/lib/gflags
-  ${THIRD_PATH_HOME_PATH}/x64/lib/zlib
+  ${THIRD_PATH_HOME_PATH}/arm64/lib/glog
+  ${THIRD_PATH_HOME_PATH}/arm64/lib/gflags
+  ${THIRD_PATH_HOME_PATH}/arm64/lib/zlib
 )
 
 file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc)

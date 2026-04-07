@@ -26,7 +26,7 @@ using ::ros2_interface::msg::ObstacleList;
 using ::ros2_interface::msg::PointCloud;
 
 template <typename T>
-Ros2MessageManager<T>::Ros2MessageManager() : Node{"perception"} {}
+Ros2MessageManager<T>::Ros2MessageManager() : Node{"lidar_detect_voxel"} {}
 template <typename T> void Ros2MessageManager<T>::Init(T *t) {
   is_init_ = false;
   instance_ = t;

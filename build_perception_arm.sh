@@ -211,12 +211,12 @@ apply_module_build_flags
 
 generate_vehicle_proto
 
-# run_script "${ROOT_DIR}/modules/perception/lidar/lidar_ground_segmentation/scripts/build.arm64.sh"
-# run_script "${ROOT_DIR}/modules/perception/lidar/lidar_cluster_detect/scripts/build.arm64.sh"
-run_script "${ROOT_DIR}/modules/perception/lidar/multi_lidar_splicing/scripts/build.arm64.sh"
+run_script "${ROOT_DIR}/modules/perception/lidar/lidar_ground_segmentation/scripts/build.arm64.sh"
+#run_script "${ROOT_DIR}/modules/perception/lidar/lidar_cluster_detect/scripts/build.arm64.sh"
+#run_script "${ROOT_DIR}/modules/perception/lidar/multi_lidar_splicing/scripts/build.arm64.sh"
 
 # run_script "${ROOT_DIR}/modules/perception/lidar/lidar_detect_voxel/scripts/build.arm64.sh"
 
-# run_script "${ROOT_DIR}/modules/perception/fusion/motion_manager/scripts/build.arm64.sh"
+#run_script "${ROOT_DIR}/modules/perception/fusion/motion_manager/scripts/build.arm64.sh"
 
 log "all done"

@@ -27,7 +27,8 @@ using ::ros2_interface::msg::Location;
 using ::ros2_interface::msg::ObstacleList;
 
 template <typename T>
-Ros2MessageManager<T>::Ros2MessageManager() : Node{"perception"} {}
+Ros2MessageManager<T>::Ros2MessageManager()
+    : Node{"motion_manager"}, is_init_{false}, is_active_{false}, action_mode_{MessageActionMode::DO_NOTHING} {}
 template <typename T> void Ros2MessageManager<T>::Init(T *t) {
   is_init_ = false;
   instance_ = t;

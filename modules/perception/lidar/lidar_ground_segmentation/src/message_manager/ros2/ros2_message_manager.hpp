@@ -28,7 +28,7 @@ using ::ros2_interface::msg::Faults;
 using ::ros2_interface::msg::PointCloud;
 
 template <typename T>
-Ros2MessageManager<T>::Ros2MessageManager() : Node{"perception"} {}
+Ros2MessageManager<T>::Ros2MessageManager() : Node{"lidar_ground_segmentation"} {}
 template <typename T> void Ros2MessageManager<T>::Init(T* t) {
   is_init_ = false;
   is_active_ = false;

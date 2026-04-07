@@ -7,6 +7,9 @@
 #include <thread>
 #include <future>
 #include <vector>
+#include <string>
+#include <map>
+#include <mutex>
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
@@ -21,62 +24,64 @@
 
 #include "sensors/lidar.h"
 
+struct LidarConfig {
+    std::string name;
+    std::string path;
+    bool enabled;
+};
+
+struct FilterRegion {
+    bool enable = false;
+    float x_min = -0.4f;
+    float x_max = 1.6f;
+    float y_min = -0.6f;
+    float y_max = 0.61f;
+    float z_min = -0.1f;
+    float z_max = 1.6f;
+};
+
 class MultiLidarSplicing : public rclcpp::Node
 {
 private:
-    Lidar lidar_front_;
-    Lidar lidar_mid_;
-    Lidar lidar_left_;
-    Lidar lidar_right_;
-    Lidar lidar_back_;
+    std::vector<Lidar> lidars_;
+    std::map<std::string, size_t> lidar_name_to_index_;
 
     std::string frame_id_;
     std::string publish_topic_;
 
-    // ROS2 pub/sub
     rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr point_cloud_publisher_;
 
-    // message_filters（ROS2）
-    std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>> sub_front_;
-    std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>> sub_mid_;
-    std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>> sub_left_;
-    std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>> sub_right_;
-    std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>> sub_back_;
+    std::map<std::string, std::shared_ptr<message_filters::Subscriber<sensor_msgs::msg::PointCloud2>>> subscribers_;
 
-    using SyncPolicy = message_filters::sync_policies::ApproximateTime<
-        sensor_msgs::msg::PointCloud2,
-        sensor_msgs::msg::PointCloud2,
-        sensor_msgs::msg::PointCloud2,
-        sensor_msgs::msg::PointCloud2,
-        sensor_msgs::msg::PointCloud2>;
-    std::shared_ptr<message_filters::Synchronizer<SyncPolicy>> sync_;
+    int lidar_count_;
 
-    // 性能监控
     std::chrono::high_resolution_clock::time_point last_publish_time_;
     size_t dropped_frames_ = 0;
     size_t total_frames_ = 0;
 
+    FilterRegion filter_region_;
+
 public:
-    MultiLidarSplicing(std::string lidar_front,
-                       std::string lidar_mid,
-                       std::string lidar_left,
-                       std::string lidar_right,
-                       std::string lidar_back,
-                       std::string frame_id,
-                       std::string publish_topic);
+    explicit MultiLidarSplicing(const std::vector<LidarConfig> &lidar_configs,
+                                const std::string &frame_id,
+                                const std::string &publish_topic,
+                                const FilterRegion &filter_region);
     ~MultiLidarSplicing();
 
     void run();
 
-    void callback(const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_front_msg,
-                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_mid_msg,
-                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_left_msg,
-                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_right_msg,
-                  const sensor_msgs::msg::PointCloud2::ConstSharedPtr &lidar_back_msg);
+    void callback(const std::vector<sensor_msgs::msg::PointCloud2::ConstSharedPtr> &msgs);
 
 private:
-    // 并行处理单个激光雷达的点云转换和变换
+    void onLidarMessage(size_t lidar_index, const sensor_msgs::msg::PointCloud2::ConstSharedPtr& msg);
+
     pcl::PointCloud<pcl::PointXYZI>::Ptr processLidarCloud(
         const sensor_msgs::msg::PointCloud2::ConstSharedPtr &msg,
         const Lidar &lidar);
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr mergeClouds(
+        const std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> &clouds);
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud(
+        const pcl::PointCloud<pcl::PointXYZI>::Ptr &cloud);
 };
