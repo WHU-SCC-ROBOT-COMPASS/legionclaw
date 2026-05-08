@@ -15,5 +15,21 @@
         "y_max": 0.7,
         "z_min": -0.1,
         "z_max": 1.6
+    },
+    "filter_region_outside": {
+        "enable": true,
+        "x_min": -10,
+        "x_max": 10,
+        "y_min": -10,
+        "y_max": 10,
+        "z_min": -1,
+        "z_max": 2
+    },
+    "sync_config": {
+        "enable_approximate_time_sync": false,
+        "sync_time_tolerance": 0.05,
+        "min_lidars_for_fusion": 4,
+        "message_timeout": 1.0,
+        "strict_sync": true
     }
 }

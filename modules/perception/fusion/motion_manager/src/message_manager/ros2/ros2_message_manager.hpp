@@ -40,11 +40,13 @@ template <typename T> void Ros2MessageManager<T>::Init(T *t) {
 
   obstacle_list_output_pub_ =
       create_publisher<::ros2_interface::msg::ObstacleList>(
-          "/perception/fusion/motion_manager/MMObstacleList", QoS{10},
+          "/perception/fusion/motion_manager/MMObstacleList", 
+          rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile(),
           PubAllocT{});
 
   obu_cmd_msg_sub_ = create_subscription<::ros2_interface::msg::ObuCmdMsg>(
-      "/vui_client/ObuCmdMsg", QoS{30},
+      "/vui_client/ObuCmdMsg", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).reliable().durability_volatile(),
       [this](const ros2_interface::msg::ObuCmdMsg::SharedPtr msg) {
         Ros2MessageManager::HandleObuCmdMsgMessage(msg);
       },
@@ -88,21 +90,24 @@ template <typename T> void Ros2MessageManager<T>::TaskStart() {
   std::cout << "ros2 activate" << std::endl;
 
   location_sub_ = create_subscription<Location>(
-      "/localization/global_fusion/Location", QoS{30},
+      "/localization/global_fusion/Location", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile(),
       [this](const ros2_interface::msg::Location::SharedPtr msg) {
         Ros2MessageManager::HandleLocationMessage(msg);
       },
       SubAllocT{});
 
   obstacle_list_input_sub_ = create_subscription<ObstacleList>(
-      "/perception/lidar/lidar_detect/LidarObstacleList", QoS{30},
+      "/perception/lidar/lidar_detect/LidarObstacleList", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile(),
       [this](const ros2_interface::msg::ObstacleList::SharedPtr msg) {
         Ros2MessageManager::HandleObstacleListInputMessage(msg);
       },
       SubAllocT{});
 
   lcd_obstacle_list_sub_ = create_subscription<ObstacleList>(
-      "/perception/lidar/lidar_cluster_detect/LCDObstacleList", QoS{30},
+      "/perception/lidar/lidar_cluster_detect/LCDObstacleList", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile(),
       [this](const ros2_interface::msg::ObstacleList::SharedPtr msg) {
         Ros2MessageManager::HandleLCDObstacleListMessage(msg);
       },

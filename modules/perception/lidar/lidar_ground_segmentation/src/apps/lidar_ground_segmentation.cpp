@@ -182,7 +182,9 @@ void LidarGroundSegmentation::TaskActivate() {
   if (function_activation_) {
     return;
   }
-  task_1000ms_->AddTimer(1000, &LidarGroundSegmentation::Task1000ms, this);
+  int32_t timer_ms = produce_lidar_ground_segmentation_command_duration_ > 0 ? 
+      produce_lidar_ground_segmentation_command_duration_ : 20;
+  task_1000ms_->AddTimer(timer_ms, &LidarGroundSegmentation::Task1000ms, this);
   // 所有定时器都使用高级定时器，方便激活和去激活。
   std::cout << "===================function activate=================="
             << std::endl;

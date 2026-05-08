@@ -43,18 +43,23 @@ template <typename T> void Ros2MessageManager<T>::Init(T* t) {
   using PubAllocT = rclcpp::PublisherOptionsWithAllocator<std::allocator<void>>;
 
   obstacle_list_pub_ = create_publisher<::ros2_interface::msg::ObstacleList>(
-      "/perception/lidar/lidar_cluster_detect/LCDObstacleList", QoS{10},
+      "/perception/lidar/lidar_cluster_detect/LCDObstacleList", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile(),
       PubAllocT{});
 
   faults_pub_ = create_publisher<::ros2_interface::msg::Faults>(
-      "/perception/lidar/lidar_cluster_detect/Faults", QoS{10}, PubAllocT{});
+      "/perception/lidar/lidar_cluster_detect/Faults", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).reliable().durability_volatile(),
+      PubAllocT{});
 
   cluster_point_cloud_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>(
-      "/perception/lidar/lidar_cluster_detect/ClusterPointCloud", QoS{10},
+      "/perception/lidar/lidar_cluster_detect/ClusterPointCloud", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile(),
       PubAllocT{});
 
   obu_cmd_msg_sub_ = create_subscription<::ros2_interface::msg::ObuCmdMsg>(
-      "/vui_client/ObuCmdMsg", QoS{30},
+      "/vui_client/ObuCmdMsg", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).reliable().durability_volatile(),
       [this](const ros2_interface::msg::ObuCmdMsg::SharedPtr msg) {
         Ros2MessageManager::HandleObuCmdMsgMessage(msg);
       },
@@ -97,7 +102,8 @@ template <typename T> void Ros2MessageManager<T>::TaskStart() {
 
   std::cout << "ros2 activate" << std::endl;
   point_cloud_sub_ = create_subscription<sensor_msgs::msg::PointCloud2>(
-      "/perception/lidar/lidar_ground_segmentation/NoGroundPoints", QoS{30},
+      "/perception/lidar/lidar_ground_segmentation/NoGroundPoints", 
+      rclcpp::QoS(rclcpp::KeepLast(1)).best_effort().durability_volatile(),
       [this](const sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) {
         Ros2MessageManager::HandlePointCloudMessage(msg);
       },

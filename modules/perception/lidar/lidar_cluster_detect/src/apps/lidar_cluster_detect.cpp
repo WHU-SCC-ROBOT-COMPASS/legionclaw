@@ -180,7 +180,9 @@ void LidarClusterDetect::TaskActivate() {
   if (function_activation_) {
     return;
   }
-  task_100ms_->AddTimer(100, &LidarClusterDetect::Task100ms, this);
+  int32_t timer_ms = produce_lidar_cluster_detect_command_duration_ > 0 ? 
+      produce_lidar_cluster_detect_command_duration_ : 20;
+  task_100ms_->AddTimer(timer_ms, &LidarClusterDetect::Task100ms, this);
   // 所有定时器都使用高级定时器，方便激活和去激活。
   std::cout << "===================function activate=================="
             << std::endl;

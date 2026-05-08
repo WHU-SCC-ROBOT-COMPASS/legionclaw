@@ -6,7 +6,9 @@ static bool loadConfig(const std::string &filename,
                 std::vector<LidarConfig> &lidars,
                 std::string &frame_id,
                 std::string &publish_topic,
-                FilterRegion &filter_region)
+                FilterRegion &filter_region,
+                FilterRegion &filter_region_outside,
+                SyncConfig &sync_config)
 {
     Json::Reader reader;
     Json::Value root;
@@ -66,7 +68,7 @@ static bool loadConfig(const std::string &filename,
         return false;
     }
 
-    // Filter region configuration
+    // Filter region configuration (inside filter)
     if (!root["filter_region"].isNull())
     {
         const Json::Value &fr = root["filter_region"];
@@ -79,6 +81,38 @@ static bool loadConfig(const std::string &filename,
         filter_region.z_max = static_cast<float>(fr["z_max"].asDouble());
     }
 
+    // Filter region outside configuration
+    if (!root["filter_region_outside"].isNull())
+    {
+        const Json::Value &fro = root["filter_region_outside"];
+        filter_region_outside.enable = fro["enable"].asBool();
+        filter_region_outside.x_min = static_cast<float>(fro["x_min"].asDouble());
+        filter_region_outside.x_max = static_cast<float>(fro["x_max"].asDouble());
+        filter_region_outside.y_min = static_cast<float>(fro["y_min"].asDouble());
+        filter_region_outside.y_max = static_cast<float>(fro["y_max"].asDouble());
+        filter_region_outside.z_min = static_cast<float>(fro["z_min"].asDouble());
+        filter_region_outside.z_max = static_cast<float>(fro["z_max"].asDouble());
+    }
+
+    // Sync configuration
+    if (!root["sync_config"].isNull())
+    {
+        const Json::Value &sc = root["sync_config"];
+        sync_config.enable_approximate_time_sync = sc["enable_approximate_time_sync"].asBool();
+        sync_config.sync_time_tolerance = sc["sync_time_tolerance"].asDouble();
+        sync_config.min_lidars_for_fusion = sc["min_lidars_for_fusion"].asInt();
+        sync_config.message_timeout = sc["message_timeout"].asDouble();
+        sync_config.strict_sync = sc["strict_sync"].asBool();
+    }
+    else
+    {
+        sync_config.enable_approximate_time_sync = true;
+        sync_config.sync_time_tolerance = 0.1;
+        sync_config.min_lidars_for_fusion = 1;
+        sync_config.message_timeout = 1.0;
+        sync_config.strict_sync = false;
+    }
+
     is.close();
     return true;
 }
@@ -89,8 +123,10 @@ int main(int argc, char *argv[])
     std::vector<LidarConfig> lidar_configs;
     std::string frame_id, publish_topic;
     FilterRegion filter_region;
+    FilterRegion filter_region_outside;
+    SyncConfig sync_config;
 
-    if (!loadConfig(file_path, lidar_configs, frame_id, publish_topic, filter_region))
+    if (!loadConfig(file_path, lidar_configs, frame_id, publish_topic, filter_region, filter_region_outside, sync_config))
         return 1;
 
     std::cout << "[MultiLidarSplicing] Configured lidars: ";
@@ -101,14 +137,28 @@ int main(int argc, char *argv[])
     std::cout << std::endl;
 
     if (filter_region.enable) {
-        std::cout << "[MultiLidarSplicing] Filter region: x[" << filter_region.x_min
+        std::cout << "[MultiLidarSplicing] Filter region (inside): x[" << filter_region.x_min
                   << ", " << filter_region.x_max << "], y[" << filter_region.y_min
                   << ", " << filter_region.y_max << "], z[" << filter_region.z_min
                   << ", " << filter_region.z_max << "]" << std::endl;
     }
 
+    if (filter_region_outside.enable) {
+        std::cout << "[MultiLidarSplicing] Filter region (outside): x[" << filter_region_outside.x_min
+                  << ", " << filter_region_outside.x_max << "], y[" << filter_region_outside.y_min
+                  << ", " << filter_region_outside.y_max << "], z[" << filter_region_outside.z_min
+                  << ", " << filter_region_outside.z_max << "]" << std::endl;
+    }
+
+    std::cout << "[MultiLidarSplicing] Sync config: approximate_time=" 
+              << (sync_config.enable_approximate_time_sync ? "true" : "false")
+              << ", tolerance=" << sync_config.sync_time_tolerance << "s"
+              << ", min_lidars=" << sync_config.min_lidars_for_fusion
+              << ", timeout=" << sync_config.message_timeout << "s"
+              << ", strict=" << (sync_config.strict_sync ? "true" : "false") << std::endl;
+
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<MultiLidarSplicing>(lidar_configs, frame_id, publish_topic, filter_region);
+    auto node = std::make_shared<MultiLidarSplicing>(lidar_configs, frame_id, publish_topic, filter_region, filter_region_outside, sync_config);
     node->run();
     rclcpp::shutdown();
     return 0;

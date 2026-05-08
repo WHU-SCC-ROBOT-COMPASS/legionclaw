@@ -91,9 +91,7 @@ if(pcl_ros_FOUND)
 endif()
 
 link_directories(
-  ${THIRD_PATH_HOME_PATH}/arm64/lib/glog
-  ${THIRD_PATH_HOME_PATH}/arm64/lib/gflags
-  ${THIRD_PATH_HOME_PATH}/arm64/lib/zlib
+  ${THIRD_PATH_HOME_PATH}/arm64/lib
 )
 
 file(GLOB_RECURSE SOURCE_FILES src/*.c src/*.cxx src/*.cpp src/*.cc)
@@ -106,8 +104,6 @@ target_link_libraries(${APP_NAME}
   ${PCL_LIBRARIES}
   ${JSONCPP_TARGET}
   pthread
-  gflags
-  glog
   z
 )
 

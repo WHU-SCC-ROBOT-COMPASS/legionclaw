@@ -37,10 +37,12 @@ template <typename T> void Ros2MessageManager<T>::Init(T *t) {
   using PubAllocT = rclcpp::PublisherOptionsWithAllocator<std::allocator<void>>;
 
   obstacle_list_pub_ = create_publisher<::ros2_interface::msg::ObstacleList>(
-      "/perception/lidar/lidar_detect/LidarObstacleList", QoS{10}, PubAllocT{});
+      "/perception/lidar/lidar_detect/LidarObstacleList", 
+      rclcpp::QoS(rclcpp::KeepLast(10)).reliable().durability_volatile(), PubAllocT{});
 
   point_cloud_sub_ = create_subscription<sensor_msgs::msg::PointCloud2>(
-    "/rslidar_points", QoS{30},
+    "/rslidar_points", 
+    rclcpp::QoS(rclcpp::KeepLast(10)).reliable().durability_volatile(),
     // "/sensor/lidar/mid/PointCloud2", QoS{30},
     [this](const sensor_msgs::msg::PointCloud2::SharedPtr msg)
     {

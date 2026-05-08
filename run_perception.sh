@@ -101,8 +101,10 @@ source_ros2_environment() {
     set -u
 
     # Explicitly set RMW implementation to FastRTPS to match the built-in typesupport
-    export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-    log "Set RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}"
+    #export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+    #log "Set RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}"
+    export FASTRTPS_DEFAULT_PROFILES_FILE="/home/BEACON/project/driver/lidar_launch/config/ros_fastdds.xml"
+    echo "[DDS] 使用 ros_fastdds.xml (eth0: 192.168.1.103)"
 }
 
 check_binary() {
@@ -152,6 +154,7 @@ start_module() {
     log "  Log: ${log_file}"
 
     # Create symlink for config if needed (some programs look for configs relative to project root)
+    source_ros2_environment
     if [ -d "${PROJECT_ROOT}/${name}/bin/conf" ] && [ ! -L "${PROJECT_ROOT}/conf" ]; then
         ln -sf "${PROJECT_ROOT}/${name}/bin/conf" "${PROJECT_ROOT}/conf"
     fi
