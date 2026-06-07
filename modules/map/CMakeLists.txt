@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 project(map)
 
 set(APP_NAME map)
-set(THIRD_PATH_HOME_PATH /usr/local/legionclaw/third_party)
+set(THIRD_PATH_HOME_PATH /usr)
 set(LEGION_ALGORITHM_PATH_HOME_PATH /usr/local/legionclaw/legionclaw_algorithm)
 
 # =====================================================================

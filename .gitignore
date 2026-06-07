@@ -1,106 +1,33 @@
-# Prerequisites
-*.d
+# LegionClaw .gitignore
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# === 构建产物 ===
+**/build/
+**/install/
+**/log/
+**/CMakeCache.txt
+**/CMakeFiles/
+modules/**/make/*.cmake
 
-# Precompiled Headers
-*.gch
-*.pch
+# 忽略 bin/ 下的二进制文件，但保留 bin/conf/ 配置
+modules/**/bin/*
+!modules/**/bin/conf/
+!modules/**/bin/conf/**/
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# === 数据（bag/PCD/PNG 很大）===
+data/
+output/
+test_result/
 
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Build directories
-build/
-build_private/
-cmake-build-*/
-*.cmake*
-
-# Third-party libraries (external dependencies)
-# If you need to include third-party libs, consider using git submodule instead
-third-party/
-third_party/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# CMake
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-Makefile
-*.cmake
-CMakeLists.txt.user
-
-# Package files
-*.tar.gz
-*.zip
-*.rar
-
-# Log files
+# === 日志 ===
 *.log
 
-# Protobuf generated files
-*.pb.cc
-*.pb.h
-*.pb.py
+# === 系统 ===
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+.DS_Store
+/tmp/
 
-# Binary files
-# All build output directories
-bin/
-*.bin
-
-# Model files (TensorRT plans, ONNX models)
-*.plan
-*.onnx
-
-# Compiled libraries
-*.so
-
-
-# Motion manager config files in bin
-modules/perception/fusion/motion_manager/bin/
-
-# Lidar cluster detect config files
-modules/perception/lidar/lidar_cluster_detect/bin/
-
-# Generated executables
-*.a
-
-# Ignore all bin directories
-**/bin/
-
-# Ignore executables
-**/bin/*.exe
-**/bin/motion_manager
-**/bin/lidar_*
-
-# Message build artifacts
-modules/message/install/
-modules/message/log/
+# === 备份 ===
+*.bak

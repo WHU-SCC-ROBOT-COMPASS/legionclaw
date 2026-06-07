@@ -81,6 +81,13 @@ FastLIOSAM::FastLIOSAM(const Config& cfg)
     // Voxel filters
     downsize_filter_surf_->setLeafSize(cfg.filter_size_surf, cfg.filter_size_surf, cfg.filter_size_surf);
     downsize_filter_corner_->setLeafSize(cfg.filter_size_corner, cfg.filter_size_corner, cfg.filter_size_corner);
+
+    // Initialize ESKF with process model functions (REQUIRED before predict())
+    // Using init_dyn_runtime_share which only needs f/f_x/f_w (no measurement model)
+    int max_iter = cfg.max_iteration;
+    double limit[state_ikfom::DOF];
+    for (int i = 0; i < state_ikfom::DOF; i++) limit[i] = 1000.0;
+    state_->init_dyn_runtime_share(get_f, df_dx, df_dw, max_iter, limit);
 }
 
 FastLIOSAM::~FastLIOSAM() {

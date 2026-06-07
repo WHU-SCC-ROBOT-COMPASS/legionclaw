@@ -29,6 +29,21 @@
 #include "modules/map/src/slam/fast_lio_sam.h"
 
 // ROS2 头文件
+
+
+template<typename T>
+void fromROSMsgWithFallback(const sensor_msgs::msg::PointCloud2& ros_cloud, pcl::PointCloud<T>& pcl_cloud) {
+
+  pcl::PointCloud<pcl::PointXYZI> tmp;
+  pcl::fromROSMsg(ros_cloud, tmp);
+  pcl_cloud.resize(tmp.size());
+  for (size_t i = 0; i < tmp.size(); ++i) {
+    pcl_cloud[i].x = tmp[i].x; pcl_cloud[i].y = tmp[i].y; pcl_cloud[i].z = tmp[i].z;
+    pcl_cloud[i].intensity = tmp[i].intensity;
+    pcl_cloud[i].normal_x = pcl_cloud[i].normal_y = pcl_cloud[i].normal_z = 0.0f;
+    pcl_cloud[i].curvature = 0.0f;
+  }
+}
 #if ROS2_ENABLE
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/imu.hpp>
@@ -342,7 +357,7 @@ void LaserMappingNode::imuCallback(const sensor_msgs::Imu::ConstPtr& msg) {
 #if ROS2_ENABLE
 void LaserMappingNode::lidarCallback(sensor_msgs::msg::PointCloud2::ConstSharedPtr msg) {
     pcl::PointCloud<PointType>::Ptr cloud(new pcl::PointCloud<PointType>());
-    pcl::fromROSMsg(*msg, *cloud);
+    fromROSMsgWithFallback(*msg, *cloud);
     // Convert ROS2 header stamp to double
     double stamp = static_cast<double>(msg->header.stamp.sec) +
                    static_cast<double>(msg->header.stamp.nanosec) * 1e-9;
@@ -353,7 +368,7 @@ void LaserMappingNode::lidarCallback(sensor_msgs::msg::PointCloud2::ConstSharedP
 #if ROS_ENABLE
 void LaserMappingNode::lidarCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
     pcl::PointCloud<PointType>::Ptr cloud(new pcl::PointCloud<PointType>());
-    pcl::fromROSMsg(*msg, *cloud);
+    fromROSMsgWithFallback(*msg, *cloud);
     double stamp = msg->header.stamp.toSec();
     processScan(cloud, stamp);
 }

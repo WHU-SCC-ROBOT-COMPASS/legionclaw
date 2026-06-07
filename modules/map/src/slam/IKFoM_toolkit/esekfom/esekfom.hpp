@@ -287,6 +287,11 @@ public:
 		state x_before = x_;
 		x_.oplus(f_, dt);
 
+		// Ensure state build is up-to-date (workaround for empty state lists)
+		// Always rebuild after oplus
+		x_.build_S2_state();
+		x_.build_SO3_state();
+		x_.build_vect_state();
 		F_x1 = cov::Identity();
 		for (std::vector<std::pair<std::pair<int, int>, int> >::iterator it = x_.vect_state.begin(); it != x_.vect_state.end(); it++) {
 			int idx = (*it).first.first;
